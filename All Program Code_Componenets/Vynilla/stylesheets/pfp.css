@@ -1,0 +1,38 @@
+:root {
+    --dark0: black;
+    --dark1: #292830;
+    --dark2: #38373d;
+    --dark3: #444347;
+    --light: #fff;
+    --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+}
+
+body {
+    margin: 25px 50px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: minmax(100px, .5fr) 3fr minmax(150px, .5fr);
+    grid-template-areas: 
+        "navbar-backer midsection friends-backer"
+        "navbar-backer midsection friends-backer"
+        "     .        midsection        .      ";
+    grid-column-gap: 10px;
+    grid-row-gap: 15px;
+}
+
+.navbar-backer {
+    /* border helps visualize */
+    border: 1px solid black;
+}
+
+.midsection {
+    /* border helps visualize */
+    border: 1px solid black;
+}
+
+.friends-backer {
+    /* border helps visualize */
+    border: 1px solid black; 
+}
