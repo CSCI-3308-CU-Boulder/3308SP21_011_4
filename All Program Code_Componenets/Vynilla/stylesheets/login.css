@@ -5,6 +5,8 @@ body {
 #center {
   max-width: 500px;
   margin: auto;
+  background-image: url('../resources/img/teton.jpeg');
+  background-size: cover;
 }
 .modal-login {		
     color: #636363;
