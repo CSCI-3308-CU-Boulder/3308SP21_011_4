@@ -2,6 +2,10 @@
 body {
     font-family: 'Varela Round', sans-serif;
 }
+#center {
+  max-width: 500px;
+  margin: auto;
+}
 .modal-login {		
     color: #636363;
     width: 350px;
