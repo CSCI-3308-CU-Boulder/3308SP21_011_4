@@ -4,6 +4,7 @@
     width: 100px
 }
 body {
+    font-family: 'Varela Round', sans-serif;
     padding: 25px;
     background-color: white;
     color: black;
@@ -11,6 +12,6 @@ body {
   }
   
   .dark-mode {
-    background-color: rgb(41, 35, 35);
+    background-color: rgb(2, 2, 2);
     color: white;
   }

@@ -10,31 +10,33 @@
         <link rel="stylesheet" href="../stylesheets/login.css">
     </head>
     <body class="center text-center">
-        <div class="container-sm" id="center">
-        <div class="container-sm left" id="center">  
-        <form class="form-signin">
-          <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Remember me | 
-            </label>
-                <a href="">Forgot Password?</a>
-          </div>
-          <button class="btn btn-info" type="submit">Sign In</button>
-          <div class="sign_up_button">
-            <a href="#myModal" class="btn btn-info" data-toggle="modal" onclick="openModal()">Don't have an account? Sign Up</a>
-          </div>
-        </form>
+        <div class="container-sm row" id="center">
+          <div class="collumn" id="smol">  
+            <form class="form-signin">
+              <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
+              <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              <div class="checkbox mb-3">
+                <label>
+                  <input type="checkbox" value="remember-me"> Remember me | 
+                </label>
+                    <a href="">Forgot Password?</a>
+              </div>
+              <button class="btn btn-info" type="submit">Sign In</button>
+              <div class="sign_up_button">
+                <a href="#myModal" class="btn btn-info" data-toggle="modal" onclick="openModal()">Don't have an account? Sign Up</a>
+              </div>
+            </form>
 
         <!-- Dark Mode -->
         <button class="btn btn-info" onclick="myFunction()">Toggle dark mode</button>
         </div>
-        <div id="container-sm right" id="center>
+        <div id="collumn">
+          <div class="container-sm" id="signwords">
+          <h>Share your love of music with your friends</h>
         <!-- Modal HTML -->
         <div id="myModal" class="modal fade">
           <div class="modal-dialog modal-login">

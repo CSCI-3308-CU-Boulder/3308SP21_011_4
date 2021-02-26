@@ -1,13 +1,25 @@
 /* Jacob Levato */
-body {
-    font-family: 'Varela Round', sans-serif;
-}
+
 #center {
   max-width: 500px;
   margin: auto;
   background-image: url('../resources/img/teton.jpeg');
   background-size: cover;
 }
+.row {
+  display: flex;
+}
+#smol{
+  width: 200px;
+}
+#signwords{
+  color: white;
+  width: auto;
+}
+.column {
+  flex: 50%;
+}
+
 .modal-login {		
     color: #636363;
     width: 350px;

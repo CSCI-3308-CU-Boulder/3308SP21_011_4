@@ -12,16 +12,14 @@ function openModal() {
 	var length = document.getElementById("length");    
     var match = document.getElementById("match");
 
-
-	// When the user starts to type something inside the password field
 	myInput.onkeyup = function() {
        console.log('helllooo')
         
-        /* TODO: Question 1.1: Starts here */
-        var lowerCaseLetters = /[a-z]/; // : Fill in the regular experssion for lowerCaseLetters
-        var upperCaseLetters = /[A-Z]/; // : Fill in the regular experssion for upperCaseLetters
-        var numbers = /[0-9]/; // : Fill in the regular experssion for digits
-        var minLength = 8; // : Change the minimum length to what what it needs to be in the question 
+        
+        var lowerCaseLetters = /[a-z]/; 
+        var upperCaseLetters = /[A-Z]/; 
+        var numbers = /[0-9]/; 
+        var minLength = 8; 
         /* TODO: Question 1.1: Ends here */
         
 
