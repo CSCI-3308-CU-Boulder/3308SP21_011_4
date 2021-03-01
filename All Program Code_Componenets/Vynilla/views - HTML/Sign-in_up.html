@@ -10,37 +10,46 @@
         <link rel="stylesheet" href="../stylesheets/login.css">
     </head>
     <body class="center text-center">
-        <div class="container-sm">
-        <form class="form-signin">
-          <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Remember me | 
-            </label>
-                <a href="">Forgot Password?</a>
-          </div>
-          <button class="btn btn-info" type="submit">Sign In</button>
-          <div class="sign_up_button">
-            <a href="#myModal" class="btn btn-info" data-toggle="modal" onclick="openModal()">Don't have an account? Sign Up</a>
-          </div>
-        </form>
+        <div class="container-sm row" id="center">
+          <div class="collumn" id="smol">  
+            <form class="form-signin">
+              <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
+              <h1 id = "white" class="h3 mb-3 font-weight-normal">Please sign in</h1>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              <div class="checkbox mb-3">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                <label>
+                  <label class="control-label" id="white-r"> Remember me </label>
+                  <input type="checkbox"  value="remember-me">
+                    
+                </label>
+                </div>
+              </form>
+                    <a href="" id = "white-r">Forgot Password?</a>
+              </div>
+              <button class="btn btn-info" id="gray" type="submit">Sign In</button>
+              <div class="sign_up_button">
+                <a href="#myModal" class="btn btn-info" id="gray" data-toggle="modal" onclick="openModal()">Don't have an account? Sign Up</a>
+              </div>
+            </form>
 
         <!-- Dark Mode -->
-        <button class="btn btn-info" onclick="myFunction()">Toggle dark mode</button>
+        <button class="btn btn-info" id="gray" onclick="myFunction()">Toggle dark mode</button>
         </div>
-        
+        <div id="collumn">
+          <div class="container-sm" id="signwords">
+          <h>Share your love of music with your friends</h>
         <!-- Modal HTML -->
-        <div id="myModal" class="modal fade">
-          <div class="modal-dialog modal-login">
-            <div class="modal-content">
+        <div id="myModal" class="modal fade" >
+          <div class="modal-dialog modal-login ">
+            <div class="modal-content ">
               <div class="modal-header">
                 <div class="avatar">
-                  <img src="https://www.tutorialrepublic.com/examples/images/avatar.png" alt="Avatar">
+                  <img src="..\resources\img\Vynilla.png" alt="Avatar">
                 </div>
                 <h4 class="modal-title">Sign Up page</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -79,15 +88,9 @@
             </div>
           </div>
         </div>
-
-
+        </div>
+      </div>
         <script src="../javascript/login.js"></script>
-        <script>
-        function myFunction() {
-        var element = document.body;
-        element.classList.toggle("dark-mode");
-        }
-        </script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
