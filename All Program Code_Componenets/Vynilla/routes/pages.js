@@ -9,9 +9,10 @@ router.get('/register', (req, res) =>{
     res.render('register');
 });
 
-router.get('/feed', (req, res) =>{
-    res.render('feed');
-});
+// router.get('/feed', (req, res) =>{
+//     res.render('feed');
+// });
+
 
 
 module.exports = router;

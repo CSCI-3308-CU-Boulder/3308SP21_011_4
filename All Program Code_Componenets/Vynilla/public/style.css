@@ -1,12 +1,99 @@
-body {
-    display: grid;
-    grid-column-start: 0;
-    grid-column-end: 3;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppings', sans-serif;
 }
-.container {
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(-30deg, rgb(59, 59, 59), rgb(19, 19, 19), black);
+    /* filter: hue-rotate(120deg); */
+}
+.box {
+    position: relative;
     padding: 50px;
-    grid-column: 1;
+    width: 480px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    box-shadow: 0 5px 35px black;
 }
-.btn-primary {
-    margin-right: 10px;
+.box::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 5px;
+    pointer-events: none;
+}
+.box .container {
+    position: relative;
+    width: 100%;
+}
+.box .container h2 {
+    color: white;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+.box .container h4 {
+    color: white;
+    font-weight: 100;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-size: small;
+}
+.box .container .inputBx {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.box .container .inputBx input {
+    width: 100%;
+    outline: none;
+    border: 1px solid grey;
+    background: transparent;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: white;
+    /* box-shadow: inset 0 0 25px rgb(0, 0, 0); */
+}
+form a {
+    color: #4eb5f1;
+    transition: all 0.3s;
+}
+
+form a:hover {
+    color: rgb(70, 70, 70);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.signIn_btn {
+    display:inline-block;
+    padding:0.3em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    border: none;
+    border-radius:2em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    background-color:#4eb5f1;
+    text-align:center;
+    transition: all 0.3s;
+}
+.signIn_btn:hover {
+    background: rgb(70, 70, 70);
+    transition: all 0.3s;
+}
+.alert h4 {
+    color: red;
 }

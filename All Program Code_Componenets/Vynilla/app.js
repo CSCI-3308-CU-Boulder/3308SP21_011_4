@@ -4,6 +4,7 @@ const mysql = require("mysql");
 const dotenv = require("dotenv");
 var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+var session = require('express-session');
 
 dotenv.config({ path: './.env'});
 
@@ -27,6 +28,11 @@ db.connect((error) => {
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
 
 // parse application/x-www-form-urlencoded, basically can only parse incoming Request Object if strings or arrays
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,6 +44,13 @@ app.set('view engine', 'hbs');
 //Define Routes
 app.use('/', require('./routes/pages.js'));
 app.use('/auth', require('./routes/auth'));
+
+app.get('/feed', (req, res) => {
+    console.log("hi");
+    if (req.session.loggedin){
+        res.send('Welcome back, ' + req.session.name + '!');
+    }
+})
 
 app.listen(5000, () => {
     console.log("Server Started on Port 5000")

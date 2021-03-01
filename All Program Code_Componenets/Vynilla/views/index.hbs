@@ -9,23 +9,26 @@
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
-        <form action="/auth/index" method="POST">
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" name="email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <section>
+        <div class="box">
+            <div class="container">
+                <h2>Vynilla</h2>
+                <h4>Share the love of music with your friends</h4>
+                <form action="/auth/index" method="POST">
+                    <div class="inputBx">
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email Address" name="email">
+                    </div>
+                    <div class="inputBx">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+                    </div>
+                    <button type="submit" class="signIn_btn">Sign In</button>
+                    <a href="/register" class="button">Don't have an account? Sign Up</a>
+                    {{#if message}}
+                        <h4 class="alert">{{message}}</h4>
+                    {{/if}}
+                </form>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="/register" class="button">Don't have an account? Sign Up</a>
-        </form>
-    </div>
-    {{#if message}}
-        <h4 class="alert alert-danger mt-4">{{message}}</h4>
-    {{/if}}
+        </div>
+    </section>
 </body>
 </html>

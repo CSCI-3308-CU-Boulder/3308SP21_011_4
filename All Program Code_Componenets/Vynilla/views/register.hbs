@@ -9,33 +9,33 @@
     <title>Register</title>
 </head>
 <body>
-    <div class="container">
-        <form action="/auth/register" method="POST">
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <section>
+        <div class="box">
+            <div class="container">
+                <form action="/auth/register" method="POST">
+                    <h4>Welcome! Tell us about yourself</h4>
+                    <div class="inputBx">
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email address" name="email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="inputBx">
+                        <input type="name" class="form-control" id="name" placeholder="Enter your name" name="name">
+                    </div>
+                    <div class="inputBx">
+                        <input type="username" class="form-control" id="username" placeholder="Enter a username" name="username">
+                    </div>
+                    <div class="inputBx">
+                        <input type="password" class="form-control" id="password" placeholder="Enter a password" name="password">
+                    </div>
+                    <div class="inputBx">
+                        <input type="password" class="form-control" id="confirmPass" placeholder="Confirm your password" name="confirmPass">
+                    </div>
+                    <button type="submit" class="signIn_btn">Register</button>
+                    <a href="/" class="button">Have an account? Sign In</a>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="name" class="form-control" id="name" placeholder="Enter your name" name="name">
-            </div>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="username" class="form-control" id="username" placeholder="Enter a username" name="username">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" name="password">
-            </div>
-            <div class="form-group">
-                <label for="password">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPass" placeholder="Password" name="confirmPass">
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-            <a href="/" class="button">Have an account? Sign In</a>
-        </form>
-    </div>
+        </div>
+    </section>
     {{#if message}}
         <h4 class="alert alert-danger mt-4">{{message}}</h4>
     {{/if}}

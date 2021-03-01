@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+var session = require('express-session');
 
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
@@ -69,6 +70,8 @@ exports.login = async (req, res) => {
             } else {
                 const id = results[0].id;
 
+                req.session.loggedin = true;
+                req.session.name = results[0].name;
                 const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })
