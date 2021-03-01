@@ -3,6 +3,26 @@
     height: 100px;
     width: 100px
 }
+#black{
+  background-color:black;
+}
+.modal-backdrop 
+{ 
+  background-color:rgb(31, 30, 30)
+}
+#white{
+  color: white;
+}
+#white-r{
+  color: white;
+  font-size:20px
+}
+#gray{
+  background-color: gray;
+}
+.class{
+  display: table;
+}
 body {
     font-family: 'Varela Round', sans-serif;
     padding: 25px;
