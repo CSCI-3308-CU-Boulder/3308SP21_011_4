@@ -48,7 +48,9 @@ app.use('/auth', require('./routes/auth'));
 app.get('/feed', (req, res) => {
     console.log("hi");
     if (req.session.loggedin){
-        res.send('Welcome back, ' + req.session.name + '!');
+        res.render('feed', {
+            name: req.session.name
+        })
     }
 })
 
