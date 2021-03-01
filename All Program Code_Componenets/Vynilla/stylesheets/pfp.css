@@ -7,32 +7,200 @@
     --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
 }
 
+html {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--dark1);
+}
+
 body {
-    margin: 25px 50px;
+    background: var(--dark0);
+    margin: 30px 50px;
+    line-height: 1.4em;
+    color: var(--light);
 }
 
 .wrapper {
     display: grid;
     grid-template-columns: minmax(100px, .5fr) 3fr minmax(150px, .5fr);
-    grid-template-areas: 
+    grid-template-areas:
         "navbar-backer midsection friends-backer"
         "navbar-backer midsection friends-backer"
         "     .        midsection        .      ";
-    grid-column-gap: 10px;
-    grid-row-gap: 15px;
+    grid-gap: 20px;
 }
 
 .navbar-backer {
     /* border helps visualize */
-    border: 1px solid black;
+    border: 1px solid white;
+    text-align: center;
+    margin: 0;
+}
+
+.navbar {
+    padding: 10px 10px;
+    background-color: var(--dark2);
+}
+
+.navbar ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /*potentially firefox specific*/
+    padding: 0;
+    list-style: none;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.1rem;
 }
 
 .midsection {
     /* border helps visualize */
-    border: 1px solid black;
+    border: 1px solid white;
+    padding: 20px;
+    background-color: var(--dark1);
+}
+
+.pfp {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+
+.profile-section {
+    display: grid;
+    width: 100%;
+    height: 30%;
+    grid-template-areas:
+        "img     name     .  ."
+        "img     atname   .  ."
+        ".        .    friends music";
+    /* "artists songs albums"; */
+    grid-template-rows: 1fr 3fr;
+    grid-template-columns: 1fr, 3fr;
+}
+
+/* .flexy {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+} */
+
+.name {
+    /* padding-top: 50px; */
+    grid-area: name;
+    height: 20px;
+    padding-bottom: 2px;
+}
+
+.atname {
+    grid-area: atname;
+    height: 20px;
+    color: lightskyblue;
+}
+
+.friends {
+    grid-area: friends;
+}
+
+.music {
+    grid-area: music;
+}
+
+.subsections {
+    display: grid;
+    grid-template-areas:
+        "artists songs albums";
+}
+
+.pfp,
+.name,
+.atname {
+    display: inline;
+}
+
+.subsections h1 {
+    text-align: center;
+}
+
+.artist-backing {
+    background-color: black;
+    border-radius: 5%;
+    margin: 20px;
+    margin-left: 10px;
+}
+
+.artists {
+    display: flex;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+    /* background-color: lightskyblue; */
+}
+
+.artists ul {
+    padding: 0px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    margin: 10px;
+    width: 100%;
+    /* background-color: green; */
+}
+
+
+.artists li {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: space-around;
+    background: var(--dark3);
+    border-radius: 5%;
+    padding: 20px 0px 0px;
+    margin: 10px;
+    width: 100%;
+    height: 75%;
+}
+
+
+/* {
+    display: flex;
+    align-self: center;
+    text-align: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px; */
+
+/* top | right | bottom | left */
+/* padding: 20px 20% 0 20% ;
+    border-radius: 8%;
+    margin: 0px;
+    background-color: var(--dark1);
+} */
+
+.songs-backing {
+    background-color: black;
+    border-radius: 5%;
+    margin: 20px;
+
+}
+
+.albums-backing {
+    background-color: black;
+    border-radius: 5%;
+    margin: 20px;
+    margin-right: 10px;
 }
 
 .friends-backer {
     /* border helps visualize */
-    border: 1px solid black; 
+    border: 1px solid white;
 }
