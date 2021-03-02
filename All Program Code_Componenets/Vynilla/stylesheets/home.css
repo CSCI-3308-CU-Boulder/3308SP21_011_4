@@ -67,16 +67,31 @@ body {
 
 .main-feed {
     grid-area: feed;
-    display: grid;
-    grid-gap: 40px;
-    background-color: var(--dark2);
+    display: flex;
+    flex-direction: column;
+    background-color: black;
 }
 .main-feed .author, .action {
     display: inline;
 }
 
+
+
+
+
 .main-feed .feed {
-    background:rgba(104, 104, 104, 0.8);
+    background: var(--dark2);
+    border-radius: 40px 40px 2px 2px; /* warning - hard-coded to match feed-item b. radius */
+}
+
+.main-feed .feed h1 {
+    margin-left: 25px;
+}
+
+
+.album-cover {
+    width: 250px;
+    margin:0px;
 }
 
 
@@ -85,13 +100,15 @@ body {
 }
 
 .feed-item {
+    margin: 20px 0px;
     min-height: 200px;
     background: var(--dark1);
+    border-radius: 25px;
 }
 
 .song {
     display: grid;
-    grid-gap: 20px;
+    grid-gap: 0px;
     grid-template-areas:
     "alb-cover song-name ."
     "alb-cover artist    ."
@@ -120,11 +137,17 @@ body {
 }
 
 .comments {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     background-color: var(--dark1);
+    border-top: 1px solid var(--dark3);
     text-align: right;
     margin-top: 0.5rem;
     margin-bottom: 0;
     padding-bottom: 0;
+    width: 100%;
+    border-radius: 0px 0px 25px 25px;
 }
 .comments .commenter {
     font-size: 0.9rem;
@@ -146,7 +169,7 @@ body {
     grid-area: friends;
     text-align: left;
     background-color: var(--dark2);
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px ;
     /* width: 100%; */
 }
 
