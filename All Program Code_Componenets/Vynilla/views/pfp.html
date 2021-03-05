@@ -9,48 +9,71 @@
     <link rel="stylesheet" href="../stylesheets/pfp.css">
     <script src="https://kit.fontawesome.com/a95c4725a7.js"
         crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
-<body>
 
+<!-- to do -->
+<!-- description box -->
+<!-- description box -->
+    
+    
+
+<body>
+    <!-- https://getbootstrap.com/docs/3.3/components/  Icons for bootstrap buttons-->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">   
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Vynilla</a> 
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="https://www.google.com">MyNilla</a></li>
+            <li><a href="file:///Users/dalbir/Documents/GitHub/3308SP21_011_4/All%20Program%20Code_Componenets/Vynilla/views/pfp.html#">Profile</a></li>
+            <li><a href="file:///Users/dalbir/Documents/GitHub/3308SP21_011_4/All%20Program%20Code_Componenets/Vynilla/views/pfp.html#">EditME</a></li>
+            <li><a href="https://www.neverendingchartrendering.org/">Topster</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+
+        </ul>
+        </div>
+    </nav>
+    
     <!-- grid wrapper -->
     <section class="wrapper">
-
-        <!-- can hopefully use this to give navbar a background color -->
-        <!-- maybe turn it to section rather than div? notsure -->
-        <div class="navbar-backer">
-            <!-- Potentially make it 'leftside'-->
-
-            <!-- left-side navbar -->
-            <div class="navbar">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Notifications</a></li>
-                    <li><a href="#">Explore</a></li>
-                    <li><a href="#">Inbox</a></li>
-                    <li><a href="#">Profile</a></li>
-                </ul>
-            </div>
-        </div>
-
+        
         <div class="midsection">
             <div class="profile-section">
                 <!-- <div class="flexy"> -->
 
                     <!-- pfp -->
-                    <img src="https://picsum.photos/id/237/600/400"
-                        alt="A precious lil doggo" class="pfp">
+                    <div> 
+                        <img src="https://picsum.photos/id/237/600/400"
+                            alt="A precious lil doggo" class="pfp">
 
-                    <!-- user name -->
-                    <h1 class="name">John Appleseed</h1>
-                    <h2 class="atname">@johnappleseed</h2>
+                        <!-- user name -->
+                        <h1 class="name">John Appleseed</h1>
+                        <h2 class="atname">@johnappleseed</h2>
+                    </div>
+
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Edit Profile</a>
+
+                    <div class="description">
+                        <p>
+                            John Appleseed, born on a Monday, christened on Tuesday, married on Wednesday, took ill on Thursday, grew worse on Friday, died on Saturday, buried on Sunday.
+                        </p>
+                    </div>
 
                     <!-- friends -->
                     <div class="friends">
                         <h3>Friends</h3>
-                        <p>217</p>
+                        <h4>217</h4>
                     </div>
-
 
                     <!-- music icons -->
                     <div class="music">
@@ -77,6 +100,7 @@
                             <li>Doja Cat</li>
                             <li>Daft Punk</li>
                             <li>dryhope</li>
+                            <li>MF DOOM</li>
                             <li><i class="fas fa-plus-circle"></i></li>
                         </ul>
                     </div>
@@ -106,8 +130,7 @@
                                 <h4 class="song-artist">Daft Punk</h4>
                             </li>
                             <li class="song">
-                                <h3 class="song-name">R.I.P Kevin Miller
-                                </h3>
+                                <h3 class="song-name">R.I.P Kevin Miller</h3>
                                 <h4 class="song-artist">Isaiah Rashad</h4>
                             </li>
                         </ul>
@@ -118,8 +141,7 @@
                 <div class="albums-backing">
                     <h1>Albums</h1>
                     <div class="albums">
-                        <ul class="album-list">
-
+                        <ul class="album-list"> 
 
                             <li class="album">
                                 <h3>Mind Mischief</h3>
@@ -144,12 +166,15 @@
 
             </section>
         </div>
+
+
+        <!-- Use a flex box for Queue -->
         <div class="friends-backer">
             <!-- Potentially make it 'rightside'-->
 
             <!-- left-side navbar -->
             <div class="friends">
-                <h1>Listening Now</h1>
+                <h1>The Aux</h1> <!-- who did you hand the Aux?-->
                 <ul>
                     <li class="feed-item">
                         <h3 class="friend-name">jacksmith</h3>
@@ -165,13 +190,27 @@
             </div>
         </div>
 
-
-
-
-
-
     </section>
 
 </body>
 
 </html>
+
+
+
+<!-- can hopefully use this to give navbar a background color -->
+        <!-- maybe turn it to section rather than div? notsure -->
+        
+        <!-- 
+        <div class="navbar-backer">
+            <div class="navbar">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="#">Explore</a></li>
+                    <li><a href="#">Inbox</a></li>
+                    <li><a href="#">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        -->
