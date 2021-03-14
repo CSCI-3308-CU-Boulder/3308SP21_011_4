@@ -71,7 +71,7 @@ body {
     flex-direction: column;
     background-color: black;
 }
-.main-feed .author, .action {
+.main-feed .author, .action, .pfp {
     display: inline;
 }
 
@@ -80,19 +80,28 @@ body {
 
 
 .main-feed .feed {
-    background: var(--dark2);
+    /* background: var(--dark2); */
+    margin-top: 8px;
     border-radius: 40px 40px 2px 2px; /* warning - hard-coded to match feed-item b. radius */
 }
 
-.main-feed .feed h1 {
-    margin-left: 25px;
+.main-feed .feed h4, .feed p #action, .feed .pfp {
+    margin-left: 15px; /* give Jack Smith Added... a left margin */
+    margin-bottom: 15px;
+}
+
+.feed .pfp {
+    width : 50px;
+    height : 60px;
+    border-radius: 50%;
 }
 
 
 .album-cover {
+    margin-top: 15px;
     width: 250px;
     margin:0px;
-}
+} 
 
 
 .author {
