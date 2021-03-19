@@ -72,9 +72,6 @@ exports.login = async (req, res) => {
 
                 req.session.loggedin = true;
                 req.session.name = results[0].name;
-                req.session.username = results[0].username;
-                req.session.email = results[0].email;
-                req.session.id = results[0].id;
                 const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })

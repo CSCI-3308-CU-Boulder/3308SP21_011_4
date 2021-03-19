@@ -46,10 +46,16 @@ app.use('/', require('./routes/pages.js'));
 app.use('/auth', require('./routes/auth'));
 
 app.get('/feed', (req, res) => {
-    console.log("hi");
     if (req.session.loggedin){
+        console.log(req.session);
         res.render('feed', {
-            name: req.session.name
+            name: req.session.name,
+            username: req.session.username
+        })
+    }
+    else {
+        res.render('index', {
+            message: "Please Log In"
         })
     }
 })

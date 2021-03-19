@@ -9,10 +9,15 @@ router.get('/register', (req, res) =>{
     res.render('register');
 });
 
-// router.get('/feed', (req, res) =>{
-//     res.render('feed');
-// });
+router.get('/explore', (req, res) =>{
+    res.render('explore');
+});
 
-
+router.get('/pfp', (req, res) =>{
+    res.render('pfp', {
+        name: req.session.name,
+        username: req.session.username
+    });
+});
 
 module.exports = router;

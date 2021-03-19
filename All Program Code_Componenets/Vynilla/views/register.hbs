@@ -32,12 +32,12 @@
                     </div>
                     <button type="submit" class="signIn_btn">Register</button>
                     <a href="/" class="button">Have an account? Sign In</a>
+                    {{#if message}}
+                        <h4 class="alert">{{message}}</h4>
+                    {{/if}}
                 </form>
             </div>
         </div>
     </section>
-    {{#if message}}
-        <h4 class="alert alert-danger mt-4">{{message}}</h4>
-    {{/if}}
 </body>
 </html>

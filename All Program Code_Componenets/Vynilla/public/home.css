@@ -15,8 +15,6 @@ html {
 
 body {
     background: var(--dark0);
-    margin: 30px 50px;
-    line-height: 1.4em;
     color: var(--light);
 } 
 
@@ -34,36 +32,6 @@ body {
 /* .main-nav{ 
     width: 30%;
 } */
-
-.main-nav ul {
-    width: 100%;
-    display: grid;
-    grid-gap: 20px;
-    padding: 0;
-    list-style: none;
-    grid-template-rows: repeat(5, 1fr);
-    grid-area: nav;
-    grid-auto-flow: column;
-    background-color: var(--dark2);
-}
-
-.main-nav a {
-    /* box-shadow: var(--shadow); */
-    background: var(--dark2);
-    display: block;
-    text-decoration: none;
-    padding: 0.8rem;
-    text-align: left;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 1.1rem;
-    /* box-shadow: var(--shadow); */
-}
-
-.main-nav a:hover {
-    background: var(--dark1);
-    color: var(--light);
-}
 
 .main-feed {
     grid-area: feed;
@@ -174,4 +142,4 @@ body {
     padding-left: 15px;
     padding-top: 0;
     margin-top: 0;
-}
+} 

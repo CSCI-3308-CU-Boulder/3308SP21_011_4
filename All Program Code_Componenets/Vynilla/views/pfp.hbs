@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./pfp.css">
+  <link rel="stylesheet" href="./navbar.css">
+</head>
+<body>
+
+    <div class="sidenav">
+        <a href="/feed">Home</a>
+        <a href="/explore">Explore</a>
+        <a href="#">Notifications</a>
+        <a href="/pfp">Profile</a>
+    </div>
+
+  <div class="center">
+    <div class="right-profile-info">
+      <img src="https://picsum.photos/id/237/600/400" alt="A precious lil doggo" class="pfp">
+      <h1 class="name">{{{name}}}</h1>
+      <h2 class="atname">@{{{username}}}</h2>
+    </div>
+    <div class="left-profile-info">
+      <h1 class="name">Friends</h1>
+      {{!-- Add friends here with hbs and javascript --}}
+    </div>
+
+  </div>
+
+  <div class="right">
+    <div class="list">
+      <h1>Listening</h1>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  window.onload = function () {
+    document.querySelector('.search').addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) {
+        window.open('./blank.html')
+      }
+    })
+  }
+</script>
+</body>
+</html>
