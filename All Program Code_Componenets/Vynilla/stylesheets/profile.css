@@ -1,0 +1,53 @@
+:root {
+    --dark0: black;
+    --dark1: #292830;
+    --dark2: #38373d;
+    --dark3: #444347;
+    --light: #fff;
+    --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+}
+
+body {
+    background-color: lightslategray    
+}
+
+.navbar-nav {
+    border-bottom: var(--dark1);
+    padding: 10px 10px;
+    margin:auto;
+}
+
+.container {
+    margin: 15px 15px; /* top/bottom and left/right */
+}
+
+.navbar-nav.navbar-brand{
+    margin-left: auto;
+}
+
+.nav-item {
+    background-color: var(--dark1);
+    padding: 15px 4.5px; /* top/bottom and left/right */
+    
+    font-weight: 600;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    /* how to space words? */
+    border-radius: 1.0em; /* idk what this does */
+    border-color: black;
+    border: 5px;
+}
+
+.navbar navbar{
+    border-style: ridge;
+    border-radius: 500px;
+    color:yellowgreen
+}
+
+.card {
+    line-height: 50px;
+    margin:auto
+}
+
+.p {
+    font-size:2px;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./explore.css">
+  <link rel="stylesheet" href="./navbar.css">
+</head>
+<body>
+
+    <div class="sidenav">
+        <a href="/feed">Home</a>
+        <a href="/explore">Explore</a>
+        <a href="#">Notifications</a>
+        <a href="/pfp">Profile</a>
+    </div>
+
+  <div class="center">
+
+    <input type="text"
+           class="search"
+           placeholder="Search for songs, artists, albums, or users">
+
+    <div class="card-main">
+      <div class="card">
+        <a href="./blank.html" target="_blank">jack</a>
+      </div>
+      <div class="card">
+        <a href="./blank.html" target="_blank">sam</a>
+      </div>
+      <div class="card">
+        <a href="./blank.html" target="_blank">jerry</a>
+      </div>
+      <div class="card">
+        <a href="./blank.html" target="_blank">tom</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="list">
+      <h1>Listening</h1>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+      <div class="out-row">
+        <div class="p-row">
+          <img src="./abc.jpg" alt="this is a photo">
+          <span>jack smith</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  window.onload = function () {
+    document.querySelector('.search').addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) {
+        window.open('./blank.html')
+      }
+    })
+  }
+</script>
+</body>
+</html>

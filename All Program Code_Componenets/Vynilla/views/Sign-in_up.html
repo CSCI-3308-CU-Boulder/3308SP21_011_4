@@ -7,36 +7,92 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../stylesheets/login.css">
     </head>
     <body class="center text-center">
-        <div class="container-sm">
-        <form class="form-signin">
-          <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Remember me | 
-            </label>
-                <a href="">Forgot Password?</a>
-          </div>
-          <button  type="submit">Sign In</button>
-          <button  href="register.html">Sign Up</a>
-        </form>
-        <button onclick="myFunction()">Toggle dark mode</button>
+        <div class="container-sm row" id="center">
+          <div class="collumn" id="smol">  
+            <form class="form-signin">
+              <img class="Vynilla" src="..\resources\img\Vynilla.png" alt="Vynilla">
+              <h1 id = "white" class="h3 mb-3 font-weight-normal">Please sign in</h1>
+              <label for="inputEmail" class="sr-only">Email address</label>
+              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              <div class="checkbox mb-3">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                <label>
+                  <label class="control-label" id="white-r"> Remember me </label>
+                  <input type="checkbox"  value="remember-me">
+                    
+                </label>
+                </div>
+              </form>
+                    <a href="" id = "white-r">Forgot Password?</a>
+              </div>
+              <button class="btn btn-info" id="gray" type="submit">Sign In</button>
+              <div class="sign_up_button">
+                <a href="#myModal" class="btn btn-info" id="gray" data-toggle="modal" onclick="openModal()">Don't have an account? Sign Up</a>
+              </div>
+            </form>
 
-        <script>
-        function myFunction() {
-        var element = document.body;
-        element.classList.toggle("dark-mode");
-        }
-        </script>
+        <!-- Dark Mode -->
+        <button class="btn btn-info" id="gray" onclick="myFunction()">Toggle dark mode</button>
+        </div>
+        <div id="collumn">
+          <div class="container-sm" id="signwords">
+          <h>Share your love of music with your friends</h>
+        <!-- Modal HTML -->
+        <div id="myModal" class="modal fade" >
+          <div class="modal-dialog modal-login ">
+            <div class="modal-content ">
+              <div class="modal-header">
+                <div class="avatar">
+                  <img src="..\resources\img\Vynilla.png" alt="Avatar">
+                </div>
+                <h4 class="modal-title">Sign Up page</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="firstName" placeholder="First Name"
+                    required="required">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="lastName" placeholder="Last Name"
+                    required="required">
+                </div>
+                <div class="form-group">
+                  <input id="psw" type="password" class="form-control" name="password" placeholder="Password"
+                    required="required">
+                </div>
+                <div class="form-group">
+                  <input id="cpsw" type="password" class="form-control" name="confirm password"
+                    placeholder="Confirm Password" required="required">
+                </div>
+                <div class="form-group">
+                  <button id="my_submit_button" class="btn btn-primary btn-block login-btn" disabled>Sign Up</button>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <div id="message" style="display:block">
+                  <h3>Password must contain the following:</h3>
+                  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                  <p id="number" class="invalid">A <b>number</b></p>
+                  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                  <p id="match" class="invalid">Password and Confirm Password Match</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+        <script src="../javascript/login.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    </div>
     </body>
 </html>

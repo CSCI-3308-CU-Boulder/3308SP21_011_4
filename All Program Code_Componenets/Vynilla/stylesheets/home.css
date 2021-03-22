@@ -14,12 +14,16 @@ html {
 }
 
 body {
+<<<<<<< HEAD
     /* dark linear */
     background: linear-gradient(45deg, black, var(--dark3));
 
     /*blue-pink radial*/
     /* background: rgb(238, 174, 202);
     background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%); */
+=======
+    background: var(--dark0);
+>>>>>>> 4134d32456696b9a42615111173e77f5fa550144
     margin: 30px 50px;
     line-height: 1.4em;
     color: var(--light);
@@ -83,8 +87,12 @@ body {
     grid-area: feed;
     display: flex;
     flex-direction: column;
+<<<<<<< HEAD
     grid-gap: 40px;
     /* background-color: var(--dark2); */
+=======
+    background-color: black;
+>>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 .main-feed .author,
@@ -97,8 +105,27 @@ body {
     margin-left: -1px;
 }
 
+
+
+
+
 .main-feed .feed {
+<<<<<<< HEAD
     background: rgba(104, 104, 104, 0.8);
+=======
+    background: var(--dark2);
+    border-radius: 40px 40px 2px 2px; /* warning - hard-coded to match feed-item b. radius */
+}
+
+.main-feed .feed h1 {
+    margin-left: 25px;
+}
+
+
+.album-cover {
+    width: 250px;
+    margin:0px;
+>>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 
@@ -107,9 +134,14 @@ body {
 }
 
 .feed-item {
+<<<<<<< HEAD
     border-radius: 10px;
+=======
+    margin: 20px 0px;
+>>>>>>> 4134d32456696b9a42615111173e77f5fa550144
     min-height: 200px;
     background: var(--dark1);
+    border-radius: 25px;
 }
 
 .main-feed .feed-header {
@@ -119,6 +151,7 @@ body {
 
 .song { 
     display: grid;
+<<<<<<< HEAD
     grid-template-columns: 1fr, 3fr;
     /* display: grid; */
     /* grid-gap: 20px; */
@@ -127,6 +160,13 @@ body {
         /* "alb-cover song-name . ."
         ". artist    . ."
         ". album-name play . " */
+=======
+    grid-gap: 0px;
+    grid-template-areas:
+    "alb-cover song-name ."
+    "alb-cover artist    ."
+    "alb-cover album-name play"
+>>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 .song .song-name {
@@ -164,11 +204,17 @@ body {
 }
 
 .comments {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     background-color: var(--dark1);
+    border-top: 1px solid var(--dark3);
     text-align: right;
     margin-top: 0.5rem;
     margin-bottom: 0;
     padding-bottom: 0;
+    width: 100%;
+    border-radius: 0px 0px 25px 25px;
 }
 
 .comments .commenter {
@@ -191,7 +237,7 @@ body {
     grid-area: friends;
     text-align: left;
     background-color: var(--dark2);
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px ;
     /* width: 100%; */
 }
 
