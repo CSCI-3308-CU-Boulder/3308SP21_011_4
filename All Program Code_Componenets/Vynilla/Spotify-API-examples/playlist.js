@@ -59,7 +59,7 @@ app.get("/callback", (req, res) => {
 
             //now we're in business!!! let's create a playlist
             return spotifyApi
-                .createPlaylist("Hacker playlist xDxDxD", { description: "*cracks knuckles* \n time to hack the CIA.", public: true })
+                .createPlaylist("Hacker playlist xDxDxD", { description: "*cracks knuckles* time to hack the CIA.", public: true })
                 .then((data) => {
                     console.log("Created playlist!");
                 })
