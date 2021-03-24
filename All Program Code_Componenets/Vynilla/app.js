@@ -63,3 +63,9 @@ app.get('/feed', (req, res) => {
 app.listen(5000, () => {
     console.log("Server Started on Port 5000")
 })
+//need a getsong api in here
+//put all api calls in here
+//have a fn (gettoken) that all api functions can call, to mimic getSong & index.js
+//
+//
+//
