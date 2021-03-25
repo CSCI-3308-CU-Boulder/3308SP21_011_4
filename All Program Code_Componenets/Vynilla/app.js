@@ -60,6 +60,7 @@ app.get('/feed', (req, res) => {
     }
 })
 
+/* rendering username and name and profile picture*/
 app.get('/profile', (req, res) => {
     if (req.session.loggedin){
         console.log(req.session);
@@ -73,7 +74,14 @@ app.get('/profile', (req, res) => {
             message: "Please Log In"
         })
     }
+
 })
+
+/* rendering friend count */
+/// need user id --> to get into db
+/// need authentication key
+
+
 
 app.listen(5000, () => {
     console.log("Server Started on Port 5000")
