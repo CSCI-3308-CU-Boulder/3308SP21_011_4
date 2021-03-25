@@ -60,6 +60,21 @@ app.get('/feed', (req, res) => {
     }
 })
 
+app.get('/profile', (req, res) => {
+    if (req.session.loggedin){
+        console.log(req.session);
+        res.render('feed', {
+            name: req.session.name,
+            username: req.session.username
+        })
+    }
+    else {
+        res.render('index', {
+            message: "Please Log In"
+        })
+    }
+})
+
 app.listen(5000, () => {
     console.log("Server Started on Port 5000")
 })

@@ -16,22 +16,13 @@
 </head>
 
 
-<!-- to do -->
-<!-- description box -->
-<!-- description box -->
-    
-    
-
 <body>
-    <!-- https://getbootstrap.com/docs/3.3/components/  Icons for bootstrap buttons-->
-<div class="sidenav">
-    <a href="/feed">Home</a>
-    <a href="/explore">Explore</a>
-    <a href="#">Notifications</a>
-    <a href="/profile">Profile</a>
-</div>
-    
-
+    <div class="sidenav">
+        <a href="/feed">Home</a>
+        <a href="/explore">Explore</a>
+        <a href="#">Notifications</a>
+        <a href="/profile">Profile</a>
+    </div>
 
     <!-- grid wrapper -->
     <section class="wrapper">
@@ -46,15 +37,15 @@
                             alt="A precious lil doggo" class="pfp">
 
                         <!-- user name -->
-                        <h1 class="name">John Appleseed</h1>
-                        <h2 class="atname">@johnappleseed</h2>
+                        <h1 class="name">{{name}}</h1>
+                        <h2 class="atname">@{{username}}</h2>
 
                     </div>
 
                     <div>
                         <div class="friends">
                             <h3>Friends</h3>
-                            <h4>217</h4>
+                            <h4>{{friendCount}}</h4>
                         </div>
                     </div>
 
@@ -73,7 +64,7 @@
 
                     <div class="description">
                         <p>
-                            John Appleseed, born on a Monday, christened on Tuesday, married on Wednesday, took ill on Thursday, grew worse on Friday, died on Saturday, buried on Sunday.
+                            {{description}}
                         </p>
                     </div>
 
@@ -91,75 +82,71 @@
             <section class="subsections">
 
                 <!-- artists live here. -->
+                <!-- artist object notes -->
+                <!--key     : value
+                    id      : String
+                    images  : Array[ImageObject]
+                    name    : String
+                -->
                 <div class="artist-backing">
                     <h1>Artists</h1>
                     <!-- hopefully, this can give artists a nice backing-->
+                    <!-- -->
                     <div class="artists">
                         <ul class="artist-list">
-                            <li>Tame Impala</li>
-                            <li>Doja Cat</li>
-                            <li>Daft Punk</li>
-                            <li>dryhope</li>
-                            <li>MF DOOM</li>
-                            <li><i class="fas fa-plus-circle"></i></li>
+                            {{#each artist}}
+                            <li>{{this}}</li> <!-- do fields go here? -->
+                            {{/each}}
                         </ul>
                     </div>
                 </div>
 
                 <!-- songs live here -->
+                <!-- SimplifiedSongObject notes -->
+                <!--key : value
+                    artists : Array[SimplifiedArtistObject]
+                    id      : String
+                    name    : String
+                    images  : Array[ImageObject] //// only available in unsimplified 
+                -->
                 <div class="songs-backing">
                     <h1>Songs</h1>
                     <div class="songs">
                         <ul class="song-list">
+                            {{#each song}}
                             <li class="song">
-                                <h3 class="song-name">Mind Mischief</h3>
-                                <h4 class="song-artist">Tame Impala</h4>
+                                <h3 class="song-name">{{this}}</h3>
+                                <h4 class="song-artist">{{this}}</h4>
                             </li>
+                            {{/each}}
+                            <!--
                             <li class="song">
                                 <h3 class="song-name">Say So</h3>
                                 <h4 class="song-artist">Doja Cat</h4>
                             </li>
-
-                            <li class="song">
-                                <h3 class="song-name">Talk Dirty</h3>
-                                <h4 class="song-artist">Doja Cat</h4>
-                            </li>
-
-                            <li class="song">
-                                <h3 class="song-name">One More Time</h3>
-                                <h4 class="song-artist">Daft Punk</h4>
-                            </li>
-                            <li class="song">
-                                <h3 class="song-name">R.I.P Kevin Miller</h3>
-                                <h4 class="song-artist">Isaiah Rashad</h4>
-                            </li>
+                            -->
                         </ul>
                     </div>
                 </div>
 
                 <!-- albums live here -->
+                <!-- album object notes -// can possibly use SimplifiedAlbumObject-->
+                <!--key : value
+                    artists : Array[ArtistObject]
+                    id      : String
+                    images  : Array[ImageObject]
+                    name    : String
+                --> 
                 <div class="albums-backing">
                     <h1>Albums</h1>
                     <div class="albums">
                         <ul class="album-list"> 
-
+                            {{#each album}}
                             <li class="album">
                                 <h3>Mind Mischief</h3>
                                 <h4>Tame Impala</h4>
                             </li>
-                            <li class="album">
-                                <h3>Take Care (Deluxe)</h3>
-                                <h4>Drake</h4>
-                            </li>
-                            <li class="album">
-                                <h3>Discovery</h3>
-                                <h4>Daft Punk</h4>
-                            </li>
-                            <li class="album">
-                                <h3>Riot!</h3>
-                                <h4>Paramore</h4>
-                            </li>
-                            <i class="fas fa-plus-circle"></i>
+                            {{/each}}
                         </ul>
                     </div>
                 </div>
@@ -169,48 +156,54 @@
 
 
         <!-- Use a flex box for Queue -->
-        <div class="friends-backer">
-            <!-- Potentially make it 'rightside'-->
 
-            <!-- left-side navbar -->
+        <!-- public user notes PublicUserObject -->
+        <!-- 
+            display_name : String
+            id           : String
+            images       : Array[ImageObject]
+            followers    : FollowersObject
+        -->
+        <div class="friends-backer">
+
             <div class="friends">
-                <h1>The Aux</h1> <!-- who did you hand the Aux?-->
+                <h1>Aux</h1>
                 <ul>
+                    {{#each item}}
                     <li class="feed-item">
                         <h3 class="friend-name">jacksmith</h3>
                         <h4 class="song-name">Say So</h4>
                         <h5 class="song-artist">Doja Cat</h5>
                     </li>
-                    <li class="feed-item">
-                        <h3 class="friend-name">anniesmith</h3>
-                        <h4 class="song-name">Sonate Pacifique</h4>
-                        <h5 class="song-artist">L'Impératrice</h5>
-                    </li>
+                    {{/each}}
                 </ul>
             </div>
         </div>
 
     </section>
 
+
+    <!-- image object -->
+    <!-- key    : value
+         height : int
+         width  : int
+         url    : String
+    -->
+
+    <!-- private user object -->
+    <!-- key    : value
+         display_name : String
+         id           : String
+         url          : Array[ImageObject]
+    -->
+
+    <!-- Followers object -->
+    <!-- key    : value
+         href  : String
+         total : int
+    -->
+
+
 </body>
 
 </html>
-
-
-
-<!-- can hopefully use this to give navbar a background color -->
-        <!-- maybe turn it to section rather than div? notsure -->
-        
-        <!-- 
-        <div class="navbar-backer">
-            <div class="navbar">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Notifications</a></li>
-                    <li><a href="#">Explore</a></li>
-                    <li><a href="#">Inbox</a></li>
-                    <li><a href="#">Profile</a></li>
-                </ul>
-            </div>
-        </div>
-        -->
