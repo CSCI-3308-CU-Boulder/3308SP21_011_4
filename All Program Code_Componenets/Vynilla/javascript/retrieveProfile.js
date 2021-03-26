@@ -11,7 +11,16 @@ const bcrypt = require('bcryptjs');
 var session = require('express-session');
 var pgp = require('pg-promise')();
 
+
+// is mysql specified?
 const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASS,
+    database: "nodejs_login"
+});
+
+const friends_table = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
@@ -20,45 +29,53 @@ const db = mysql.createConnection({
 
 
 // store in cookie (our own id, spotify id, username?)
-//  send profile picture and display_name
+// retrieve all user info and send to profile page
 app.get('/Vynilla/profile', function(req, res) {
-    var friends_count = "";
-    var friends_list = "";
+
+	//each where will use WHERE id = ' '; 
     var name = "";
+	var friend_count = "";
     var pfplink = "";
-    var queue = "";
     var top_songs = "";
     var top_albums = "";
     var top_artists = "";
+	var friends_list = "";
     
 	db.task('get-everything', task => {
 		return task.batch([
 			task.any(name),
+			task.any(friend_count),
 			task.any(pfplink),
-            task.any(friends_count),
             task.any(top_artists),
             task.any(top_songs),
             task.any(top_albums),
-            task.any(queue),
             task.any(friends_list)
 		]);
 	})
-		.then(info => { // use info as array name
-			res.render('pages/home',{
-				my_title: "Home Page",
-				data: "", // first db query result
-				color: "",
-				color_msg: info[1][0].color_msg // why is this 2d array and why .color_msg
+		.then(info => { // use info as array name // does it matter that return types have same name as query vars?
+			res.render('/Vynilla/profile',{
+				display_name: session.Cookie.username,
+				name: info[0],
+				friend_count: info[1],
+				profile_link: info[2],
+				top_artists: info[3],
+				top_songs: info[4],
+				top_albums: info[5],
+				friends_list: info[6]
 			})
 		})
 		.catch(error => {
 			// display error message in case an error
 			request.flash('error', err);
-			response.render('pages/home', {
-				title: 'Home Page',
-				data: '',
-				color: '',
-				color_msg: ''
+			response.render('/Vynilla/profile', {
+				display_name: session.Cookie.username,
+				name: '',
+				friend_count: '',
+				profile_link: '',
+				top_artists: '',
+				top_songs: '',
+				top_albums: '',
+				friends_list: ''
 			})
 		});
 
@@ -67,27 +84,21 @@ app.get('/Vynilla/profile', function(req, res) {
 
 // this post will take in the user selected friend, then return the queue from that user
 app.post('/Vynilla/profile', function(req, res) {
-	var friends_list = req.query.friend_select; // drop down element id="friend_select"
+	var friend = req.query.friend_select; // drop down element id="friend_select"
     
-	db.task('get-everything', task => {
-		task.query(friends_list)
+	friends_table.task('get-everything', task => {
+		task.query(friend)
 	})
 		.then(info => { // use info as array name
-			res.render('pages/home',{
-				my_title: "Home Page",
-				data: "", // first db query result
-				color: "",
-				color_msg: info[1][0].color_msg // why is this 2d array and why .color_msg
+			res.render('/Vynilla/profile', {
+				queue: info[0]
 			})
 		})
 		.catch(error => {
 			// display error message in case an error
 			request.flash('error', err);
-			response.render('pages/home', {
-				title: 'Home Page',
-				data: '',
-				color: '',
-				color_msg: ''
+			response.render('/Vynilla/profile', {
+				queue: ''
 			})
 		});
 
