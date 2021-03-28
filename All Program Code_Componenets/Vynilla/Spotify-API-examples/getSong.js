@@ -9,7 +9,7 @@ const spapi = require('spotify-web-api-node');
 //5. put in this string
 //6. 'node getSong'
 //7. :D
-const token = 'BQBnjJyRRFHeGTg59o08DcKrqag5CpoCcxNcN4RbRRX6HgScgxlgVeuVTO4y8UoMjQGBRHQQ-8MGGUST7sAa6ONQ1PZUdI_QqwQG1T0fdO3IGd87qGNOukVMhCi377v07aaMqgWMAfib1axQV0AtsvWDi0JSAhCSSC0w_nqrqtfU9jXTrehdrcfTW_8SRtCwe1UDbdGGC7YVMB1kGBkSISM56KlOvk7kfiUdfqhaTdLAbmhRHh1IFplMEjJAe3Sw2Jq9zR9OY3_99NI1--Cf3SWlLmtxN3_-MdklzD9le46JgHyOkfi5'
+const token = 'BQCVfl5bSWEuYNXEjJWJKzDND2zyvgtkbKkTYKM63vbtsjOD3nBiQllAGRO-rz8Bgco63e4RwOCq_HfRId-YIZ9wHr59fZhKDIuex2WBi9bAsl93E06XLQY8T4BDyWJDIkrbJIHuKZXyC6-JxxjRlZepDjGeXx1krQgL9o8uhP6ZD0a0IB0BJ0sKSJcCJLEQbjjY7TmmSlKG7JcdttociMSPiKwhRUlM2sJg1c8PzPTQABwTHVlA1dNp4ZJq7wNckedPyRLZhU0-MNdig64m_6NxKgopJi62j7uQkh83er426z_VsvV-'
 //token *shouldn't* be stored in browser (cookies), but alas... we won't get docked for it if we do that
 
 const spot = new SpotifyWebApi();

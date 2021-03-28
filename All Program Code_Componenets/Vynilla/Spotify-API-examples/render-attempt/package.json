@@ -1,0 +1,9 @@
+{
+    "name": "node-ejs-spotify",
+    "main": "server.js",
+    "dependencies": {
+        "ejs": "^3.1.5",
+        "express": "^4.17.1",
+        "spotify-web-api-node": "5.0.0"
+    }
+}
