@@ -66,7 +66,7 @@ app.post('/explore/search', (req, res) => {
     var query = "select * from users where name = " + search + ";";
     // console.log(query);
     db.query('USE nodejs_login;');
-    db.query('SELECT * FROM users WHERE name LIKE ?', [search], async (error, results) => {
+    db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         console.log(results);
         if(error){
             console.log(error);
@@ -110,7 +110,7 @@ app.get('/pfp', (req, res) =>{
     console.log(req.session.userId);
     db.query('USE nodejs_login;');
     db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
-    WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != 1", [req.session.userId, req.session.userId], async (error, results) => {
+    WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != ?", [req.session.userId, req.session.userId, req.session.userId], async (error, results) => {
         if (error){
             res.render('pfp', {
                 name: req.session.name,
