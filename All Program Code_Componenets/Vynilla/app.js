@@ -17,6 +17,7 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
+
 db.connect((error) => {
     if(error) {
         console.log(error)
@@ -58,6 +59,98 @@ app.get('/feed', (req, res) => {
             message: "Please Log In"
         })
     }
+})
+
+app.post('/explore/search', (req, res) => {
+    const search = req.body.search;
+    var query = "select * from users where name = " + search + ";";
+    // console.log(query);
+    db.query('USE nodejs_login;');
+    db.query('SELECT * FROM users WHERE name LIKE ?', [search], async (error, results) => {
+        console.log(results);
+        if(error){
+            console.log(error);
+        }
+        if (results.length == 0){
+            res.render('explore', {
+                message: "No users with this username",
+                friends: null
+            })
+        }
+        else {
+            res.render('explore', {
+                message: null,
+                friends: results
+            })
+        }
+    });
+});
+
+app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
+    console.log(req.params.username);
+    console.log(req.params.userTwoId);
+    const userOneId = req.session.userId;
+    const userTwoId = req.params.userTwoId;
+    db.query('INSERT INTO relationship SET ?', {user_id_one: userOneId, user_id_two: userTwoId, status: 0, action_user_id: userOneId }, (error, results) => {
+            if(error){
+                console.log(error);
+                res.render('explore', {
+                    message: "Error Sending Friend Request",
+                    friends: null
+                })
+            } else {
+                res.render('explore', {
+                    message: "Friend Request Sent to " + req.params.username
+                })
+            }
+    })
+})
+
+app.get('/pfp', (req, res) =>{
+    console.log(req.session.userId);
+    db.query('USE nodejs_login;');
+    db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
+    WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != 1", [req.session.userId, req.session.userId], async (error, results) => {
+        if (error){
+            res.render('pfp', {
+                name: req.session.name,
+                username: req.session.username,
+                friend_requests: null
+            })
+        } else {
+            console.log(results);
+            db.query("SELECT users.username FROM relationship INNER JOIN users ON IF(?=user_id_one, relationship.user_id_two = users.id, relationship.user_id_one = users.id) WHERE (user_id_one = ? OR user_id_two = ?) AND status = 1 \
+            ", [req.session.userId, req.session.userId, req.session.userId], async (error, friendsList) => {
+            if (error) {
+                console.log(error);
+            } else {
+                res.render('pfp', {
+                    name: req.session.name,
+                    username: req.session.username,
+                    friend_requests: results,
+                    friends: friendsList
+                });
+            }
+        })
+        }
+    })
+});
+
+app.get('/pfp/accept-friend/:userOneId', (req, res) => {
+    console.log(req.params.userOneId);
+    const signedInUser = req.session.userId;
+    const friend = req.params.userOneId;
+    db.query('USE nodejs_login;');
+    db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?", 
+        [signedInUser, friend, signedInUser], async (error, results) => {
+            if (error){
+                console.log(error);
+                res.redirect('/pfp');
+            }
+            else {
+                res.redirect('/pfp');
+            }
+    })
 })
 
 app.listen(5000, () => {

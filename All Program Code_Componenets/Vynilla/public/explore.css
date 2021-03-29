@@ -7,6 +7,36 @@
   --light: #fff;
   --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
 }
+.searchText {
+  color: white;
+  font-size: 20px;
+  align-self: flex-start;
+}
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  padding: 25px;
+  background-color: rgb(73, 73, 73);
+  border-radius: 5px;
+}
+.button {
+  display: inline-block;
+  padding: .75rem 1rem;
+  border-radius: 10rem;
+  background-color: rgb(75, 196, 101);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.button:hover {
+  background-color: rgb(54, 139, 72);
+}
+
 
 a {
   color: white;

@@ -8,6 +8,26 @@
   --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
 }
 
+.friendReq {
+  display: flex;
+  color: white;
+  margin: 10px;
+}
+.friendText {
+  font-size: 1.5rem;
+  text-decoration: bold;
+  margin: 10px;
+  color: white;
+}
+.acceptFR {
+  margin: 10px;
+  color: green;
+}
+.declineFR {
+  margin: 10px;
+  color: red;
+}
+
 a {
   color: white;
   text-decoration: none;

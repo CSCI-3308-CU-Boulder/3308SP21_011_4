@@ -24,6 +24,16 @@
     <div class="left-profile-info">
       <h1 class="name">Friends</h1>
       {{!-- Add friends here with hbs and javascript --}}
+      {{#each friend_requests}}
+        <div class="friendReq">
+          <div class="friendText">{{this.username}}</div>
+          <a href="/pfp/accept-friend/{{this.user_id_one}}" class="acceptFR">Accept</a>
+          <a href="#" class="declineFR">Decline</a>
+          </div>
+      {{/each}}
+      {{#each friends}}
+        <div class="friendText">{{this.username}}</div>
+      {{/each}}
     </div>
 
   </div>

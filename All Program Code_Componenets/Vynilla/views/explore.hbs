@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <link rel="stylesheet" href="./explore.css">
-  <link rel="stylesheet" href="./navbar.css">
+  <link rel="stylesheet" href="/explore.css">
+  <link rel="stylesheet" href="/navbar.css">
 </head>
 <body>
 
@@ -16,10 +16,23 @@
     </div>
 
   <div class="center">
+    <form action="/explore/search" method="POST">
+      <input type="name" action="/explore/search"
+            class="search" id="search" name="search"
+            placeholder="Search for songs, artists, albums, or users">
+      </form>
 
-    <input type="text"
-           class="search"
-           placeholder="Search for songs, artists, albums, or users">
+      {{#if message}}
+        <h4 class="searchText">{{message}}</h4>
+      {{/if}}
+      {{#each friends}}
+        <div class="searchResults">
+          <div class="searchText">
+            {{this.username}}
+            <a href="/explore/friend-request-sent/{{this.username}}/{{this.id}}" class="button">Add Friend</a>
+          </div>
+        </div>
+      {{/each}}
 
     <div class="card-main">
       <div class="card">

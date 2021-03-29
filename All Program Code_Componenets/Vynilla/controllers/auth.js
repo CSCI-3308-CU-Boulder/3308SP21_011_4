@@ -19,13 +19,13 @@ exports.register = (req, res) => {
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
 
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
+    db.query('SELECT username FROM users WHERE username = ?', [username], async (error, results) => {
         if(error){
             console.log(error);
         } 
         if( results.length > 0 ){
             return res.render('register', {
-                message: "Email is already in use"
+                message: "Username is already taken"
             })
         }
         else if (password !== confirmPass){
@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
                 req.session.name = results[0].name;
                 req.session.username = results[0].username;
                 req.session.email = results[0].email;
-                req.session.id = results[0].id;
+                req.session.userId = results[0].id;
                 const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })
