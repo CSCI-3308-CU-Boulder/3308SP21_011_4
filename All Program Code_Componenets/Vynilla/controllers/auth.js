@@ -2,6 +2,8 @@ const mysql = require("mysql");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 var session = require('express-session');
+const SpotifyWebApi = require('spotify-web-api-node');
+
 
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
@@ -11,6 +13,7 @@ const db = mysql.createConnection({
 });
 
 exports.register = (req, res) => {
+
     console.log(req.body);
 
     const name = req.body.name;
@@ -18,6 +21,12 @@ exports.register = (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
+
+    if (!name || !email || !username || !password || !confirmPass){
+        return res.render('register', {
+            message: "Fields cannot be blank"
+        })
+    }
 
     db.query('SELECT username FROM users WHERE username = ?', [username], async (error, results) => {
         if(error){
@@ -41,9 +50,7 @@ exports.register = (req, res) => {
             if(error){
                 console.log(error);
             } else {
-                return res.render('register', {
-                    message: "User registered"
-                })
+                return res.redirect('/connect-spotify');
             }
         })
     });
@@ -86,7 +93,7 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie("jwt", token, cookieOptions);
-                res.status(200).redirect("/feed");
+                res.status(200).redirect('/feed');
             }
         })
 

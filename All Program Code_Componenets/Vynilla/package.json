@@ -30,6 +30,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
-    "pg-promise": "^10.9.5"
+    "pg-promise": "^10.9.5",
+    "spotify-web-api-node": "^5.0.2"
   }
 }
