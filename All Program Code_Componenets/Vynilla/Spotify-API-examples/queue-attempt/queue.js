@@ -1,6 +1,7 @@
 const app = require("express")();
 const path = require("path");
 const SpotWAPI = require("spotify-web-api-node");
+const qs = require('querystring');
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -11,7 +12,7 @@ const credentials = {
     redirectUri: "http://localhost:8888/callback",
 };
 
-const scopes = ["playlist-modify-private"];
+const scopes = ["playlist-modify-private", "playlist-modify-public"];
 
 var spotifyApi = new SpotWAPI(credentials);
 
@@ -66,23 +67,49 @@ app.get("/callback/search", (req, res) => {
                     artists.push(artist.name); //add them to artists
                 });
 
-
                 //add an entry for the current song
                 //whose 'artists' field is an array of all artists
-                console.log(songsObj);
                 songsObj.songs.push({
                     songname: song.name,
-                    artists: [...artists] //spread operator. kinda funky, definitely redundant, but it feels flex
+                    artists: [...artists], //spread operator. kinda funky, definitely redundant, but it feels flex
+                    id: "spotify:track:" + song.id
                 });
             });
 
-            res.render("queue", { songs: songsObj["songs"] }); //once that's all done, render it in modal.hbs
+            songsToAdd.push(songsObj["songs"][0]);
+            console.log(songsToAdd);
+            res.render('queue', {songs: songsToAdd})
+
         })
         .catch((err) => {
             console.log("So close!! : " + err);
             return;
         });
 });
+
+app.post('/makePlaylist', (req,res) => {
+     var songIDs = songsToAdd.map(function(obj) {
+        console.log("fuck it!!! :" + obj.name);
+        return obj[2];
+    })
+
+    console.log(req.body);
+
+    spotifyApi.createPlaylist('My Love For U <3', {'description': 'Made with Vynilla!', 'public': true})
+        .then((data) => {
+            console.log('Created playlist!');
+            console.log(data);
+            return data;
+        }).then((data) => {
+            console.log(songIDs);
+            return spotifyApi.addTracksToPlaylist(data.body.id, songIDs);
+        })
+        .catch((err) => {
+            console.log("No playlist for u. " + err);
+        })
+        res.render('queue', {songs: []})
+})
+
 
 app.listen(8888, console.log("Goto http://localhost:8888/login"));
 

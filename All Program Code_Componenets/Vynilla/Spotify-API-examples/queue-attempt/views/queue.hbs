@@ -26,16 +26,34 @@
                             <label for="songname">Songname</label>
                             <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!" />
                         </div>
-                        <button type="submit" class="btn btn-success btn-sm">Add it</button>
-                        <div class="songs-to-add"></div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Nvm I hate my friends</button>
-                </div>
+                    <button type="submit" class="btn btn-success btn-sm">Add it</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">Nvm I hate my friends</button>
             </div>
         </div>
     </div>
+</div>
+<div class="songs-to-add">
+    <ul>
+        {{#each songs}}
+            <li>{{songname}}</li>
+            <ul>
+                {{#each artists}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/each}}
+    </ul>
+</div>
+
+<form action="/makePlaylist" method="post">
+    {{#if songs}}
+        <button type="submit" class="btn btn-success btn-default pull-left"> Make that hoe!!</button>
+    {{/if}}
+</form>
+
 
     <script>
         $(document).ready(function() {
