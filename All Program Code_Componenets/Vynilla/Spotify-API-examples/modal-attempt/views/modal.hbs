@@ -33,10 +33,6 @@
                                 <label for="songname">Songname</label>
                                 <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!" />
                             </div>
-                            <div class="form-group">
-                                <label for="artistname">Artist Name</label>
-                                <input type="text" name="artistname" class="form-control" id="artistname" placeholder="Enter its artist!" />
-                            </div>
                             <button type="submit" class="btn btn-success btn-block">Search that bad boy!</button>
                         </form>
                     </div>
@@ -51,8 +47,12 @@
         <div class="songs">
             <ul>
             {{#each songs}}
-                <!-- <h1> {{this.body.tracks.items.name}} </h1> -->
-                <li>{{this}}</li>
+                <li>{{songname}}</li>
+                <ul>
+                    {{#each artists}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
             {{/each}}
 
         </div>
