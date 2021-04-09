@@ -144,7 +144,7 @@ app.get('/callback', (req, res) => {
 
 app.get('/feed', (req, res) => {
     if (req.session.loggedin){
-        console.log(req.session);
+        // console.log(req.session);
         res.render('feed', {
             name: req.session.name,
             username: req.session.username
@@ -157,28 +157,73 @@ app.get('/feed', (req, res) => {
     }
 })
 
+
 app.post('/explore/search', (req, res) => {
     const search = req.body.search;
     var query = "select * from users where name = " + search + ";";
-    // console.log(query);
+    var friendsResults;
+    // First we search users
     db.query('USE nodejs_login;');
     db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         console.log(results);
+        friendsResults = results;
         if(error){
             console.log(error);
         }
-        if (results.length == 0){
-            res.render('explore', {
-                message: "No users with this username",
-                friends: null
+
+        // Now we search a song
+        const song = req.body.search;
+        // const playlistid = req.query["playlistid"];
+        console.log(song);
+
+        var songsObj = {
+            songs: []
+        };
+
+        spotifyApi
+            .clientCredentialsGrant()
+            .then(function(data) {
+                // Set the access token on the API object so that it's used in all future requests
+                spotifyApi.setAccessToken(req.session.access_token);
+
+                // Get the most popular tracks by David Bowie in Great Britain
+                return spotifyApi.searchTracks(song, { limit: 5 });
             })
-        }
-        else {
-            res.render('explore', {
-                message: null,
-                friends: results
+            .then((data) => {
+                data.body.tracks.items.forEach((item) => {
+                    var artists = [];
+                    item.artists.forEach((artist) => {
+                        artists.push(artist.name);
+                    })
+                    songsObj.songs.push({
+                        songname: item.name,
+                        artists: artists,
+                        link: item.uri //NOTICE: we're passing link URIs now. this is the checkbox's value in hbs
+                    })
+
+                });
+                if (results.length == 0){
+                    res.render('explore', {
+                        message: "No users with this username",
+                        friends: null, 
+                        songs: songsObj["songs"]
+                    })
+                }
+                else {
+                    res.render('explore', {
+                        message: null,
+                        friends: friendsResults,
+                        songs: songsObj["songs"]
+                    })
+                }
+
+                //pass the songs returned from the call & playlistid back to the hbs
+                // res.render('explore', {songs: songsObj["songs"], message: null, friends: friendsResults});
             })
-        }
+            .catch((err) => {
+                console.log(err);
+            });
+
     });
 });
 
@@ -268,6 +313,7 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
             }
     })
 })
+
 
 app.listen(8888, () => {
     console.log("Server Started on Port 8888")

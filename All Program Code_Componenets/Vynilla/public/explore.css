@@ -12,6 +12,14 @@
   font-size: 20px;
   align-self: flex-start;
 }
+
+.searchCategory {
+  color: rgb(196, 196, 196);
+  font-size: 20px;
+  align-self: flex-start;
+  text-decoration: underline;
+}
+
 .searchResults {
   display: flex;
   flex-direction: column;

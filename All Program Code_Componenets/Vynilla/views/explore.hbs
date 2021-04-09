@@ -22,14 +22,24 @@
             placeholder="Search for songs, artists, albums, or users">
       </form>
 
-      {{#if message}}
-        <h4 class="searchText">{{message}}</h4>
+      {{#if friends}}
+        <h2 class="searchCategory">Users</h2>
       {{/if}}
       {{#each friends}}
         <div class="searchResults">
           <div class="searchText">
             {{this.username}}
             <a href="/explore/friend-request-sent/{{this.username}}/{{this.id}}" class="button">Add Friend</a>
+          </div>
+        </div>
+      {{/each}}
+      {{#if songs}}
+        <h2 class="searchCategory">Songs</h2>
+      {{/if}}
+      {{#each songs}}
+        <div class="searchResults">
+          <div class="searchText">
+            {{songname}}
           </div>
         </div>
       {{/each}}
