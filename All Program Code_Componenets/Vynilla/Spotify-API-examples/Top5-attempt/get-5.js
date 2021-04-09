@@ -96,41 +96,42 @@ app.get('/callback/searchSong', function(req, res) {
     var track = req.query.addSong + '';
     var trackArtist = req.query.songArtist + '';
     var trackquery = 'track:' + track + ' artist:' + trackArtist;
+    var trackid = '';
 
     
     // check if we can search tracks by id '3TO7bbrUKrOSPGRTB5MeCz' ==> doesnt works
     spotifyApi.searchTracks(trackquery)
     .then((data) => {
         console.log('Search tracks ' + track, data.body);
-        var trackid = '';
-        var creator = '';
-        var creator = creator + data.body.tracks.items[0].artists[0].name;
         var trackid = trackid + data.body.tracks.items[0].id;
-        /*
-        var newsong = {
-            "name": [],
-            "image": []
-        };
-        spotifyApi.getTracks(trackid)
-        */
-        // put as into json of TOPSONGS
-        // db.put(creator and trackid) append to 
     })
     .catch(err => {
         res.send('error');
     });
+    // all above goes into explore page
 
-
-
-    /* does db send back list or json with nested list?
+    // all below in rendering pfp
     var dbquery = 'SELECT TOPSONGS where id = req.session.userID';
-    //db.any(dbquery)
+    db.any(dbquery)
     .then((data) => {
-        res.render {
-            song-list: data
+        var songsObj = {
+            songs: []
+        };
+
+        for (i = 0; i < data.length; i++){
+            spotifyApi.getTrack(data[i])
+            .then((data) => {
+                var creator = data.body.artists[0].name;
+                var trackname = data.body.name;
+                songsObj.songs.push(
+                    {
+                        name: trackname,
+                        artist: creator
+                    }
+                )
+            })
         }
     });
-    */
     
 });
 
@@ -209,40 +210,31 @@ app.get('/callback/searchArtist', function(req, res) {
         var searchid = searchid + data.body.artists.items[0].id;
         //db.put(searchid) // append to list in db?
     })
+    // all above goes to explore
 
+    // all below to app.js to load pfp
     //db.any(query);
     .then((data) => {
         //object to send to handlebars
         var artistsObj = {
-            "name": [],
-            "image": []
+            artists: []
         };
         
         // looping over list of artist id's stored in db
-        // db stores list of ids ['1234', '5678']
         for (i = 0; i < data.length; i++) {
-            var name = '';
-            var img = ''
             spotifyApi
             .getArtist(data[i])
             .then((data) => {
                 var name = name + data.body.name;
-                var img = img + data.body.images[0].url;   // getting name and image from getArtist method
+                var img = img + data.body.images[0].url;
+                artistsObj.artists.push(
+                    {
+                        name: name,
+                        image: img
+                    }
+                );
             })
-            artistsObj.name.push(name);
-            artistsObj.image.push(img);
         }
-        
-        //update with all db searches?
-        res.render('profile.hbs', {
-            name: 'dalbir',
-            display_name: 'dabr2558',
-            friend_count: '555',
-            artist: '',
-            album: [ 'bandana', 'ye', 'after Hours' ],
-            friend: ['bado6868', 'yared4221', 'jake99'],
-            profile_link: 'https://media-exp1.licdn.com/dms/image/C5603AQFyRCCZSpyyrg/profile-displayphoto-shrink_100_100/0/1613370728531?e=1623283200&v=beta&t=JgVqFQigP-7wCVM7V-oDmR6FHyWMBjsDmIXMgJyrkgY'
-        });
     })
     .catch((err) => {
         console.log("Something went wrong in searchArtist!", err);
@@ -252,21 +244,18 @@ app.get('/callback/searchArtist', function(req, res) {
 // keep as post
 app.post('/callback/removeSongs', function(req, res) {
     //db.put("")
-    //es.redirect('/callback');
     console.log('Client requested all Songs to be removed.');
 });
 
 // needs to be post
 app.post('/callback/removeAlbums', function(req, res) {
     //db.put("")
-    //res.redirect('/callback');
     console.log('Client requested all Albums to be removed.');
 });
 
 // needs to be post
 app.post('/callback/removeArtists', function(req, res) {
     //db.put("")
-    //res.redirect('/callback')
     console.log('Client requested all Artists to be removed.');
 });
 
