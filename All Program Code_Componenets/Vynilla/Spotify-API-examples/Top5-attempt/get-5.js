@@ -145,12 +145,10 @@ app.get('/callback/searchAlbum', function(req, res) {
     .then((data) => {
         console.log('Artist information', data.body);
         artistid = artistid + data.body.artists.items[0].id;
-        //res.send(data.body.artists.items[0].id);
     })
     .catch((err) => {
         console.log("Something went wrong in searchAlbum!", err);
     });
-    
    
     spotifyApi.getArtistAlbums(artistid, {limit: 5})
     .then((data) => {
@@ -161,42 +159,33 @@ app.get('/callback/searchAlbum', function(req, res) {
     .catch((err) => {
         console.log("Something went wrong in searchAlbum pt2!", err);
     });
-    
-
-    
-    /* insert one of these or 5 of these? */
-        // if one, then db return is sent to user no for loop
-        // if five, then this obj needs to be put into above api call and then stuck into db
+    // all above to explore page
+        
+    // all below to app.js under /profile
+    db.any(TOPALBUMS)
+    .then((data) => {
         var albumsObj = {
-            "name": [],
-            "artist": [],
-            "image": []
+            albums: []
         };
-    
-        //db.any(TOPALBUMS)
-    //.then((data) => {
-        
-        
-        // looping over list of artist id's stored in db
-        // db stores list of ids ['1234', '5678']
-        /*
         for (i = 0; i < data.length; i++) {
             var name = '';
             var img = ''
             spotifyApi
-            .getArtist(data[i])
+            .getAlbum(data[i])
             .then((data) => {
                 var name = name + data.body.name;
-                var img = img + data.body.images[0].url;   // getting name and image from getArtist method
+                var img = img + data.body.images[0].url;
+                var creator = data.body.artists[0].name;
+                albumsObj.albums.push(
+                    {
+                        name: name,
+                        artist: creator,
+                        image: img
+                    }
+                );
             })
-            albumsObj.name.push(name);
-            albumsObj.image.push(img);
-        }*/
-    //})
-    
-    
-        // then loop through db using id and .getAlbum('insertid') to get album info and send
-        // to page in json {name: 'name', Artist: 'name', coverArt:'url'}
+        }
+    })
 });
 
 app.get('/callback/searchArtist', function(req, res) {
