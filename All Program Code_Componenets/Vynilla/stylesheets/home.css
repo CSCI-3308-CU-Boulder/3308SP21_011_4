@@ -14,7 +14,6 @@ html {
 }
 
 body {
-<<<<<<< HEAD
     /* dark linear */
     background: linear-gradient(45deg, black, var(--dark3));
 
@@ -23,7 +22,6 @@ body {
     background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%); */
 =======
     background: var(--dark0);
->>>>>>> 4134d32456696b9a42615111173e77f5fa550144
     margin: 30px 50px;
     line-height: 1.4em;
     color: var(--light);
@@ -78,7 +76,6 @@ body {
 
 .main-nav a:hover {
     transition: 0.3s;
-    /* background: linear-gradient(90deg, var(--c1, #f6d365), var(--c2, #fda085) 51%, var(--c1, #f6d365)) var(--x, 0)/ 200%; */
     background: var(--dark1);
     color: var(--light);
 }
@@ -87,16 +84,15 @@ body {
     grid-area: feed;
     display: flex;
     flex-direction: column;
-<<<<<<< HEAD
     grid-gap: 40px;
     /* background-color: var(--dark2); */
-=======
     background-color: black;
->>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 .main-feed .author,
 .action {
+=======
+.main-feed .author, .action, .pfp {
     display: inline;
     margin-left: 10px;
 }
@@ -110,22 +106,27 @@ body {
 
 
 .main-feed .feed {
-<<<<<<< HEAD
-    background: rgba(104, 104, 104, 0.8);
-=======
+    /* background: rgba(104, 104, 104, 0.8); */
     background: var(--dark2);
     border-radius: 40px 40px 2px 2px; /* warning - hard-coded to match feed-item b. radius */
 }
 
-.main-feed .feed h1 {
-    margin-left: 25px;
+.main-feed .feed h4, .feed p #action, .feed .pfp {
+    margin-left: 15px; /* give Jack Smith Added... a left margin */
+    margin-bottom: 15px;
+}
+
+.feed .pfp {
+    width : 50px;
+    height : 60px;
+    border-radius: 50%;
 }
 
 
 .album-cover {
+    margin-top: 15px;
     width: 250px;
     margin:0px;
->>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 
@@ -134,11 +135,8 @@ body {
 }
 
 .feed-item {
-<<<<<<< HEAD
     border-radius: 10px;
-=======
     margin: 20px 0px;
->>>>>>> 4134d32456696b9a42615111173e77f5fa550144
     min-height: 200px;
     background: var(--dark1);
     border-radius: 25px;
@@ -151,7 +149,6 @@ body {
 
 .song { 
     display: grid;
-<<<<<<< HEAD
     grid-template-columns: 1fr, 3fr;
     /* display: grid; */
     /* grid-gap: 20px; */
@@ -160,13 +157,11 @@ body {
         /* "alb-cover song-name . ."
         ". artist    . ."
         ". album-name play . " */
-=======
     grid-gap: 0px;
     grid-template-areas:
     "alb-cover song-name ."
     "alb-cover artist    ."
     "alb-cover album-name play"
->>>>>>> 4134d32456696b9a42615111173e77f5fa550144
 }
 
 .song .song-name {

@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-8">
+        <form action="/song" method="post" id="song-form">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" for="song-name">Song Name</label>
+                <div class="col-sm-10">
+                    <input id="song-name" class="form-control" type="text" name="song_name" placeholder="Enter Song Name">
+                </div>
+                
+                <% 
+                var songtext = "<p>"
+                if (song) {
+                    console.log(song.name);   
+                    songtext += song.name +"</p>";
+                } 
+                %>
+                <%- songtext %>
+
+            </div>
+        </form>
+    </div>
+</div>
