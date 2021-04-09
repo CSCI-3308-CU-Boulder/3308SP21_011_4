@@ -1,0 +1,32 @@
+
+
+  <head>
+  <main>
+    <div class="" style="background-color: #0f415c;">
+      <div class="container-fluid" style="padding: 2%; ">
+        <input type="text" id="songnam" name="songnam" placeholder="Enter the song">
+      </li>
+        <br></br>
+        <button type="button" class="btn btn-primary">Submit</button>
+    </head>
+  </main>
+    <body>
+      </ul>
+      <% if (items) {%>
+        <% var cards = ''; %>
+        <%i=0%>
+        <% items.forEach(function(item){
+            
+            cards += '<div class="card"  ><div class="card-body"><h4>' + items[i].name + '</h4></div></div>'
+            i+=1
+          }); %>
+
+          <div class="card-columns"><%- cards %></div>
+      <% } %>
+
+      </div>
+      </div>
+      
+
+    </body>
+    <script src="Search_Song.js"></script>
