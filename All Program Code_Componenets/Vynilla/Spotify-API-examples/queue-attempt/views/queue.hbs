@@ -21,12 +21,29 @@
                     <h4>Searchy search search</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="/callback/search" method="get">
-                        <div class="form-group">
-                            <label for="songname">Songname</label>
-                            <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!" />
+                    <!-- <form action="/callback/search" method="get"> -->
+                    <!--     <div class="form-group"> -->
+                    <!--         <label for="songname">Songname</label> -->
+                    <!--         <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!" /> -->
+                    <!--     </div> -->
+                    <!-- <button type="submit" class="btn btn-success btn-sm">Add it</button> -->
+                <!-- </form> -->
+                <form action="/callback/makeplaylist" method="get">
+                    <div class="form-group" id = "2ndform">
+                        <div class="row">
+                            <label class="control-label" for="Playlist"></label>
+                            <input name="playlistname" class="form-control-sm" type="text" id="Playlist" placeholder="Name of playlist?">
                         </div>
-                    <button type="submit" class="btn btn-success btn-sm">Add it</button>
+                        <div class="row">
+                            <div class="col-md-4">
+                            <label class="control-label">Song</label>
+                            <input type="text" name="songnames" class="form-control-sm" id="songname" placeholder="enter a song!!!" />     
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="addrow" class="btn btn-primary btn-sm pull-left">add a row?</button>
+                    <button type="submit" id="submitsongs" class="btn btn-success btn-sm pull-right">Add the songs!</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -48,7 +65,7 @@
     </ul>
 </div>
 
-<form action="/makePlaylist" method="post">
+<form action="/makePlaylist" method="get">
     {{#if songs}}
         <button type="submit" class="btn btn-success btn-default pull-left"> Make that hoe!!</button>
     {{/if}}
@@ -56,11 +73,23 @@
 
 
     <script>
+        var count = 1; //for the rows of the form
         $(document).ready(function() {
                     $("#searchbtn").click(function() {
                                 $("#myModal").modal();
                             })
                 })
+                $('#addrow').click(function() {
+                            $('#2ndform').append(addnewrow(count));
+                            $('#myModal').modal('handleUpdate')
+                            count++;
+                        })
+                function addnewrow(count) {
+
+                            var newrow = '<div class="row"><div class="col-md-4"><label class="control-label">Song</label><input type="text" name="songnames" class="form-control-sm" id="songname" placeholder="enter a song!!!" /></div></div>'
+                            return newrow
+
+                        }
     </script>
 
 </body>

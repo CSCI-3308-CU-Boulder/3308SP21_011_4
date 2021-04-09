@@ -1,7 +1,7 @@
 const app = require("express")();
 const path = require("path");
 const SpotWAPI = require("spotify-web-api-node");
-const qs = require('querystring');
+const querystring = require("querystring");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -51,7 +51,7 @@ app.get("/callback/search", (req, res) => {
     trackname = trackname.replace("+", " "); //want the search term to be in plain english
     // songs = [];
     var songsObj = {
-        "songs": []
+        songs: [],
     };
 
     spotifyApi
@@ -72,14 +72,13 @@ app.get("/callback/search", (req, res) => {
                 songsObj.songs.push({
                     songname: song.name,
                     artists: [...artists], //spread operator. kinda funky, definitely redundant, but it feels flex
-                    id: "spotify:track:" + song.id
+                    id: "spotify:track:" + song.id,
                 });
             });
 
             songsToAdd.push(songsObj["songs"][0]);
             console.log(songsToAdd);
-            res.render('queue', {songs: songsToAdd})
-
+            res.render("queue", { songs: songsToAdd });
         })
         .catch((err) => {
             console.log("So close!! : " + err);
@@ -87,29 +86,48 @@ app.get("/callback/search", (req, res) => {
         });
 });
 
-app.post('/makePlaylist', (req,res) => {
-     var songIDs = songsToAdd.map(function(obj) {
-        console.log("fuck it!!! :" + obj.name);
-        return obj[2];
-    })
+app.get("/callback/makePlaylist", (req, res) => {
 
-    console.log(req.body);
+    //check the URL after selecting to make the playlist;
+    //'songnames' fields r their responses in each textbox
+    const songsarr = req.query["songnames"];
+    const playlistname = req.query["playlistname"];
+    // console.log(songsarr);
 
-    spotifyApi.createPlaylist('My Love For U <3', {'description': 'Made with Vynilla!', 'public': true})
+    const songIDs = []; //array in which to store songarrs' songs' ids
+
+    //>1 song in song arr
+    if (songsarr.length > 1) {
+        songsarr.forEach((song) => {
+            spotifyApi.searchTracks(song).then((data) => {
+                console.log(song + " with " + data.body.tracks.items[0].id);
+                songIDs.push("spotify:track:"+data.body.tracks.items[0].id);
+            })
+        })
+    } else {
+        spotify.searchTracks(songsarr).then((data) => {
+            songIDs.push("spotify:track:"+data.body.tracks.items[0].id);
+        })
+    }
+
+    // console.log(songIDs);
+
+    //create playlist
+    //return its ID to the addTracks call, which we give the array of songIDs
+    spotifyApi
+        .createPlaylist(playlistname, { description: "Made with Vynilla!", public: true })
         .then((data) => {
-            console.log('Created playlist!');
-            console.log(data);
+            console.log("Created playlist!");
             return data;
-        }).then((data) => {
-            console.log(songIDs);
+        })
+        .then((data) => {
             return spotifyApi.addTracksToPlaylist(data.body.id, songIDs);
         })
         .catch((err) => {
             console.log("No playlist for u. " + err);
-        })
-        res.render('queue', {songs: []})
-})
-
+        });
+    res.render("queue", { songs: [] });
+});
 
 app.listen(8888, console.log("Goto http://localhost:8888/login"));
 

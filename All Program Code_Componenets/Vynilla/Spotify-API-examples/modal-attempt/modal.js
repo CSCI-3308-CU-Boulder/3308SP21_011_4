@@ -11,7 +11,7 @@ const credentials = {
     redirectUri: "http://localhost:8888/callback",
 };
 
-const scopes = [];
+const scopes = ["playlist-modify-private"];
 
 var spotifyApi = new SpotWAPI(credentials);
 
@@ -53,7 +53,7 @@ app.get("/callback/search", (req, res) => {
     };
 
     spotifyApi
-        .searchTracks(trackname) //search the terms from the URL
+        .searchTracks(trackname, {limit:5}) //search the terms from the URL
         .then((data) => {
             //many songs are returned. iterate thru them
             data.body.tracks.items.forEach((song) => {
