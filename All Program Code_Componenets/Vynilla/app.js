@@ -123,11 +123,18 @@ app.get('/callback', (req, res) => {
 
     setInterval(async () => {
         const data = await spotifyApi.refreshAccessToken();
-        const access_token = data.body['access_token'];
+        access_token = data.body['access_token'];
 
         console.log('The access token has been refreshed!');
         console.log('access_token:', access_token);
         spotifyApi.setAccessToken(access_token);
+        req.session.access_token = access_token;
+        db.query('USE nodejs_login;');
+        db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, req.session.username], (error, results) => {
+        if(error){
+            console.log(error);
+        }
+    })
       }, expires_in / 2 * 1000);
       return spotifyApi.getMe();
     })
@@ -180,15 +187,12 @@ app.post('/explore/search', (req, res) => {
             songs: []
         };
 
-        spotifyApi
-            .clientCredentialsGrant()
-            .then(function(data) {
-                // Set the access token on the API object so that it's used in all future requests
-                spotifyApi.setAccessToken(req.session.access_token);
 
-                // Get the most popular tracks by David Bowie in Great Britain
-                return spotifyApi.searchTracks(song, { limit: 5 });
-            })
+        //after 
+        spotifyApi
+            .setAccessToken(req.session.access_token)
+        spotifyApi
+            .searchTracks(song, { limit: 5 })
             .then((data) => {
                 data.body.tracks.items.forEach((item) => {
                     var artists = [];
@@ -247,19 +251,18 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
     })
 })
 
+// app.get('/pfp', (req, res) => {
+//     res.redirect('/pfp/me');
+// })
 
 app.get('/pfp', (req, res) =>{
 
     var user;
-
+    console.log(req.session.access_token);
     spotifyApi
-        .clientCredentialsGrant()
-        .then(function(data) {
-            // Set the access token on the API object so that it's used in all future requests
-            spotifyApi.setAccessToken(req.session.access_token);
-
-            return spotifyApi.getMe();
-        })
+        .setAccessToken(req.session.access_token)
+    spotifyApi
+        .getMe()
         .then(function(data) {
             console.log(data.body.display_name);
             db.query('USE nodejs_login;');
