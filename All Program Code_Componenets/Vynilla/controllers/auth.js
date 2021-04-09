@@ -22,6 +22,10 @@ exports.register = (req, res) => {
     const password = req.body.password;
     const confirmPass = req.body.confirmPass;
 
+    req.session.name = name;
+    req.session.email = email;
+    req.session.username = username;
+
     if (!name || !email || !username || !password || !confirmPass){
         return res.render('register', {
             message: "Fields cannot be blank"
@@ -82,6 +86,7 @@ exports.login = async (req, res) => {
                 req.session.username = results[0].username;
                 req.session.email = results[0].email;
                 req.session.userId = results[0].id;
+                req.session.access_token = results[0].access_token;
                 const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })

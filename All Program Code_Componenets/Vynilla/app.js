@@ -97,6 +97,14 @@ app.get('/callback', (req, res) => {
       const expires_in = data.body['expires_in'];
 
       req.session.access_token = access_token;
+      const username = req.session.username;
+      console.log(username);
+      db.query('USE nodejs_login;');
+      db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, username], (error, results) => {
+        if(error){
+            console.log(error);
+        }
+    })
 
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
@@ -127,9 +135,6 @@ app.get('/callback', (req, res) => {
         console.log('Retrieved data for ' + user.body['display_name']);
         console.log('Email is ' + user.body.email);
         console.log('Image URL is ' + user.body.images[0].url);
-        req.session.user = user.body;
-        console.log(user.body);
-        console.log(req.session.user);
     })
     .catch(error => {
       console.error('Error getting Tokens:', error);
