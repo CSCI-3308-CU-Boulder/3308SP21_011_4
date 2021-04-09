@@ -13,7 +13,7 @@
         <div class="box">
             <div class="container">
                 <form action="/auth/register" method="POST">
-                    <h4>Welcome! Tell us about yourself</h4>
+                    <h4 id="welcomebanner">Welcome! Tell us about yourself</h4>
                     <div class="inputBx">
                         <input type="email" class="form-control" id="email" placeholder="Enter your email address" name="email">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
@@ -33,7 +33,7 @@
                     <button type="submit" class="signIn_btn">Register</button>
                     <a href="/" class="button">Have an account? Sign In</a>
                     {{#if message}}
-                        <h4 class="alert">{{message}}</h4>
+                        <h4 class="alert" id="blankfield" style="color:red;">{{message}}</h4>
                     {{/if}}
                 </form>
             </div>
