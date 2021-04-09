@@ -208,7 +208,6 @@ app.get('/pfp', (req, res) =>{
             // Set the access token on the API object so that it's used in all future requests
             spotifyApi.setAccessToken(req.session.access_token);
 
-            // Get the most popular tracks by David Bowie in Great Britain
             return spotifyApi.getMe();
         })
         .then(function(data) {
@@ -265,5 +264,5 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
 })
 
 app.listen(8888, () => {
-    console.log("Server Started on Port 8888")
+    console.log("Server Started on http://localhost:8888")
 })
