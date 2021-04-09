@@ -42,8 +42,8 @@ const db = mysql.createConnection({
 
 const spotifyApi = new SpotifyWebApi({
     redirectUri: 'http://localhost:8888/callback', //where auth will send the user to after they give us permission. not really relevant for this example, since everything displays in the terminal
-    clientId: '1721ccaf9f0f40a196710dede9030908', //our app details 
-    //shouldn't be putting these on github but ¯\_(ツ)_/¯ 
+    clientId: '1721ccaf9f0f40a196710dede9030908', //our app details
+    //shouldn't be putting these on github but ¯\_(ツ)_/¯
     clientSecret: '7efbade01f16446a880254fe1f30d2a7'
 });
 
@@ -88,7 +88,7 @@ app.get('/callback', (req, res) => {
         return res.render('index', {
             message: "Error Connecting to Spotify"
         })
-    } 
+    }
     spotifyApi
     .authorizationCodeGrant(code)
     .then(data => {
@@ -101,10 +101,10 @@ app.get('/callback', (req, res) => {
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
 
-      console.log(data.body);
+      // console.log(data.body);
 
-      console.log('access_token:', access_token);
-      console.log('refresh_token:', refresh_token);
+      // console.log('access_token:', access_token);
+      // console.log('refresh_token:', refresh_token);
 
       console.log(
         `Sucessfully retreived access token. Expires in ${expires_in} s.`
@@ -201,7 +201,7 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
 app.get('/pfp', (req, res) =>{
 
     var user;
-    
+
     spotifyApi
         .clientCredentialsGrant()
         .then(function(data) {
@@ -252,7 +252,7 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
     const signedInUser = req.session.userId;
     const friend = req.params.userOneId;
     db.query('USE nodejs_login;');
-    db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?", 
+    db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?",
         [signedInUser, friend, signedInUser], async (error, results) => {
             if (error){
                 console.log(error);
