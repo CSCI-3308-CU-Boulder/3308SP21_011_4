@@ -206,6 +206,7 @@ app.post('/explore/search', (req, res) => {
                     })
 
                 });
+                console.log(songsObj);
                 if (results.length == 0){
                     res.render('explore', {
                         message: "No users with this username",
@@ -231,6 +232,12 @@ app.post('/explore/search', (req, res) => {
     });
 });
 
+app.get('/explore/add_song:songid', (req, res) => {
+    console.log(req.params.songid);
+    
+    // res.redirect('explore');
+})
+
 app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
     console.log(req.params.username);
     console.log(req.params.userTwoId);
@@ -251,9 +258,6 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
     })
 })
 
-// app.get('/pfp', (req, res) => {
-//     res.redirect('/pfp/me');
-// })
 
 app.get('/pfp', (req, res) =>{
 
