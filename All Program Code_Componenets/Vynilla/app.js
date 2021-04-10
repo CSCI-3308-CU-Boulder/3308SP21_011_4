@@ -9,6 +9,24 @@ const SpotifyWebApi = require('spotify-web-api-node');
 
 dotenv.config({ path: './.env'});
 
+const app = express();
+
+//connect to mysql database
+const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.PASSWORD,
+    database: "nodejs_login"
+});
+
+//create a spotifyAPI instance w/ our credentials
+const spotifyApi = new SpotifyWebApi({
+    redirectUri: 'http://localhost:8888/callback', // where to send user after authentication
+    clientId: '1721ccaf9f0f40a196710dede9030908',
+    clientSecret: '7efbade01f16446a880254fe1f30d2a7'
+});
+
+//scopes that we will request access to
 const scopes = [
     'ugc-image-upload',
     'user-read-playback-state',
@@ -31,23 +49,6 @@ const scopes = [
     'user-follow-modify'
   ];
 
-const app = express();
-
-const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASS,
-    database: "nodejs_login"
-});
-
-const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://localhost:8888/callback', //where auth will send the user to after they give us permission. not really relevant for this example, since everything displays in the terminal
-    clientId: '1721ccaf9f0f40a196710dede9030908', //our app details
-    //shouldn't be putting these on github but ¯\_(ツ)_/¯
-    clientSecret: '7efbade01f16446a880254fe1f30d2a7'
-});
-
-
 db.connect((error) => {
     if(error) {
         console.log(error)
@@ -56,9 +57,11 @@ db.connect((error) => {
     }
 })
 
+//specify where express should look for static files (stylesheets, etc)
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
+//cookie initialization(?)
 app.use(session({
     secret: 'secret',
     resave: true,
@@ -70,35 +73,42 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+//tell express that we're using hbs templating
 app.set('view engine', 'hbs');
 
-//Define Routes
+//define our routes
 app.use('/', require('./routes/pages.js'));
 app.use('/auth', require('./routes/auth'));
 
+//redirect connections to spotify's auth. url, asking for permission with the aforementioned scopes
 app.get('/connect-spotify', (req, res) => {
     return res.redirect(spotifyApi.createAuthorizeURL(scopes));
 })
 
+//upon authorization, spotify redirects the user to /callback, with the desired auth. codes
 app.get('/callback', (req, res) => {
+    const code = req.query.code; //get the authorization code
     const error = req.query.error;
-    const code = req.query.code;
-    req.session.authCode = code;
+    req.session.authCode = code; //set it for this user
+
     if (error){
         return res.render('index', {
             message: "Error Connecting to Spotify"
         })
     }
-    spotifyApi
-    .authorizationCodeGrant(code)
+
+    //authorize ourselves w/ that code
+    //returns a promise w/ an access & refresh token
+    spotifyApi.authorizationCodeGrant(code)
     .then(data => {
       const access_token = data.body['access_token'];
       const refresh_token = data.body['refresh_token'];
       const expires_in = data.body['expires_in'];
-
-      req.session.access_token = access_token;
       const username = req.session.username;
-      console.log(username);
+
+      req.session.access_token = access_token; //store this user's accesss_token in cookies
+      // console.log(username);
+
       db.query('USE nodejs_login;');
       db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, username], (error, results) => {
         if(error){
@@ -106,21 +116,20 @@ app.get('/callback', (req, res) => {
         }
     })
 
+      //set our access & refresh tokens for all future spotifyApi calls
       spotifyApi.setAccessToken(access_token);
       spotifyApi.setRefreshToken(refresh_token);
 
-      // console.log(data.body);
+      // console.log(
+      //   `Sucessfully retreived access token. Expires in ${expires_in} s.`
+      // );
 
-      // console.log('access_token:', access_token);
-      // console.log('refresh_token:', refresh_token);
-
-      console.log(
-        `Sucessfully retreived access token. Expires in ${expires_in} s.`
-      );
+      //send users to index
       res.render('index', {
         message: "Successfully Connected to Spotify"
     })
 
+    //when this access token expires, refresh it & update our cookies, etc
     setInterval(async () => {
         const data = await spotifyApi.refreshAccessToken();
         access_token = data.body['access_token'];
@@ -149,9 +158,9 @@ app.get('/callback', (req, res) => {
     });
 })
 
+//if the user is logged in when they goto feed, render it for them with a welcome message.
 app.get('/feed', (req, res) => {
     if (req.session.loggedin){
-        // console.log(req.session);
         res.render('feed', {
             name: req.session.name,
             username: req.session.username
@@ -165,52 +174,58 @@ app.get('/feed', (req, res) => {
 })
 
 
+//explore page post request
 app.post('/explore/search', (req, res) => {
-    const search = req.body.search;
-    var query = "select * from users where name = " + search + ";";
+    const search = req.body.search; //search term
+
+    // is this necessary??
+    // var query = "select * from users where name = " + search + ";"; //find users that match their search
     var friendsResults;
-    // First we search users
+
+    //find users whose name resembles their search query
     db.query('USE nodejs_login;');
     db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
-        console.log(results);
+        // console.log(results);
         friendsResults = results;
         if(error){
             console.log(error);
         }
 
-        // Now we search a song
         const song = req.body.search;
-        // const playlistid = req.query["playlistid"];
-        console.log(song);
+        // console.log(song);
 
+        //json obj in which to store song search results
         var songsObj = {
             songs: []
         };
 
+        //ensure spotify knows we're auth'ed to access search
+        spotifyApi.setAccessToken(req.session.access_token)
 
-        //after 
-        spotifyApi
-            .setAccessToken(req.session.access_token)
-        spotifyApi
-            .searchTracks(song, { limit: 5 })
+        //return top 5 tracks which resemble their search query
+        spotifyApi.searchTracks(song, { limit: 5 })
             .then((data) => {
                 data.body.tracks.items.forEach((item) => {
+
+                    //store all of this track's artists
                     var artists = [];
                     item.artists.forEach((artist) => {
                         artists.push(artist.name);
                     })
+
+                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
                     songsObj.songs.push({
                         songname: item.name,
                         artists: artists,
-                        link: item.uri //NOTICE: we're passing link URIs now. this is the checkbox's value in hbs
+                        link: item.uri
                     })
 
                 });
-                console.log(songsObj);
+                // console.log(songsObj);
                 if (results.length == 0){
                     res.render('explore', {
                         message: "No users with this username",
-                        friends: null, 
+                        friends: null,
                         songs: songsObj["songs"]
                     })
                 }
@@ -222,8 +237,6 @@ app.post('/explore/search', (req, res) => {
                     })
                 }
 
-                //pass the songs returned from the call & playlistid back to the hbs
-                // res.render('explore', {songs: songsObj["songs"], message: null, friends: friendsResults});
             })
             .catch((err) => {
                 console.log(err);
@@ -232,17 +245,21 @@ app.post('/explore/search', (req, res) => {
     });
 });
 
+//tbd
 app.get('/explore/add_song:songid', (req, res) => {
     console.log(req.params.songid);
-    
+
     // res.redirect('explore');
 })
 
+//GET friend request from user one to user two
 app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
-    console.log(req.params.username);
-    console.log(req.params.userTwoId);
+    // console.log(req.params.username);
+    // console.log(req.params.userTwoId);
     const userOneId = req.session.userId;
     const userTwoId = req.params.userTwoId;
+
+    //reflect this request in these users' relationship
     db.query('INSERT INTO relationship SET ?', {user_id_one: userOneId, user_id_two: userTwoId, status: 0, action_user_id: userOneId }, (error, results) => {
             if(error){
                 console.log(error);
@@ -259,14 +276,15 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
 })
 
 
+//GET profile page
+//render user information (spotify PF picture, username)
+//conditionally render friend requests, friend lists, etc
 app.get('/pfp', (req, res) =>{
 
     var user;
-    console.log(req.session.access_token);
-    spotifyApi
-        .setAccessToken(req.session.access_token)
-    spotifyApi
-        .getMe()
+    // console.log(req.session.access_token);
+    spotifyApi.setAccessToken(req.session.access_token)
+    spotifyApi.getMe()
         .then(function(data) {
             console.log(data.body.display_name);
             db.query('USE nodejs_login;');
@@ -303,11 +321,14 @@ app.get('/pfp', (req, res) =>{
         });
 });
 
+//GET user accepting friend requests
 app.get('/pfp/accept-friend/:userOneId', (req, res) => {
-    console.log(req.params.userOneId);
+    // console.log(req.params.userOneId);
     const signedInUser = req.session.userId;
     const friend = req.params.userOneId;
     db.query('USE nodejs_login;');
+
+    //update their relationship in the relationship table
     db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?",
         [signedInUser, friend, signedInUser], async (error, results) => {
             if (error){
