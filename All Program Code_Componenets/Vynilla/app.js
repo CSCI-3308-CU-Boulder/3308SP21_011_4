@@ -179,7 +179,7 @@ app.post('/explore/search', (req, res) => {
     const search = req.body.search; //search term
 
     // is this necessary??
-    // var query = "select * from users where name = " + search + ";"; //find users that match their search
+    var query = "select * from users where name = " + search + ";"; //find users that match their search
     var friendsResults;
 
     //find users whose name resembles their search query
@@ -202,6 +202,7 @@ app.post('/explore/search', (req, res) => {
         //ensure spotify knows we're auth'ed to access search
         spotifyApi.setAccessToken(req.session.access_token)
 
+
         //return top 5 tracks which resemble their search query
         spotifyApi.searchTracks(song, { limit: 5 })
             .then((data) => {
@@ -211,6 +212,16 @@ app.post('/explore/search', (req, res) => {
                     var artists = [];
                     item.artists.forEach((artist) => {
                         artists.push(artist.name);
+
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //since we can't search artist by name...
+                        //maybe we just display a track's artists, and give the user the option to
+                        //add one of them to their top5????
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        // artists.push({
+                        //     name: artist.name,
+                        //     id: artist.id //potential workaround for not being able to search 'Doja Cat'?
+                        // })
                     })
 
                     //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
@@ -245,12 +256,76 @@ app.post('/explore/search', (req, res) => {
     });
 });
 
-//tbd
+
+
+//!!!!!!!!!!!!!!!!!!!!!!!!--------------------
+//necessary endpoints to get working before demo
+
+//------------queue functionality---------------
+//--- create playlist for friend. name it, describe it
+//------- add songs to it
+//--- export a playlist that was made for you by a friend
+//----------------------------------------------
+
+//------------feed functionality?--------------
+//--- when u add an artist/song to ur top 5, update all of ur friends' feeds
+//------ that's pretty much it as far as i'm concerned
+//---------------------------------------------
+
+//!!!!!!!!!!!!!!!!!!!!!!!!--------------------
+
+//GET add a song to the user's top 5
 app.get('/explore/add_song:songid', (req, res) => {
     console.log(req.params.songid);
 
-    // res.redirect('explore');
+    const songid = req.params.songid; //given: a song id
+
+    // const song_name = req.params.songname //we should probably pass the songname too, for rendering purposes
+
+    //db stuff here about connecting,
+    //then inserting into their top5
+
+//!!!!!!!!!!!!!!!!!!!!!!!!----------------------
+// Pseudocode below
+
+    //should we see if they have > 5 songs already?
+    //then, if they don't...
+    res.redirect('explore', {
+        message: song_name + " added to your top 5 songs.",
+        friends: null,
+        songs: []
+    });
+    //if they do have > 5...
+    // res.redirect('explore', {
+    //     message: "Can't add " + song_name + ". Your top 5 is full!",
+    //     friends: null,
+    //     songs: []
+    // });
 })
+//!!!!!!!!!!!!!!!!!!!!!!!!--------------------
+
+//!!!!!!!!!!!!!!!!!!!!!!!!--------------------
+//Pseudocode below
+//GET add an artist to the user's top 5
+//is this url fucked??
+app.get('/explore/add_artist/:artistId/:artistName', (req,res) => {
+    const artistid = req.params.artistId;
+    const artistname = req.params.artistName;
+
+    res.redirect('explore', {
+        message: artistname + " added to your top 5 artists.",
+        friends: null,
+        songs: []
+    })
+
+    // if they have > 5 artists already...
+    //     res.redirect('explore', {
+    //         message: "Can't add " + artist_name + ". Your top 5 is full!",
+    //         friends: null,
+    //         songs:[]
+    //     })
+})
+//!!!!!!!!!!!!!!!!!!!!!!!!--------------------
 
 //GET friend request from user one to user two
 app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
