@@ -41,7 +41,7 @@
           <div class="artists">
               <ul class="artist-list">
                   {{#each artist}}
-                  <li>{{artist.name}}</li>
+                  <li>{{this.name}}</li>
                   <!-- insert artist image here -->
                   {{/each}}
               </ul>
@@ -57,8 +57,8 @@
               <ul class="song-list">
                   {{#each song}}
                   <li class="song">
-                      <h3 class="song-name">{{song.name}}</h3>
-                      <h4 class="song-artist">{{song.artist}}</h4>
+                      <h3 class="song-name">{{this.name}}</h3>
+                      <h4 class="song-artist">{{this.artist}}</h4>
                   </li>
                   {{/each}}
               </ul>
@@ -74,8 +74,8 @@
               <ul class="album-list"> 
                   {{#each album}}
                   <li class="album">
-                      <h3>{{album.name}}</h3>
-                      <h4>{{album.artist}}</h4>
+                      <h3>{{this.name}}</h3>
+                      <h4>{{this.artist}}</h4>
                       <!-- insert url here -->
                   </li>
                   {{/each}}
@@ -97,8 +97,8 @@
                 Select Friend
             </button>
             <div class="dropdown-menu" name="friend-select">
-                {{#each friend}}
-                <option>{{friend.username}}</option>
+                {{#each friends}}
+                <option>{{this.username}}</option>
                 {{/each}}
             </div>
         </div>
@@ -108,11 +108,11 @@
     <div class="queue">
         <h1>Aux</h1>
         <ul>
-            {{#each song}}
+            {{#each queue_song}}
             <li class="queue-item">
-                <h2 class="user-friend">{{song.sentFrom}}</h2>
-                <h3 class="song-name">{{song.name}</h4>
-                <h4 class="song-artist">{{song.artist}}</h5>
+                <h2 class="user-friend">{{this.sentFrom}}</h2>
+                <h3 class="song-name">{{this.name}</h4>
+                <h4 class="song-artist">{{this.artist}}</h5>
             </li>
             {{/each}}
         </ul>

@@ -171,6 +171,7 @@ app.get('/feed', (req, res) => {
             message: "Please Log In"
         })
     }
+    /// spotify api calls to see what friends are listening to
 })
 
 
@@ -355,7 +356,7 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
 //render user information (spotify PF picture, username)
 //conditionally render friend requests, friend lists, etc
 app.get('/pfp', (req, res) =>{
-
+    //// collect top 5's here in variables. then render in page
     var user;
     // console.log(req.session.access_token);
     spotifyApi.setAccessToken(req.session.access_token)
@@ -394,6 +395,7 @@ app.get('/pfp', (req, res) =>{
         .catch(function(err) {
             console.log('Unfortunately, something has gone wrong.', err.message);
         });
+    
 });
 
 //GET user accepting friend requests
@@ -414,6 +416,35 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
                 res.redirect('/pfp');
             }
     })
+})
+
+// sends back the queue of the selected friend on the profile page
+app.get("/friendSelect" , (req, res) => {
+    //db.query(queueofFriend);
+    var queue = {
+        queue_song : {
+            sentFrom: '',
+            name = '',
+            artist = ''
+        }
+    }
+    res.redirect('pfp', {
+        queue_song: queue
+    });
+})
+
+// following three methods let user reset their TOP choices
+app.get("/removeSongs" , (req, res) => {
+    //db.remove(TOPSONGS);
+    res.redirect('pfp');
+})
+app.get("/removeArtists" , (req, res) => {
+    //db.remove(TOPARTISTS);
+    res.redirect('pfp');
+})
+app.get("/removeAlbums" , (req, res) => {
+    //db.remove(TOPALBUMS);
+    res.redirect('pfp');
 })
 
 
