@@ -11,7 +11,6 @@
     <div class="sidenav">
         <a href="/feed">Home</a>
         <a href="/explore">Explore</a>
-        <a href="#">Notifications</a>
         <a href="/pfp">Profile</a>
     </div>
 
@@ -35,33 +34,92 @@
         <div class="friendText">{{this.username}}</div>
       {{/each}}
     </div>
+    
+    <section class="subsections">
+      <div class="artist-backing">
+          <h1>Artists</h1>
+          <div class="artists">
+              <ul class="artist-list">
+                  {{#each artist}}
+                  <li>{{artist.name}}</li>
+                  <!-- insert artist image here -->
+                  {{/each}}
+              </ul>
+          </div>
+          <form action="/removeArtists" method="get">
+                <button type="button" class="btn btn-primary">RemoveAll</button>
+          </form>
+      </div>
+
+      <div class="songs-backing">
+          <h1>Songs</h1>
+          <div class="songs">
+              <ul class="song-list">
+                  {{#each song}}
+                  <li class="song">
+                      <h3 class="song-name">{{song.name}}</h3>
+                      <h4 class="song-artist">{{song.artist}}</h4>
+                  </li>
+                  {{/each}}
+              </ul>
+          </div>
+          <form action="/removeSongs" method="get">
+            <button type="button" class="btn btn-primary">RemoveAll</button>
+          </form>
+      </div>
+
+      <div class="albums-backing">
+          <h1>Albums</h1>
+          <div class="albums">
+              <ul class="album-list"> 
+                  {{#each album}}
+                  <li class="album">
+                      <h3>{{album.name}}</h3>
+                      <h4>{{album.artist}}</h4>
+                      <!-- insert url here -->
+                  </li>
+                  {{/each}}
+              </ul>
+          </div>
+          <form action="/removeAlbums" method="get">
+                <button type="button" class="btn btn-primary">RemoveAll</button>
+          </form>
+      </div>
+  </section>
 
   </div>
 
   <div class="right">
-    <div class="list">
-      <h1>Listening</h1>
-      <div class="out-row">
-        <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
-          <span>jack smith</span>
+    <!-- here goes friend_select drop down button -->
+    <form action="/friendSelect" method="get">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Select Friend
+            </button>
+            <div class="dropdown-menu" name="friend-select">
+                {{#each friend}}
+                <option>{{friend.username}}</option>
+                {{/each}}
+            </div>
         </div>
-      </div>
-      <div class="out-row">
-        <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
-          <span>jack smith</span>
-        </div>
-      </div>
-      <div class="out-row">
-        <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
-          <span>jack smith</span>
-        </div>
-      </div>
+        <button type="button" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div class="queue">
+        <h1>Aux</h1>
+        <ul>
+            {{#each song}}
+            <li class="queue-item">
+                <h2 class="user-friend">{{song.sentFrom}}</h2>
+                <h3 class="song-name">{{song.name}</h4>
+                <h4 class="song-artist">{{song.artist}}</h5>
+            </li>
+            {{/each}}
+        </ul>
     </div>
   </div>
-</div>
+
+
 <script>
   window.onload = function () {
     document.querySelector('.search').addEventListener('keyup', (event) => {
