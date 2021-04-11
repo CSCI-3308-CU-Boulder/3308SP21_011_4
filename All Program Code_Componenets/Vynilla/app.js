@@ -395,7 +395,7 @@ app.get('/pfp', (req, res) =>{
         .catch(function(err) {
             console.log('Unfortunately, something has gone wrong.', err.message);
         });
-    
+
 });
 
 //GET user accepting friend requests
@@ -419,8 +419,15 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
 })
 
 // sends back the queue of the selected friend on the profile page
-app.get("/friendSelect" , (req, res) => {
+//
+// ya this is nice, i think we want to pass in the name of the friend they select too
+// so i added that param in the get query
+// --jared
+app.get("/friendSelect/:whichFriend" , (req, res) => {
+    const friendName = req.query.whichFriend;
     //db.query(queueofFriend);
+    //becomes
+    //db.query(queue belonging to relationship b/w me & friendName)
     var queue = {
         queue_song : {
             sentFrom: '',
@@ -434,10 +441,23 @@ app.get("/friendSelect" , (req, res) => {
 })
 
 // following three methods let user reset their TOP choices
-app.get("/removeSongs" , (req, res) => {
+//
+// i like it, but presumably, we want them to be able to choose which things to remove,
+// so i added params to the get link thing.
+// since we only have topsong1, topsong2... topsong 5, this shouldn't be that bad
+// --jared
+app.get("/removeSongs/:toRemove" , (req, res) => {
+
+    const getRidOf = req.query.toRemove; //num b/w one and 5, based on which 'x' they pressed on the pfp
+
     //db.remove(TOPSONGS);
+    //becomes
+    //db.remove(toRemove);
     res.redirect('pfp');
 })
+
+//i'm imagining something similar will go on with these two,
+//since i don't think they'd always want to entirely clear their top 5s
 app.get("/removeArtists" , (req, res) => {
     //db.remove(TOPARTISTS);
     res.redirect('pfp');
