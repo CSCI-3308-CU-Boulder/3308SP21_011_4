@@ -28,68 +28,28 @@
           <div class="friendText">{{this.username}}</div>
           <a href="/pfp/accept-friend/{{this.user_id_one}}" class="acceptFR">Accept</a>
           <a href="#" class="declineFR">Decline</a>
-          </div>
+        </div>
       {{/each}}
       {{#each friends}}
         <div class="friendText">{{this.username}}</div>
       {{/each}}
     </div>
-    
-    <section class="subsections">
-      <div class="artist-backing">
-          <h1>Artists</h1>
-          <div class="artists">
-              <ul class="artist-list">
-                  {{#each artist}}
-                    <li>{{this.name}}</li>
-                    <img src="{{this.image}}" alt="Artist Image">
-                  {{/each}}
-              </ul>
-          </div>
-          <form action="/removeArtists" method="get">
-                <button type="button" class="btn btn-primary">RemoveAll</button>
-          </form>
-      </div>
-
-      <div class="songs-backing">
-          <h1>Songs</h1>
-          <div class="songs">
-              <ul class="song-list">
-                  {{#each song}}
-                  <li class="song">
-                      <h3 class="song-name">{{this.name}}</h3>
-                      <h4 class="song-artist">{{this.artist}}</h4>
-                  </li>
-                  {{/each}}
-              </ul>
-          </div>
-          <form action="/removeSongs" method="get">
-            <button type="button" class="btn btn-primary">RemoveAll</button>
-          </form>
-      </div>
-
-      <div class="albums-backing">
-          <h1>Albums</h1>
-          <div class="albums">
-              <ul class="album-list"> 
-                  {{#each album}}
-                  <li class="album">
-                      <h3>{{this.name}}</h3>
-                      <h4>{{this.artist}}</h4>
-                      <img src="{{this.image}}" alt="Album Cover">
-                  </li>
-                  {{/each}}
-              </ul>
-          </div>
-          <form action="/removeAlbums" method="get">
-                <button type="button" class="btn btn-primary">RemoveAll</button>
-          </form>
-      </div>
-  </section>
-
   </div>
 
-  <div class="right">
+    
+    <section class="subsections">
+
+      <div class="top5-backing">
+        <h2 class="top5-element-header">Songs</h2>
+        {{#each top5songs}}
+        <div class="top5-element-name">{{this.trackname}}</div>
+        {{/each}}
+      </div>
+
+    </section>
+
+
+  {{!-- <div class="right">
     <!-- here goes friend_select drop down button -->
     <form action="/friendSelect" method="get">
         <div class="dropdown">
@@ -103,9 +63,9 @@
             </div>
         </div>
         <button type="button" class="btn btn-primary">Submit</button>
-    </form>
+    </form> --}}
 
-    <div class="queue">
+    {{!-- <div class="queue">
         <h1>Aux</h1>
         <ul>
             {{#each queue_song}}
@@ -117,7 +77,7 @@
             {{/each}}
         </ul>
     </div>
-  </div>
+  </div> --}}
 
 
 <script>
