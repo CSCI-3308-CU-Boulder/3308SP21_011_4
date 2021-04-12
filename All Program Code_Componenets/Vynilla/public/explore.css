@@ -11,6 +11,20 @@
   color: white;
   font-size: 20px;
   align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+.FriendsText {
+  color: white;
+  font-size: 20px;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+}
+.small {
+  color: rgb(197, 197, 197);
+  align-self: flex-start;
+  font-size: small;
 }
 
 .searchCategory {
@@ -21,13 +35,15 @@
 }
 
 .searchResults {
+  width: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 15px;
   padding: 25px;
-  background-color: rgb(73, 73, 73);
+  background-color: rgb(54, 54, 54);
   border-radius: 5px;
 }
+
 .button {
   display: inline-block;
   padding: .75rem 1rem;
@@ -40,6 +56,8 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  margin-left: 25px;
+  align-self: flex-end;
 }
 .button:hover {
   background-color: rgb(54, 139, 72);
@@ -143,16 +161,19 @@ body {
 .dropbtn {
   background-color: #4CAF50;
   color: white;
-  padding: 16px;
+  padding: 10px;
   font-size: 16px;
   border: none;
   cursor: pointer;
+  align-self: right;
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
-  display: inline-block;
+  /* position: relative; */
+  /* display: inline-block; */
+  margin-left: 25px;
+  align-self: flex-end;
 }
 
 /* Dropdown Content (Hidden by Default) */

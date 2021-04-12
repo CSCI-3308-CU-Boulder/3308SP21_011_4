@@ -213,17 +213,16 @@ app.post('/explore/search', (req, res) => {
                     var artists = [];
                     item.artists.forEach((artist) => {
                         artists.push(artist.name);
-
-                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        //since we can't search artist by name...
-                        //maybe we just display a track's artists, and give the user the option to
-                        //add one of them to their top5????
-                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        // artists.push({
-                        //     name: artist.name,
-                        //     id: artist.id //potential workaround for not being able to search 'Doja Cat'?
-                        // })
                     })
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //since we can't search artist by name...
+                    //maybe we just display a track's artists, and give the user the option to
+                    //add one of them to their top5????
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // artists.push({
+                    //     name: artist.name,
+                    //     id: artist.id //potential workaround for not being able to search 'Doja Cat'?
+                    // })
 
                     //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
                     songsObj.songs.push({
@@ -231,7 +230,7 @@ app.post('/explore/search', (req, res) => {
                         artists: artists,
                         link: item.uri
                     })
-
+                    
                 });
                 // console.log(songsObj);
                 if (results.length == 0){
@@ -450,23 +449,41 @@ app.get('/pfp', (req, res) =>{
         } else {
             console.log("1st SongID in User " + req.session.userId + ": ");
             console.log("1: " + results[0].song_one);
-            //Removing "track:spotify:" from the beginning of the stored ID 
-            //Ideal to store just the ID - quick fix later not important now
             songname1 = results[0].song_one;
             songname2 = results[0].song_two;
-            let dataFromSpotify = await getTracksFromSpotify(songname1, songname2);
-            FriendsAndUserInfo();
+            songname3 = results[0].song_three;
+            songname4 = results[0].song_four;
+            songname5 = results[0].song_five;
+            let dataFromSpotify;
+            try {
+                dataFromSpotify = await getTracksFromSpotify(songname1, songname2, songname3, songname4, songname5);
+                dataFromDB = await DBStuff();
+            } catch(err) {
+                console.log(err);
+            }
+            // try {
+            //     dataFromDB = await DBStuff();
+            // } catch(err) {
+            //     console.log(err);
+            // }
         }
     })
 
-    async function getTracksFromSpotify(song_one_id, song_two_id) {
+    async function getTracksFromSpotify(song_one_id, song_two_id, song_three_id, song_four_id, song_five_id) {
         
             if(song_one_id != null) {
                 spotifyApi.getTrack(song_one_id)
                 .then((data) => {
                     songname = data.body.name;
+                    //store all of this track's artists
+                    var artistsList = [];
+                    data.body.artists.forEach((artist) => {
+                        artistsList.push(artist.name);
+                    })
                     songsObj.songs.push({
-                        trackname: songname
+                        trackname: songname,
+                        img: data.body.album.images[0].url,
+                        artists: artistsList
                     })
                 })
                 .catch(function(err) {
@@ -477,61 +494,122 @@ app.get('/pfp', (req, res) =>{
                 spotifyApi.getTrack(song_two_id)
                 .then((data) => {
                     songname = data.body.name;
+                    //store all of this track's artists
+                    var artistsList = [];
+                    data.body.artists.forEach((artist) => {
+                        artistsList.push(artist.name);
+                    })
                     songsObj.songs.push({
-                        trackname: songname
+                        trackname: songname,
+                        img: data.body.album.images[0].url,
+                        artists: artistsList
                     })
                 })
                 .catch(function(err) {
                     console.log('Unfortunately, something has gone wrong.', err.message);
                 });
             }
-            // may be a heavy db call or http request?
-            
-    }
-    function FriendsAndUserInfo(){
-        console.log(songname);
+            if(song_three_id != null) {
+                spotifyApi.getTrack(song_three_id)
+                .then((data) => {
+                    songname = data.body.name;
+                    //store all of this track's artists
+                    var artistsList = [];
+                    data.body.artists.forEach((artist) => {
+                        artistsList.push(artist.name);
+                    })
+                    songsObj.songs.push({
+                        trackname: songname,
+                        img: data.body.album.images[0].url,
+                        artists: artistsList
+                    })
+                })
+                .catch(function(err) {
+                    console.log('Unfortunately, something has gone wrong.', err.message);
+                });
+            }
+            if(song_four_id != null) {
+                spotifyApi.getTrack(song_four_id)
+                .then((data) => {
+                    songname = data.body.name;
+                    //store all of this track's artists
+                    var artistsList = [];
+                    data.body.artists.forEach((artist) => {
+                        artistsList.push(artist.name);
+                    })
+                    songsObj.songs.push({
+                        trackname: songname,
+                        img: data.body.album.images[0].url,
+                        artists: artistsList
+                    })
+                })
+                .catch(function(err) {
+                    console.log('Unfortunately, something has gone wrong.', err.message);
+                });
+            }
+            if(song_five_id != null) {
+                spotifyApi.getTrack(song_five_id)
+                .then((data) => {
+                    songname = data.body.name;
+                    //store all of this track's artists
+                    var artistsList = [];
+                    data.body.artists.forEach((artist) => {
+                        artistsList.push(artist.name);
+                    })
+                    songsObj.songs.push({
+                        trackname: songname,
+                        img: data.body.album.images[0].url,
+                        artists: artistsList
+                    })
+                })
+                .catch(function(err) {
+                    console.log('Unfortunately, something has gone wrong.', err.message);
+                });
+            }
     }
 
     // console.log(req.session.access_token);
     // var user;
-    spotifyApi.setAccessToken(req.session.access_token)
-    spotifyApi.getMe()
-        .then(function(data) {
-            // console.log(data.body.display_name);
-            db.query('USE nodejs_login;');
-            db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
-            WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != ?", [req.session.userId, req.session.userId, req.session.userId], async (error, results) => {
-                if (error){
-                    res.render('pfp', {
-                        name: req.session.name,
-                        username: req.session.username,
-                        friend_requests: null,
-                        user: data.body
-                    })
-                } else {
-                    console.log(results);
-                    db.query("SELECT users.username FROM relationship INNER JOIN users ON IF(?=user_id_one, relationship.user_id_two = users.id, relationship.user_id_one = users.id) WHERE (user_id_one = ? OR user_id_two = ?) AND status = 1 \
-                    ", [req.session.userId, req.session.userId, req.session.userId], async (error, friendsList) => {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("songname when getting passed to hbs: " + songname);
+    async function DBStuff(){
+        spotifyApi.setAccessToken(req.session.access_token)
+        spotifyApi.getMe()
+            .then(function(data) {
+                // console.log(data.body.display_name);
+                db.query('USE nodejs_login;');
+                db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
+                WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != ?", [req.session.userId, req.session.userId, req.session.userId], async (error, results) => {
+                    if (error){
                         res.render('pfp', {
                             name: req.session.name,
                             username: req.session.username,
-                            friend_requests: results,
-                            friends: friendsList,
-                            user: data.body,
-                            top5songs: songsObj["songs"]
-                        });
+                            friend_requests: null,
+                            user: data.body
+                        })
+                    } else {
+                        console.log(results);
+                        db.query("SELECT users.username FROM relationship INNER JOIN users ON IF(?=user_id_one, relationship.user_id_two = users.id, relationship.user_id_one = users.id) WHERE (user_id_one = ? OR user_id_two = ?) AND status = 1 \
+                        ", [req.session.userId, req.session.userId, req.session.userId], async (error, friendsList) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("songname when getting passed to hbs: " + songname);
+                            res.render('pfp', {
+                                name: req.session.name,
+                                username: req.session.username,
+                                friend_requests: results,
+                                friends: friendsList,
+                                user: data.body,
+                                top5songs: songsObj["songs"]
+                            });
+                        }
+                    })
                     }
                 })
-                }
             })
-        })
-        .catch(function(err) {
-            console.log('Unfortunately, something has gone wrong.', err.message);
-        });
+            .catch(function(err) {
+                console.log('Unfortunately, something has gone wrong.', err.message);
+            });
+        }
 });
 
 
