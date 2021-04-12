@@ -493,6 +493,7 @@ app.get('/pfp', (req, res) =>{
     }
 
     // console.log(req.session.access_token);
+    // var user;
     spotifyApi.setAccessToken(req.session.access_token)
     spotifyApi.getMe()
         .then(function(data) {
