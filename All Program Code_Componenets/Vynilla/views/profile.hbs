@@ -81,17 +81,8 @@
             <!-- artists, songs, albums -->
             <section class="subsections">
 
-                <!-- artists live here. -->
-                <!-- artist object notes -->
-                <!--key     : value
-                    id      : String
-                    images  : Array[ImageObject]
-                    name    : String
-                -->
                 <div class="artist-backing">
                     <h1>Artists</h1>
-                    <!-- hopefully, this can give artists a nice backing-->
-                    <!-- -->
                     <div class="artists">
                         <ul class="artist-list">
                             {{#each artist}}
@@ -101,14 +92,6 @@
                     </div>
                 </div>
 
-                <!-- songs live here -->
-                <!-- SimplifiedSongObject notes -->
-                <!--key : value
-                    artists : Array[SimplifiedArtistObject]
-                    id      : String
-                    name    : String
-                    images  : Array[ImageObject] //// only available in unsimplified 
-                -->
                 <div class="songs-backing">
                     <h1>Songs</h1>
                     <div class="songs">
@@ -119,24 +102,10 @@
                                 <h4 class="song-artist">{{this}}</h4>
                             </li>
                             {{/each}}
-                            <!--
-                            <li class="song">
-                                <h3 class="song-name">Say So</h3>
-                                <h4 class="song-artist">Doja Cat</h4>
-                            </li>
-                            -->
                         </ul>
                     </div>
                 </div>
 
-                <!-- albums live here -->
-                <!-- album object notes -// can possibly use SimplifiedAlbumObject-->
-                <!--key : value
-                    artists : Array[ArtistObject]
-                    id      : String
-                    images  : Array[ImageObject]
-                    name    : String
-                --> 
                 <div class="albums-backing">
                     <h1>Albums</h1>
                     <div class="albums">
@@ -150,7 +119,6 @@
                         </ul>
                     </div>
                 </div>
-
             </section>
         </div>
 
@@ -165,23 +133,27 @@
             followers    : FollowersObject
         -->
         <div class="friends-backer">
-            <!-- here goes friend_select drop down button -->ß
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    Select Friend
-                </button>
-                <div class="dropdown-menu">
-                    {{#each friend}}
-                    <a class="dropdown-item" href="#">{{friend}}</a>
-                    {{/each}}
+            <!-- here goes friend_select drop down button -->
+            <form action="/friendSelect" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Select Friend
+                    </button>
+                    <div class="dropdown-menu" name="friend-select">
+                        {{#each friend}}
+                        <option>{{friend}}</option>
+                        {{/each}}
+                    </div>
                 </div>
-            </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
 
             <div class="friends">
                 <h1>Aux</h1>
                 <ul>
-                    {{#each item}}
+                    {{#each song}}
                     <li class="feed-item">
+                        <h2 class="user-friend">{{username}}</h2>
                         <h3 class="song-name">{{song_name}}</h4>
                         <h4 class="song-artist">{{artist_name}}</h5>
                     </li>

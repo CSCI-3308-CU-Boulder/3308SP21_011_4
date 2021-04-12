@@ -171,6 +171,7 @@ app.get('/feed', (req, res) => {
             message: "Please Log In"
         })
     }
+    /// spotify api calls to see what friends are listening to
 })
 
 
@@ -433,7 +434,7 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
 //render user information (spotify PF picture, username)
 //conditionally render friend requests, friend lists, etc
 app.get('/pfp', (req, res) =>{
-
+    //// collect top 5's here in variables. then render in page
     var user;
     // console.log(req.session.access_token);
     spotifyApi.setAccessToken(req.session.access_token)
@@ -472,6 +473,7 @@ app.get('/pfp', (req, res) =>{
         .catch(function(err) {
             console.log('Unfortunately, something has gone wrong.', err.message);
         });
+
 });
 
 //GET user accepting friend requests
@@ -492,6 +494,55 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
                 res.redirect('/pfp');
             }
     })
+})
+
+// sends back the queue of the selected friend on the profile page
+//
+// ya this is nice, i think we want to pass in the name of the friend they select too
+// so i added that param in the get query
+// --jared
+app.get("/friendSelect/:whichFriend" , (req, res) => {
+    const friendName = req.query.whichFriend;
+    //db.query(queueofFriend);
+    //becomes
+    //db.query(queue belonging to relationship b/w me & friendName)
+    var queue = {
+        queue_song : {
+            sentFrom: '',
+            name = '',
+            artist = ''
+        }
+    }
+    res.redirect('pfp', {
+        queue_song: queue
+    });
+})
+
+// following three methods let user reset their TOP choices
+//
+// i like it, but presumably, we want them to be able to choose which things to remove,
+// so i added params to the get link thing.
+// since we only have topsong1, topsong2... topsong 5, this shouldn't be that bad
+// --jared
+app.get("/removeSongs/:toRemove" , (req, res) => {
+
+    const getRidOf = req.query.toRemove; //num b/w one and 5, based on which 'x' they pressed on the pfp
+
+    //db.remove(TOPSONGS);
+    //becomes
+    //db.remove(toRemove);
+    res.redirect('pfp');
+})
+
+//i'm imagining something similar will go on with these two,
+//since i don't think they'd always want to entirely clear their top 5s
+app.get("/removeArtists" , (req, res) => {
+    //db.remove(TOPARTISTS);
+    res.redirect('pfp');
+})
+app.get("/removeAlbums" , (req, res) => {
+    //db.remove(TOPALBUMS);
+    res.redirect('pfp');
 })
 
 
