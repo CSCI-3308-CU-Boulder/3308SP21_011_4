@@ -15,7 +15,7 @@ const app = express();
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
-    password: process.env.PASSWORD,
+    password: process.env.DATABASE_PASS,
     database: "nodejs_login"
 });
 
@@ -276,10 +276,88 @@ app.post('/explore/search', (req, res) => {
 //!!!!!!!!!!!!!!!!!!!!!!!!--------------------
 
 //GET add a song to the user's top 5
-app.get('/explore/add_song:songid', (req, res) => {
+app.get('/explore/add_song:songid/:location', (req, res) => {
     console.log(req.params.songid);
 
     const songid = req.params.songid; //given: a song id
+    var location = req.params.location;
+    location = parseInt(location);
+    const song_name = "No";
+
+
+    db.query('USE nodejs_login;');
+    switch(location) {
+        case 1:
+            db.query('UPDATE top5songs SET song_one = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    // console.log("here");
+                    res.render('explore', {
+                        message: null,
+                        friends: null,
+                        songs: []
+                    });
+                }
+            });
+          break;
+        case 2:
+            db.query('UPDATE top5songs SET song_two = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    // console.log("here");
+                    res.render('explore', {
+                        message: null,
+                        friends: null,
+                        songs: []
+                    });
+                }
+            });
+          break;
+        case 3:
+            db.query('UPDATE top5songs SET song_three = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    // console.log("here");
+                    res.render('explore', {
+                        message: null,
+                        friends: null,
+                        songs: []
+                    });
+                }
+            });
+            break;
+        case 4:
+            db.query('UPDATE top5songs SET song_four = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    // console.log("here");
+                    res.render('explore', {
+                        message: null,
+                        friends: null,
+                        songs: []
+                    });
+                }
+            });
+            break;
+        case 5:
+            db.query('UPDATE top5songs SET song_five = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    // console.log("here");
+                    res.render('explore', {
+                        message: null,
+                        friends: null,
+                        songs: []
+                    });
+                }
+            });
+            break;
+      }
 
     // const song_name = req.params.songname //we should probably pass the songname too, for rendering purposes
 
@@ -291,11 +369,11 @@ app.get('/explore/add_song:songid', (req, res) => {
 
     //should we see if they have > 5 songs already?
     //then, if they don't...
-    res.redirect('explore', {
-        message: song_name + " added to your top 5 songs.",
-        friends: null,
-        songs: []
-    });
+    // res.render('explore', {
+    //     message: song_name + " added to your top 5 songs.",
+    //     friends: null,
+    //     songs: []
+    // });
     //if they do have > 5...
     // res.redirect('explore', {
     //     message: "Can't add " + song_name + ". Your top 5 is full!",
