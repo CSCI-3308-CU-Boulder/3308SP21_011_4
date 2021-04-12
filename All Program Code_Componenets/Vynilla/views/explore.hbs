@@ -5,6 +5,7 @@
   <title>Title</title>
   <link rel="stylesheet" href="/explore.css">
   <link rel="stylesheet" href="/navbar.css">
+  {{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 </head>
 <body>
 
@@ -40,7 +41,17 @@
         <div class="searchResults">
           <div class="searchText">
             {{songname}}
-            <a href="/explore/add_song{{link}}" class="button">Add to Discography</a>
+            <div class="dropdown">
+              <button class="dropbtn">Add to Discography</button>
+              <div class="dropdown-content">
+                <a href="/explore/add_song{{link}}/1">Spot 1</a>
+                <a href="/explore/add_song{{link}}/2">Spot 2</a>
+                <a href="/explore/add_song{{link}}/3">Spot 3</a>
+                <a href="/explore/add_song{{link}}/4">Spot 4</a>
+                <a href="/explore/add_song{{link}}/5">Spot 5</a>
+              </div>
+            </div>
+            {{!-- <a href="/explore/add_song{{link}}" class="button">Add to Discography</a> --}}
           </div>
         </div>
       {{/each}}
@@ -66,19 +77,16 @@
       <h1>Listening</h1>
       <div class="out-row">
         <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
           <span>jack smith</span>
         </div>
       </div>
       <div class="out-row">
         <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
           <span>jack smith</span>
         </div>
       </div>
       <div class="out-row">
         <div class="p-row">
-          <img src="./abc.jpg" alt="this is a photo">
           <span>jack smith</span>
         </div>
       </div>

@@ -54,9 +54,24 @@ exports.register = (req, res) => {
             if(error){
                 console.log(error);
             } else {
-                return res.redirect('/connect-spotify');
+                db.query("SELECT id FROM users WHERE username = ?", [username], (error, results) => {
+                    if(error){
+                        console.log(error);
+                    } else {
+                        const currentUserID = results[0].id;
+                        db.query("INSERT INTO top5songs (id) VALUES(?);", [currentUserID], (error, results) => {
+                            if(error){
+                                console.log(error);
+                            } else {
+                                return res.redirect('/connect-spotify');
+                                
+                            }
+                        })
+                    }
+                })
             }
         })
+
     });
 
     
@@ -87,6 +102,7 @@ exports.login = async (req, res) => {
                 req.session.email = results[0].email;
                 req.session.userId = results[0].id;
                 req.session.access_token = results[0].access_token;
+
                 const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })
