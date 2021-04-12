@@ -41,8 +41,8 @@
           <div class="artists">
               <ul class="artist-list">
                   {{#each artist}}
-                  <li>{{this.name}}</li>
-                  <!-- insert artist image here -->
+                    <li>{{this.name}}</li>
+                    <img src="{{this.image}}" alt="Artist Image">
                   {{/each}}
               </ul>
           </div>
@@ -76,7 +76,7 @@
                   <li class="album">
                       <h3>{{this.name}}</h3>
                       <h4>{{this.artist}}</h4>
-                      <!-- insert url here -->
+                      <img src="{{this.image}}" alt="Album Cover">
                   </li>
                   {{/each}}
               </ul>

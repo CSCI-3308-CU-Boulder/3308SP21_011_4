@@ -438,14 +438,14 @@ app.get('/pfp', (req, res) =>{
     var songsObj = {
         songs: []
     };
-    var toSongsQuery = 'SELECT TOPSONGS where id = req.session.userID';
-    db.any(toSongsQuery)
+    var topSongsQuery = ''; // JAKE PLEASE ENTER QUERY 
+    db.any(topSongsQuery)
     .then((data) => {
         for (i = 0; i < data.length; i++){
             spotifyApi.getTrack(data[i])
-            .then((data) => {
-                var creator = data.body.artists[0].name;
-                var trackname = data.body.name;
+            .then((info) => {
+                var creator = info.body.artists[0].name;
+                var trackname = info.body.name;
                 songsObj.songs.push(
                     {
                         name: trackname,
@@ -464,16 +464,16 @@ app.get('/pfp', (req, res) =>{
         artists: []
     };
     // collect top artists to render in page
-    var topArtistsQuery = 'SELECT TOPSONGS where id = req.session.userID';
+    var topArtistsQuery = ''; // JAKE PLEASE ENTER QUERY 
     db.any(topArtistsQuery)
     .then((data) => {
         // looping over list of artist id's stored in db
         for (i = 0; i < data.length; i++) {
             spotifyApi
             .getArtist(data[i])
-            .then((data) => {
-                var name = name + data.body.name;
-                var img = img + data.body.images[0].url;
+            .then((info) => {
+                var name = name + info.body.name;
+                var img = img + info.body.images[0].url;
                 artistsObj.artists.push(
                     {
                         name: name,
@@ -492,34 +492,32 @@ app.get('/pfp', (req, res) =>{
         albums: []
     };
     // collect top artists to render in page
-    var topAlbumsQuery = 'SELECT TOPSONGS where id = req.session.userID';
+    var topAlbumsQuery = ''; // JAKE PLEASE ENTER QUERY 
     db.any(topArtistsQuery)
     .then((data) => {
-        // looping over list of artist id's stored in db
         for (i = 0; i < data.length; i++) {
-            /*
             spotifyApi
-            .getArtist(data[i])
-            .then((data) => {
-                var name = name + data.body.name;
-                var img = img + data.body.images[0].url;
-                artistsObj.artists.push(
+            .getAlbum(data[i])
+            .then((info) => {
+                var name = info.body.name;
+                var artist = info.artists[0].name;
+                var img = info.images[0].url;
+                albumsObj.albums.push(
                     {
                         name: name,
+                        artist: artist,
                         image: img
                     }
                 );
             })
-            */
         }
     })
     .catch((err) => {
-        console.log("Something went wrong in getTopArtists!", err);
+        console.log("Something went wrong in getTopAlbums!", err);
     });
 
 
     var user;
-    // console.log(req.session.access_token);
     spotifyApi.setAccessToken(req.session.access_token)
     spotifyApi.getMe()
         .then(function(data) {
@@ -546,7 +544,10 @@ app.get('/pfp', (req, res) =>{
                             username: req.session.username,
                             friend_requests: results,
                             friends: friendsList,
-                            user: data.body
+                            user: data.body,
+                            artist: artistsObj.artists,
+                            song: songsObj.songs,
+                            album: albumsObj.albums
                         });
                     }
                 })
