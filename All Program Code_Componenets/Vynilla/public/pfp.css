@@ -46,8 +46,26 @@ html {
 }
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.subsections {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+  margin: 50px;
+}
+.top5-backing {
+  height: 500px;
+  width: 200px;
+  grid-column: 2 / span 1;
+  display: block;
+  background: rgb(56, 56, 56);
+}
+
+.top5-element-name, .top5-element-header {
+  color: white;
+  text-align: center;
 }
 .center {
   display: flex;
