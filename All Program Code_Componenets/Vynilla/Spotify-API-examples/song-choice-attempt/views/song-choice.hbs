@@ -16,11 +16,13 @@
 
     <h2>Let's make a queue for your friend!!</h2>
     
-    <button type="button" class="btn btn-primary btn-md" id="playlistbtn">Make a playlist!!</button>
+
 
     <!-- conditionally render 'search songs' button, only when the playlist is defined -->
     {{#if playlistid}}
         <button type="button" class="btn btn-primary btn-md" id="searchbtn">Search some songs!!</button>
+    {{else}}
+        <button type="button" class="btn btn-primary btn-md" id="playlistbtn">Make a playlist!!</button>
     {{/if}}
 
     <!-- playlist modal -->
