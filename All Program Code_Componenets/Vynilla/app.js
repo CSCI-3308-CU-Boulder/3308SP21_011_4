@@ -356,7 +356,90 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
 //render user information (spotify PF picture, username)
 //conditionally render friend requests, friend lists, etc
 app.get('/pfp', (req, res) =>{
-    //// collect top 5's here in variables. then render in page
+    // collect top songs to render in page
+    var songsObj = {
+        songs: []
+    };
+    var toSongsQuery = 'SELECT TOPSONGS where id = req.session.userID';
+    db.any(toSongsQuery)
+    .then((data) => {
+        for (i = 0; i < data.length; i++){
+            spotifyApi.getTrack(data[i])
+            .then((data) => {
+                var creator = data.body.artists[0].name;
+                var trackname = data.body.name;
+                songsObj.songs.push(
+                    {
+                        name: trackname,
+                        artist: creator
+                    }
+                )
+            })
+        }
+    })
+    .catch((err) => {
+        console.log("Something went wrong in getTopSongs!", err);
+    });
+    
+    // object to send to handlebars
+    var artistsObj = {
+        artists: []
+    };
+    // collect top artists to render in page
+    var topArtistsQuery = 'SELECT TOPSONGS where id = req.session.userID';
+    db.any(topArtistsQuery)
+    .then((data) => {
+        // looping over list of artist id's stored in db
+        for (i = 0; i < data.length; i++) {
+            spotifyApi
+            .getArtist(data[i])
+            .then((data) => {
+                var name = name + data.body.name;
+                var img = img + data.body.images[0].url;
+                artistsObj.artists.push(
+                    {
+                        name: name,
+                        image: img
+                    }
+                );
+            })
+        }
+    })
+    .catch((err) => {
+        console.log("Something went wrong in getTopArtists!", err);
+    });
+
+    // object to send to handlebars
+    var albumsObj = {
+        albums: []
+    };
+    // collect top artists to render in page
+    var topAlbumsQuery = 'SELECT TOPSONGS where id = req.session.userID';
+    db.any(topArtistsQuery)
+    .then((data) => {
+        // looping over list of artist id's stored in db
+        for (i = 0; i < data.length; i++) {
+            /*
+            spotifyApi
+            .getArtist(data[i])
+            .then((data) => {
+                var name = name + data.body.name;
+                var img = img + data.body.images[0].url;
+                artistsObj.artists.push(
+                    {
+                        name: name,
+                        image: img
+                    }
+                );
+            })
+            */
+        }
+    })
+    .catch((err) => {
+        console.log("Something went wrong in getTopArtists!", err);
+    });
+
+
     var user;
     // console.log(req.session.access_token);
     spotifyApi.setAccessToken(req.session.access_token)
