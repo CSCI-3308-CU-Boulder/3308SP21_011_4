@@ -10,6 +10,8 @@
 
 .queues {
     display: grid;
+
+    /* not sure if this will work in general */ 
     grid-template-areas:
         '. . queue1 . queue2 . queue3 . .'
         '. . queue1 . queue2 . queue3 . .'
@@ -98,6 +100,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction:column;
 }
 .center {
   align-self: center;

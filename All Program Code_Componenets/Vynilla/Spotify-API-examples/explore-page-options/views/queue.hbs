@@ -24,71 +24,124 @@
     </div>
 
   <div class="center">
+      <div class="friends-select">
+          <form action="/select-friend" method="GET">
+              <select onchange="this.form.submit()" class="form-select form-select-lg mb-3" aria-label=".form-select-lg" id="friends-dropdown" name="friends-dropdown">
+                  <option>Choose a friend</option>
+                  {{#if friends}}
+                      {{#each friends}}
+                        <option 
+                            value={{this}}>
+                            {{this}}
+                        </option>
+                      {{/each}}
+                  {{/if}}
+              </select>
+          </form>
+      </div>
       <div class="queues">
-          <div class="queue1">
-              <h3 class="friendname">Jake</h3>
-              <!-- this should prrooobbably be a 'ul' w/ 'li's -->
-              <div class="song">Sauce It Up</div>
-              <div class="song">Never Going Back Again</div>
-              <div class="song">Let Down</div>
-              <div class="song">If I Ever Feel Better</div>
-              <button type="button" class="openModal" data-toggle="modal" data-target="#addSongModal">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-</svg>
-              </button>
-
-          </div>
-          <div class="queue2">
-              <h3 class="friendname">Bernardo</h3>
-              <div class="song">Guilty Conscience</div>
-              <div class="song">Mind Mischief</div>
-              <div class="song">Englishman In New York</div>
-              <div class="song">Blow Out</div>
-              <div class="song">Come Undone</div>
-              <button type="button" class="openModal" data-toggle="modal" data-target="#addSongModal">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-</svg>
-              </button>
-          </div>
-          <div class="queue3">
-              <h3 class="friendname">Dalbir</h3>
-              <div class="song">Last Train to London</div>
-              <div class="song">Dancing Queen</div>
-              <div class="song">Cherry-Coloured Funk</div>
-              <button type="button" class="openModal" data-toggle="modal" data-target="#addSongModal">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-</svg>
-              </button>
-          </div>
+          {{#if friend}}
+            <h1 style="color:white;">{{friend.name}}</h1>
+            {{#if queue}}
+                <ul>
+                {{#each queue}}
+                    <li style="color:white;">{{this.songname}}</li>
+                    <ul>
+                        {{#each artist}}
+                            <li style="color:white;">{{this}}</li>
+                        {{/each}}
+                    </ul>
+                {{/each}}
+                </ul>
+            {{/if}}
+          {{/if}}
+                  
       </div>
-  </div>
-
-  <div class="right">
-    <div class="list">
-      <h1>Listening</h1>
-      <div class="out-row">
-        <div class="p-row">
-          <span>jack smith</span>
-        </div>
-      </div>
-      <div class="out-row">
-        <div class="p-row">
-          <span>jack smith</span>
-        </div>
-      </div>
-      <div class="out-row">
-        <div class="p-row">
-          <span>jack smith</span>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-<script>
 
+{{#if friend}}
+<button type="button" style = "color:white;"class="btn btn-default btn-sm" id="searchBtn">Add a song?</button>
+{{/if}}
+
+<div id="searchModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Search <3</h5>
+                <button class="close" type="button" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/search" method="get">
+                    <div class="form-group">
+                        <label for="songname">Song name <3</label>
+                    <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!">
+                    <input type="hidden" name="friendname" value={{friend.name}}>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm">Search dat hooooooe</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend.name}}.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="queueModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Which song?</h5>
+                <button class="close" type="button" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="/addToPlaylist" method="get">
+                    {{#each songsFromSearch}}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id={{this.songname}} name="songLink" value={{this.link}}>
+                        <label class="form-check-label" for={{this.songname}}>
+                            {{this.songname}}
+                        </label>
+                        <ul>
+                            {{#each artists}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                    {{/each}}
+                    <button type="submit" class="btn btn-success btn-sm">Add it to {{friend.name}}'s queue!</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend.name}}.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{#if songsFromSearch}}
+    <script>
+        $(document).ready(function() {
+                    $("#queueModal").modal("show");
+                })
+    </script>
+{{else}}
+    <script>
+        $(document).ready(function() {
+                    $("#queueModal").modal("hide");
+                })
+    </script>
+{{/if}}
+
+<script>
+    
+    $(document).ready(function() {
+            $("#searchBtn").click(function() {
+                    $("#searchModal").modal();
+                })
+
+        })
 </script>
 
 </body>

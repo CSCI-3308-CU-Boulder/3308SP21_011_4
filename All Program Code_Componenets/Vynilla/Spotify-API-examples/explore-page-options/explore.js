@@ -45,7 +45,71 @@ app.get("/callback", (req, res) => {
 });
 
 app.get("/queue", (req,res) => {
-    res.render("queue");
+    res.render("queue", {friends:["Bernardo", "Dalbir", "Jake"]});
+})
+
+app.get('/select-friend', (req,res) => {
+    const friendname = req.query["friends-dropdown"];
+    var friendObj = {
+        name: friendname,
+        playlistid: 1,
+        queueSoFar: []
+    }
+
+    const theirq = req.query["theirqueue"];
+
+    var songsObj = {
+        songs: [
+            {
+                songname: "Poggoli", artist: ["Rav", "ioli"]
+            },
+            {
+                songname: "Say So", artist: ["Doja Cat"]
+            }
+        ]
+    }
+
+    res.render("queue", {friend: friendObj, queue: songsObj["songs"], friends: ["Bernardo", "Dalbir", "Jake"]});
+})
+
+app.get("/search", (req,res) => {
+    const songname = req.query["songname"];
+    const friendname = req.query["friendname"];
+    var friendObj = {
+        name: friendname,
+        playlistid: 1,
+        queueSoFar: []
+    }
+
+    var songsObj = {
+        songs: []
+    }
+    spotifyApi.searchTracks(songname, {limit: 5}).then((data) => {
+        data.body.tracks.items.forEach((track) => {
+            var artists = [];
+            console.log(track.name);
+            track.artists.forEach((artist) => {
+                // console.log(artist.name);
+                artists.push(artist.name);
+            })
+            songsObj["songs"].push({
+                songname: track.name,
+                artists: artists,
+                link: track.uri
+            })
+
+        })
+        console.log(songsObj["songs"])
+        res.render("queue", {
+            songsFromSearch:songsObj["songs"], //obvi we need to get this from DB
+            queueSoFar: songsObj["songs"],//& this
+            friend: friendObj,
+            friends: ["Bernardo", "Dalbir", "Jake"]
+        });
+    }).catch((err) => {
+        console.log("Shoot!" + err);
+        return;
+    })
 })
 
 app.listen(
