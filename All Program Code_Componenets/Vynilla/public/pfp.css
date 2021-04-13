@@ -57,11 +57,35 @@ body {
 }
 .top5-backing {
   height: 500px;
-  width: 200px;
+  width: 400px;
   grid-column: 2 / span 1;
   display: block;
   background: rgb(56, 56, 56);
 }
+.song-container {
+  display: flex;
+  height: 50px;
+  padding: 5px;
+  margin: 25px;
+  background: rgb(46, 46, 46);
+}
+.top5-text {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+.top5-element-name {
+  padding-left: 10px;
+  align-self: flex-start;
+}
+.top5-element-small {
+  padding-left: 10px;
+  align-self: flex-start;
+  color: rgb(185, 185, 185);
+}
+/* .song-img {
+  align-self: flex-end;
+} */
 
 .top5-element-name, .top5-element-header {
   color: white;

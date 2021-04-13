@@ -28,7 +28,7 @@
       {{/if}}
       {{#each friends}}
         <div class="searchResults">
-          <div class="searchText">
+          <div class="FriendsText">
             {{this.username}}
             <a href="/explore/friend-request-sent/{{this.username}}/{{this.id}}" class="button">Add Friend</a>
           </div>
@@ -41,18 +41,22 @@
         <div class="searchResults">
           <div class="searchText">
             {{songname}}
+            <div class="small">
+              {{this.artists}}
+            </div>
+          </div>
+          <div class="rightSide">
             <div class="dropdown">
-              <button class="dropbtn">Add to Discography</button>
-              <div class="dropdown-content">
-                <a href="/explore/add_song{{link}}/1">Spot 1</a>
-                <a href="/explore/add_song{{link}}/2">Spot 2</a>
-                <a href="/explore/add_song{{link}}/3">Spot 3</a>
-                <a href="/explore/add_song{{link}}/4">Spot 4</a>
-                <a href="/explore/add_song{{link}}/5">Spot 5</a>
+                <button class="dropbtn">Add to Discography</button>
+                <div class="dropdown-content">
+                  <a href="/explore/add_song{{link}}/1">Spot 1</a>
+                  <a href="/explore/add_song{{link}}/2">Spot 2</a>
+                  <a href="/explore/add_song{{link}}/3">Spot 3</a>
+                  <a href="/explore/add_song{{link}}/4">Spot 4</a>
+                  <a href="/explore/add_song{{link}}/5">Spot 5</a>
+                </div>
               </div>
             </div>
-            {{!-- <a href="/explore/add_song{{link}}" class="button">Add to Discography</a> --}}
-          </div>
         </div>
       {{/each}}
 

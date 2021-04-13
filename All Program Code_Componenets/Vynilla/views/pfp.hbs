@@ -42,7 +42,15 @@
       <div class="top5-backing">
         <h2 class="top5-element-header">Songs</h2>
         {{#each top5songs}}
-        <div class="top5-element-name">{{this.trackname}}</div>
+        <div class="song-container">
+          <div class="song-img">
+            <img src="{{this.img}}" alt="album cover" width="50" height="50">
+          </div>
+          <div class="top5-text">
+            <div class="top5-element-name">{{this.trackname}}</div>
+            <div class="top5-element-small">{{this.artists}}</div>
+          </div>
+        </div>
         {{/each}}
       </div>
 
