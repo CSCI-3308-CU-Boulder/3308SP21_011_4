@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./pfp.css">
+  <link rel="stylesheet" href="./navbar.css">
+</head>
+<body>
+
+    <div class="sidenav">
+        <a href="/feed">Home</a>
+        <a href="/explore">Explore</a>
+        <a href="/pfp">Profile</a>
+    </div>
+
+  <div class="center">
+    <div class="right-profile-info">
+      <img src="{{{user.images.0.url}}}" alt="User's profile picture" class="pfp">
+      <h1 class="name">{{{name}}}</h1>
+      <h2 class="atname">@{{{username}}}</h2>
+    </div>
+    <div class="left-profile-info">
+      <h1 class="name">Friends</h1>
+      {{!-- Add friends here with hbs and javascript --}}
+      {{#each friend_requests}}
+        <div class="friendReq">
+          <div class="friendText">{{this.username}}</div>
+          <a href="/pfp/accept-friend/{{this.user_id_one}}" class="acceptFR">Accept</a>
+          <a href="#" class="declineFR">Decline</a>
+        </div>
+      {{/each}}
+      {{#each friends}}
+        <div class="friendText">{{this.username}}</div>
+      {{/each}}
+    </div>
+  </div>
+
+    
+    <section class="subsections">
+
+      <div class="top5-backing">
+        <h2 class="top5-element-header">Songs</h2>
+        {{#each top5songs}}
+        <div class="song-container">
+          <div class="song-img">
+            <img src="{{this.img}}" alt="album cover" width="50" height="50">
+          </div>
+          <div class="top5-text">
+            <div class="top5-element-name">{{this.trackname}}</div>
+            <div class="top5-element-small">{{this.artists}}</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+
+    </section>
+
+
+  {{!-- <div class="right">
+    <!-- here goes friend_select drop down button -->
+    <form action="/friendSelect" method="get">
+        <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Select Friend
+            </button>
+            <div class="dropdown-menu" name="friend-select">
+                {{#each friends}}
+                <option>{{this.username}}</option>
+                {{/each}}
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary">Submit</button>
+    </form> --}}
+
+    {{!-- <div class="queue">
+        <h1>Aux</h1>
+        <ul>
+            {{#each queue_song}}
+            <li class="queue-item">
+                <h2 class="user-friend">{{this.sentFrom}}</h2>
+                <h3 class="song-name">{{this.name}</h4>
+                <h4 class="song-artist">{{this.artist}}</h5>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+  </div> --}}
+
+
+<script>
+  window.onload = function () {
+    document.querySelector('.search').addEventListener('keyup', (event) => {
+      if (event.keyCode === 13) {
+        window.open('./blank.html')
+      }
+    })
+  }
+</script>
+</body>
+</html>
