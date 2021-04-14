@@ -9,7 +9,7 @@ const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
-    database: process.env.DATABASE
+    database: 'heroku_520f5c0c9f5c6e8'
 });
 
 exports.register = (req, res) => {
@@ -31,7 +31,7 @@ exports.register = (req, res) => {
             message: "Fields cannot be blank"
         })
     }
-    db.query(`USE ${process.env.DATABASE};`);
+    db.query(`USE heroku_520f5c0c9f5c6e8;`);
     db.query('SELECT username FROM users WHERE username = ?', [username], async (error, results) => {
         if(error){
             console.log(error);
