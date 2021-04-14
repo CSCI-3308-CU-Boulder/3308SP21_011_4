@@ -109,7 +109,7 @@ app.get('/callback', (req, res) => {
       req.session.access_token = access_token; //store this user's accesss_token in cookies
       // console.log(username);
 
-      db.query('USE nodejs_login;');
+      db.query(`USE ${process.env.DATABASE};`);
       db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, username], (error, results) => {
         if(error){
             console.log(error);
@@ -144,7 +144,7 @@ app.get('/callback', (req, res) => {
         console.log('access_token:', access_token);
         spotifyApi.setAccessToken(access_token);
         req.session.access_token = access_token;
-        db.query('USE nodejs_login;');
+        db.query(`USE ${process.env.DATABASE};`);
         db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, req.session.username], (error, results) => {
         if(error){
             console.log(error);
@@ -190,7 +190,7 @@ app.post('/explore/search', (req, res) => {
     var friendsResults;
 
     //find users whose name resembles their search query
-    db.query('USE nodejs_login;');
+    db.query(`USE ${process.env.DATABASE};`);
     db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         // console.log(results);
         friendsResults = results;
@@ -316,7 +316,7 @@ app.get('/explore/add_song:songid/:location', async (req, res) => {
     await new Promise(r => setTimeout(r, 2000));
     console.log("songname" + song.name);
 
-    db.query('USE nodejs_login;');
+    db.query(`USE ${process.env.DATABASE};`);
     switch(location) {
         case 1:
             db.query('UPDATE top5songs SET song_one = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
@@ -606,7 +606,7 @@ app.get('/pfp', (req, res) =>{
         spotifyApi.getMe()
             .then(function(data) {
                 // console.log(data.body.display_name);
-                db.query('USE nodejs_login;');
+                db.query(`USE ${process.env.DATABASE};`);
                 db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
                 WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != ?", [req.session.userId, req.session.userId, req.session.userId], async (error, results) => {
                     if (error){
@@ -649,7 +649,7 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
     // console.log(req.params.userOneId);
     const signedInUser = req.session.userId;
     const friend = req.params.userOneId;
-    db.query('USE nodejs_login;');
+    db.query(`USE ${process.env.DATABASE};`);
 
     //update their relationship in the relationship table
     db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?",
