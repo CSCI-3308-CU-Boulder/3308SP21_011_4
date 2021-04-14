@@ -662,23 +662,24 @@ app.get("/friendSelect/:whichFriend" , (req, res) => {
 // since we only have topsong1, topsong2... topsong 5, this shouldn't be that bad
 // --jared
 app.get("/removeSongs/:toRemove" , (req, res) => {
-
-    const getRidOf = req.query.toRemove; //num b/w one and 5, based on which 'x' they pressed on the pfp
-
-    //db.remove(TOPSONGS);
-    //becomes
-    //db.remove(toRemove);
+    const getRidOfSong = req.query.toRemoveSong; //num b/w one and 5, based on which 'x' they pressed on the pfp
+    db.query('DELETE FROM top5songs WHERE id = ? AND song_one = ? OR song_two = ? OR song_three = ? OR song_four = ? OR song_five = ?', [req.session.userId, getRidOfSong], async(error, results) => {
+        if(error) {
+            console.log(error);
+        } 
+    })
     res.redirect('pfp');
 })
 
 //i'm imagining something similar will go on with these two,
 //since i don't think they'd always want to entirely clear their top 5s
-app.get("/removeArtists" , (req, res) => {
-    //db.remove(TOPARTISTS);
-    res.redirect('pfp');
-})
-app.get("/removeAlbums" , (req, res) => {
-    //db.remove(TOPALBUMS);
+app.get("/removeArtists/:toRemove" , (req, res) => {
+    const getRidOfArtist = req.query.toRemoveArtist; 
+    db.query('DELETE FROM top5artists WHERE id = ? AND artist_one = ? OR artist_two = ? OR artist_three = ? OR artist_four = ? OR artist_five = ?', [req.session.userId, getRidOfArtist], async(error, results) => {
+        if(error) {
+            console.log(error);
+        }
+    })
     res.redirect('pfp');
 })
 
