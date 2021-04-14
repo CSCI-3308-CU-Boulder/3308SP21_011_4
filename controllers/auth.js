@@ -31,7 +31,7 @@ exports.register = (req, res) => {
             message: "Fields cannot be blank"
         })
     }
-
+    db.query(`USE ${process.env.DATABASE};`);
     db.query('SELECT username FROM users WHERE username = ?', [username], async (error, results) => {
         if(error){
             console.log(error);
