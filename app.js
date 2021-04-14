@@ -21,7 +21,7 @@ const db = mysql.createConnection({
 
 //create a spotifyAPI instance w/ our credentials
 const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://localhost:8888/callback', // where to send user after authentication
+    redirectUri: 'http://vynilla-app.herokuapp.com/callback', // where to send user after authentication
     clientId: '1721ccaf9f0f40a196710dede9030908',
     clientSecret: '7efbade01f16446a880254fe1f30d2a7'
 });
