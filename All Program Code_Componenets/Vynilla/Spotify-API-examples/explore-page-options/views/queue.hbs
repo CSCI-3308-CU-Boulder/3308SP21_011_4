@@ -41,13 +41,13 @@
       </div>
       <div class="queues">
           {{#if friend}}
-            <h1 style="color:white;">{{friend.name}}</h1>
-            {{#if queue}}
+            <h1 style="color:white;">{{friend}}</h1>
+            {{#if currentQueue}}
                 <ul>
-                {{#each queue}}
+                {{#each currentQueue}}
                     <li style="color:white;">{{this.songname}}</li>
                     <ul>
-                        {{#each artist}}
+                        {{#each artists}}
                             <li style="color:white;">{{this}}</li>
                         {{/each}}
                     </ul>
@@ -60,9 +60,44 @@
 </div>
 
 {{#if friend}}
-<button type="button" style = "color:white;"class="btn btn-default btn-sm" id="searchBtn">Add a song?</button>
+    {{#if theirQueue}}
+        <button type="button" style = "color:white;"class="btn btn-default btn-sm" id="searchBtn">Add a song?</button>
+    {{else}}
+        <button type="button" style="color:white;" class="btn btn-default btn-sm" id="queueBtn">Create {{friend}}'s queue!</button>
+
+
+    <!--playlist/queue creation modal -->
+        <div id="playlistModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Create {{friend}}'s queue!</h5>
+                        <button class="close" type="button" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/make_queue" method="get">
+                            <div class="form-group">
+                                <label for="queuename">Name it <3</label>
+                                <input type="text" name="queue_name" class="form-control" id="queuename" placeholder="Name" + {{friend}} + "'s queue'!">
+                            <input type="hidden" name="friendname" value={{friend}}>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm">Make dat hoe</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend}}.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- end playlist/queue creation modal -->
+
+
+    {{/if}}
 {{/if}}
 
+
+<!-- find song modal -->
 <div id="searchModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -75,18 +110,20 @@
                     <div class="form-group">
                         <label for="songname">Song name <3</label>
                     <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!">
-                    <input type="hidden" name="friendname" value={{friend.name}}>
+                    <input type="hidden" name="friendname" value={{friend}}>
                     </div>
                     <button type="submit" class="btn btn-success btn-sm">Search dat hooooooe</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend.name}}.</button>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend}}.</button>
             </div>
         </div>
     </div>
 </div>
+<!--find song modal-->
 
+<!-- select songs returned from search to add to playlist -->
 <div id="queueModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -109,15 +146,17 @@
                         </ul>
                     </div>
                     {{/each}}
-                    <button type="submit" class="btn btn-success btn-sm">Add it to {{friend.name}}'s queue!</button>
+                    <input type="hidden" name="friendname" value={{friend}}>
+                    <button type="submit" class="btn btn-success btn-sm">Add it to {{friend}}'s queue!</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend.name}}.</button>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Nvm. I hate {{friend}}.</button>
             </div>
         </div>
     </div>
 </div>
+<!-- end add song to queue modal -->
 
 
 {{#if songsFromSearch}}
@@ -139,6 +178,9 @@
     $(document).ready(function() {
             $("#searchBtn").click(function() {
                     $("#searchModal").modal();
+                })
+            $("#queueBtn").click(function() {
+                    $("#playlistModal").modal();
                 })
 
         })
