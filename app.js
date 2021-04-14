@@ -77,7 +77,7 @@ app.use(cookieParser());
 app.set('view engine', 'hbs');
 
 //define our routes
-app.use('/', require('./routes/pages.js'));
+app.use('/', require('./routes/pages.js.js'));
 app.use('/auth', require('./routes/auth'));
 
 //redirect connections to spotify's auth. url, asking for permission with the aforementioned scopes
@@ -714,6 +714,6 @@ app.get("/removeAlbums" , (req, res) => {
 })
 
 
-app.listen(8888, () => {
-    console.log("Server Started on http://localhost:8888")
+app.listen(3306, () => {
+    console.log("Server Started on http://localhost:3306")
 })
