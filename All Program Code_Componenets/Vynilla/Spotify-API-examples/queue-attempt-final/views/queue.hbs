@@ -55,12 +55,15 @@
                   {{#if friends}}
                       {{#each friends}}
                         <option 
-                            value={{this}}>
-                            {{this}}
+                            value={{this.id}}>
+                            {{this.name}}
                         </option>
                       {{/each}}
                   {{/if}}
               </select>
+
+              <!-- not necessary since we have cookies -->
+              <input type="hidden" name="madeq" value={{self}}>
           </form>
       </div>
       <!-- end friend selector -->
@@ -110,7 +113,8 @@
                             <div class="form-group">
                                 <label for="queuename">Name it <3</label>
                                 <input type="text" name="queue_name" class="form-control" id="queuename" placeholder="Name" + {{friend}} + "'s queue'!">
-                            <input type="hidden" name="friendname" value={{friend}}>
+                            <input type="hidden" name="selfID" value={{self}}>
+                            <input type="hidden" name="friendID" value={{friend}}>
                             </div>
                             <button type="submit" class="btn btn-success btn-sm">Make dat hoe</button>
                         </form>
@@ -141,6 +145,7 @@
                     <div class="form-group">
                         <label for="songname">Song name <3</label>
                     <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!">
+                    <input type="hidden" name="selfID" value={{self}}>
                     <input type="hidden" name="friendname" value={{friend}}>
                     </div>
                     <button type="submit" class="btn btn-success btn-sm">Search dat hooooooe</button>
@@ -178,6 +183,7 @@
                     </div>
                     {{/each}}
                     <input type="hidden" name="friendname" value={{friend}}>
+                    <input type="hidden" name="selfID" value={{self}}>
                     <button type="submit" class="btn btn-success btn-sm">Add it to {{friend}}'s queue!</button>
                 </form>
             </div>
