@@ -55,7 +55,7 @@ var db_config = {
 
 //create a spotifyAPI instance w/ our credentials
 const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://vynilla-app.herokuapp.com/callback', // where to send user after authentication
+    redirectUri: 'http://localhost:3333/callback', // where to send user after authentication
     clientId: '1721ccaf9f0f40a196710dede9030908',
     clientSecret: '7efbade01f16446a880254fe1f30d2a7'
 });
@@ -491,8 +491,20 @@ app.get('/explore/friend-request-sent/:username/:userTwoId', (req, res) => {
                     friends: null
                 })
             } else {
-                res.render('explore', {
-                    message: "Friend Request Sent to " + req.params.username
+                db.query('INSERT INTO queue SET ?', {fromUser: userOneId, toUser: userTwoId}, (error, results) => {
+                    if(error){
+                        console.log(error);
+                    } else {
+                        db.query('INSERT INTO queue SET ?', {fromUser: userTwoId, toUser: userOneId}, (error, results) => {
+                            if(error){
+                                console.log(error);
+                            } else {
+                                res.render('explore', {
+                                    message: "Friend Request Sent to " + req.params.username
+                                })
+                            }
+                        })
+                    }
                 })
             }
     })
@@ -701,6 +713,160 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
             }
     })
 })
+
+
+app.get("/queue", (req, res) => {
+    const getAllUsers = "select person from users;"; //for dev purposes, to sim switching users w/o actually needing to
+    var users = [];
+    var friends = [];
+
+    db.query("SELECT users.username, users.id FROM relationship INNER JOIN users ON IF(?=user_id_one, relationship.user_id_two = users.id, relationship.user_id_one = users.id) WHERE (user_id_one = ? OR user_id_two = ?) AND status = 1 \
+    ", [req.session.userId, req.session.userId, req.session.userId], (error, friendsList) => {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log(friendsList[0]);
+        for (var i = 0; i < friendsList.length; i++){
+            friends.push(friendsList[i]);
+        }
+        res.render("queue", {
+            friends: friends
+        })
+    }
+})
+
+
+    // db.any(getAllUsers)
+    //     .then((data) => {
+    //         // console.log("select person from users:");
+    //         // console.table(data);
+    //         data.forEach((person) => {
+    //             users.push(person.person);
+    //         });
+
+    //         // console.log('\n users array:');
+    //         // console.table(users);
+    //         res.render("queue", { users: users, message: "in /queue, all working well" });
+    //     })
+    //     .catch((err) => {
+    //         console.error(err);
+    //         res.render("queue", { message: "messed up somewhere in /queue" });
+    //     });
+});
+
+
+app.get("/select-friend", (req, res) => {
+    var friend;
+    const selectedFriend = req.query["friends-dropdown"];
+
+    db.query("SELECT username FROM users WHERE id = ?", [selectedFriend], (error, currentFriend) => {
+        if(error){
+            console.log(error);
+        } else {
+            friend = currentFriend[0].username;
+        }
+    })
+
+    db.query("SELECT * FROM queue WHERE fromUser = ?", [req.session.userId], (error, results) => {
+        console.log(results);
+        if (results[0].nameOfPlaylist == null){
+            // User does not have a playlist, We need to make one
+
+            res.render("queue", {
+                message: "No Queue",
+                theirQueue: false,
+                friendName: friend,
+                friendID: selectedFriend
+            })
+            console.log('got here, id is null');
+        } else {
+            // User has a playlist already for this friend
+            console.log("select friend" + selectedFriend);
+            res.render("queue", {
+                message: "Making a queue for " + friend,
+                theirQueue: true,
+                friendName: friend,
+                friendID: selectedFriend
+            })
+        }
+    })    
+})
+
+
+app.get("/make_queue", (req, res) => {
+    const friendID = req.query["friendID"];
+    console.log("makequeue" + friendID);
+    const queueName = req.query["queue_name"];
+    const friendName = req.query["friendName"];
+
+    db.query("UPDATE queue SET nameOfPlaylist = ? WHERE fromUser = ? AND toUser = ?", [queueName, req.session.userId, friendID], (error, result) => {
+        if(error){
+            console.log(error);
+        } else {
+            res.render("queue", {
+                message: "You made a queue for " + friendName,
+                theirQueue: true,
+                friendID: friendID,
+                friendName: friendName
+            })
+        }
+
+    })
+})
+
+app.get("/search", (req, res) => {
+    const songname = req.query["songname"];
+    const friendName = req.query["friendName"];
+    const friendID = req.query["friendID"];
+    var songsObj = {
+        songs: [],
+    };
+    spotifyApi.setAccessToken(req.session.access_token)
+    spotifyApi
+        .searchTracks(songname, { limit: 5 })
+        .then((data) => {
+            data.body.tracks.items.forEach((track) => {
+                var artists = [];
+                // console.log(track.name);
+                track.artists.forEach((artist) => {
+                    // console.log(artist.name);
+                    artists.push(artist.name);
+                });
+                songsObj["songs"].push({
+                    songname: track.name,
+                    artists: artists,
+                    link: track.uri,
+                });
+            });
+
+            console.log(songsObj["songs"]);
+            res.render("queue", {
+                songsFromSearch: songsObj["songs"], //obvi we need to get this from DB
+                queueSoFar: songsObj["songs"], //& this
+                friendName: friendName,
+                friendID: friendID
+            });
+})
+});
+
+app.get("/addToPlaylist", (req, res) => {
+    const song = req.query["songLink"];
+    const friendID = req.query["friendID"];
+    console.log("Add To playlist" + friendID);
+
+    db.query("INSERT INTO queueSongs VALUES (?, ?, ?)", [req.session.userId, 234, song], (error, results) => {
+        if(error){
+            console.log(error);
+        } else {
+            res.render("queue", {
+                message: "added song to queue"
+            });
+        }
+    })
+})
+
+//LATER IMPLEMENTATION
+/////////////////////////////////////////
 
 // sends back the queue of the selected friend on the profile page
 //
