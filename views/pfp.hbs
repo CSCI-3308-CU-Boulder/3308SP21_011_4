@@ -49,11 +49,6 @@
           <div class="top5-text">
             <div class="top5-element-name">{{this.trackname}}</div>
             <div class="top5-element-small">{{this.artists}}</div>
-            <div class="hidden-remove-song">
-              <form action="/removeSongs/{{this.id}}" method="get">
-                <button type="submit" name= "toRemoveSong" id="submitsongs" class="btn btn-warning btn-lg pull-right">Remove Song!</button>
-              </form>
-            </div>
           </div>
         </div>
         {{/each}}

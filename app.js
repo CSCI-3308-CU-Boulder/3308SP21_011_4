@@ -16,12 +16,12 @@ const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
-    database: "nodejs_login"
+    database: process.env.DATABASE
 });
 
 //create a spotifyAPI instance w/ our credentials
 const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://localhost:8888/callback', // where to send user after authentication
+    redirectUri: 'http://vynilla-app.herokuapp.com/callback', // where to send user after authentication
     clientId: '1721ccaf9f0f40a196710dede9030908',
     clientSecret: '7efbade01f16446a880254fe1f30d2a7'
 });
@@ -109,12 +109,18 @@ app.get('/callback', (req, res) => {
       req.session.access_token = access_token; //store this user's accesss_token in cookies
       // console.log(username);
 
-      db.query('USE nodejs_login;');
+      db.query(`USE ${process.env.DATABASE};`);
       db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, username], (error, results) => {
         if(error){
             console.log(error);
         }
     })
+    db.query("UPDATE users SET authCode = ? WHERE username = ?", [code, username], (error, results) => {
+        if(error){
+            console.log(error);
+        }
+    })
+    
 
       //set our access & refresh tokens for all future spotifyApi calls
       spotifyApi.setAccessToken(access_token);
@@ -138,7 +144,7 @@ app.get('/callback', (req, res) => {
         console.log('access_token:', access_token);
         spotifyApi.setAccessToken(access_token);
         req.session.access_token = access_token;
-        db.query('USE nodejs_login;');
+        db.query(`USE ${process.env.DATABASE};`);
         db.query("UPDATE users SET access_token = ? WHERE username = ?", [access_token, req.session.username], (error, results) => {
         if(error){
             console.log(error);
@@ -184,7 +190,7 @@ app.post('/explore/search', (req, res) => {
     var friendsResults;
 
     //find users whose name resembles their search query
-    db.query('USE nodejs_login;');
+    db.query(`USE ${process.env.DATABASE};`);
     db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         // console.log(results);
         friendsResults = results;
@@ -272,20 +278,45 @@ app.post('/explore/search', (req, res) => {
 //------ that's pretty much it as far as i'm concerned
 //---------------------------------------------
 
+async function getTrackInfoFromSpotify(songid){
+    var song = { };
+    spotifyApi.getTrack(songid)
+    .then((data) => {
+        // console.log(data.body.name);
+        song = {
+            name: data.body.name,
+            artist: data.body.artists,
+            img: data.body.album.images[0].url
+        };
+    })
+    console.log(song.name);
+    return song;
+}
+
 //!!!!!!!!!!!!!!!!!!!!!!!!--------------------
 
 //GET add a song to the user's top 5
-app.get('/explore/add_song:songid/:location', (req, res) => {
-    console.log(req.params.songid);
+app.get('/explore/add_song:songid/:location', async (req, res) => {
+    // console.log(req.params.songid);
 
     var songid = req.params.songid; //given: a song id
+    var songname;
     songid = songid.substring(14);
     var location = req.params.location;
     location = parseInt(location);
-    const song_name = "No";
+    var song;
+    
+    try {
+        song = await getTrackInfoFromSpotify(songid);
 
+    } catch(err) {
+        console.log(err);
+    }
 
-    db.query('USE nodejs_login;');
+    await new Promise(r => setTimeout(r, 2000));
+    console.log("songname" + song.name);
+
+    db.query(`USE ${process.env.DATABASE};`);
     switch(location) {
         case 1:
             db.query('UPDATE top5songs SET song_one = ? WHERE id = ?', [songid, req.session.userId], (error, results) => {
@@ -294,7 +325,7 @@ app.get('/explore/add_song:songid/:location', (req, res) => {
                 } else {
                     // console.log("here");
                     res.render('explore', {
-                        message: null,
+                        message: songname + " was added to your Discography",
                         friends: null,
                         songs: []
                     });
@@ -575,7 +606,7 @@ app.get('/pfp', (req, res) =>{
         spotifyApi.getMe()
             .then(function(data) {
                 // console.log(data.body.display_name);
-                db.query('USE nodejs_login;');
+                db.query(`USE ${process.env.DATABASE};`);
                 db.query("SELECT relationship.user_id_one, users.username FROM relationship INNER JOIN users ON relationship.user_id_one = users.id \
                 WHERE (user_id_one = ? OR user_id_two = ?) AND status = 0 AND action_user_id != ?", [req.session.userId, req.session.userId, req.session.userId], async (error, results) => {
                     if (error){
@@ -618,7 +649,7 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
     // console.log(req.params.userOneId);
     const signedInUser = req.session.userId;
     const friend = req.params.userOneId;
-    db.query('USE nodejs_login;');
+    db.query(`USE ${process.env.DATABASE};`);
 
     //update their relationship in the relationship table
     db.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_id_one = ? AND user_id_two = ?",
@@ -662,28 +693,27 @@ app.get("/friendSelect/:whichFriend" , (req, res) => {
 // since we only have topsong1, topsong2... topsong 5, this shouldn't be that bad
 // --jared
 app.get("/removeSongs/:toRemove" , (req, res) => {
-    const getRidOfSong = req.query.toRemoveSong; //num b/w one and 5, based on which 'x' they pressed on the pfp
-    db.query('DELETE FROM top5songs WHERE id = ? AND song_one = ? OR song_two = ? OR song_three = ? OR song_four = ? OR song_five = ?', [req.session.userId, getRidOfSong], async(error, results) => {
-        if(error) {
-            console.log(error);
-        } 
-    })
+
+    const getRidOf = req.query.toRemove; //num b/w one and 5, based on which 'x' they pressed on the pfp
+
+    //db.remove(TOPSONGS);
+    //becomes
+    //db.remove(toRemove);
     res.redirect('pfp');
 })
 
 //i'm imagining something similar will go on with these two,
 //since i don't think they'd always want to entirely clear their top 5s
-app.get("/removeArtists/:toRemove" , (req, res) => {
-    const getRidOfArtist = req.query.toRemoveArtist; 
-    db.query('DELETE FROM top5artists WHERE id = ? AND artist_one = ? OR artist_two = ? OR artist_three = ? OR artist_four = ? OR artist_five = ?', [req.session.userId, getRidOfArtist], async(error, results) => {
-        if(error) {
-            console.log(error);
-        }
-    })
+app.get("/removeArtists" , (req, res) => {
+    //db.remove(TOPARTISTS);
+    res.redirect('pfp');
+})
+app.get("/removeAlbums" , (req, res) => {
+    //db.remove(TOPALBUMS);
     res.redirect('pfp');
 })
 
 
-app.listen(8888, () => {
-    console.log("Server Started on http://localhost:8888")
+app.listen( process.env.PORT || 3333, () => {
+    console.log("Server Started on http://localhost:3333")
 })
