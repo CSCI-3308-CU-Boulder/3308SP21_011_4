@@ -60,7 +60,7 @@ app.get("/callback", (req, res) => {
 });
 
 app.get("/queue", (req,res) => {
-    var friendsQuery = 'SELECT person FROM friends;';
+    var friendsQuery = 'SELECT person FROM relation;';
     db.any(friendsQuery)
         .then((data) => {
             console.table(data);
@@ -78,8 +78,8 @@ app.get("/queue", (req,res) => {
 
 app.get('/select-friend', (req,res) => {
     const friendname = req.query["friends-dropdown"];
-    const friendQuery = "SELECT * FROM friends WHERE person='"+friendname+"';";
-    const friendsQuery = "SELECT * FROM friends;";
+    const friendQuery = "SELECT * FROM relation WHERE person='"+friendname+"';";
+    const friendsQuery = "SELECT * FROM relation;";
     var friends = [];
 
     db.any(friendsQuery).then((data) => {
@@ -150,7 +150,7 @@ app.get("/make_queue", (req, res) => {
     var friendname = req.query["friendname"];
     var queuename = req.query["queue_name"];
 
-    const getTheirFriends = "SELECT * FROM friends;"; //obvi we wanna use a relationship table or w/e
+    const getTheirFriends = "SELECT * FROM relation;"; //obvi we wanna use a relationship table or w/e
     const friends = [];
 
     db.any(getTheirFriends).then((data) => {
@@ -162,7 +162,7 @@ app.get("/make_queue", (req, res) => {
         .then((data) => {
             // console.log(data);
             var queueid = data.body.id;
-            var query = "update friends set playlistid = '"+queueid+"' where person = '"+friendname+"';"
+            var query = "update users set playlistid = '"+queueid+"' where person = '"+friendname+"';"
             db.any(query)
                 .then((data) => {
                     res.render('queue', {
@@ -225,7 +225,15 @@ app.get('/addToPlaylist', (req,res) => {
     })
     .catch((err) => {console.error(err)})
 
-    const getFriendPlaylist = "SELECT playlistid FROM friends WHERE person='"+name+"';";
+    const getFriendPlaylist = "SELECT playlistid FROM relation  WHERE person='"+name+"';";
+    const getSongQueueThings = 'select * from songs';
+    db.any(getSongQueueThings)
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
 
     db.any(getFriendPlaylist)
         .then((data) => {
