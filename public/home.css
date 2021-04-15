@@ -16,18 +16,53 @@ html {
 body {
     background: var(--dark0);
     color: var(--light);
+    background: linear-gradient(150deg, rgb(59, 59, 59), rgb(19, 19, 19), black);
 } 
 
 .wrapper {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-areas:
-
-        "nav feed feed feed feed friends"
-        "nav feed feed feed feed friends"
-        ".   feed feed feed feed       .";
-  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 } 
+
+.center-square {
+    display: flex;
+    width: 75vh;
+    height: 50vh;
+    background: linear-gradient(-30deg, rgb(59, 59, 59), rgb(19, 19, 19), black);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0 5px 35px black;
+}
+.top-text {
+    padding: 5vh;
+    font-size: xx-large;
+}
+.info-text {
+    padding: 5vh;
+    text-align: center;
+}
+.GoToButton {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.GoToButton:hover {
+    background-color: rgb(155, 155, 155);
+}
+.ButtonText {
+    color: black;
+    text-decoration: none;
+}
 
 /* .main-nav{ 
     width: 30%;
