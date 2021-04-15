@@ -7,6 +7,9 @@
   --light: #fff;
   --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
 }
+.body {
+  background: linear-gradient(150deg, rgb(59, 59, 59), rgb(19, 19, 19), black);
+}
 .searchText {
   color: white;
   font-size: 20px;

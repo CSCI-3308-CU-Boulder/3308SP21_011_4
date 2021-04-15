@@ -19,6 +19,40 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
+//DISCONNET BUG ??
+var db_config = {
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASS,
+    database: process.env.DATABASE
+  };
+  
+  var connection;
+  
+  function handleDisconnect() {
+    connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                    // the old one cannot be reused.
+  
+    connection.connect(function(err) {              // The server is either down
+      if(err) {                                     // or restarting (takes a while sometimes).
+        console.log('error when connecting to db:', err);
+        setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+      }                                     // to avoid a hot loop, and to allow our node script to
+    });                                     // process asynchronous requests in the meantime.
+                                            // If you're also serving http, display a 503 error.
+    connection.on('error', function(err) {
+      console.log('db error', err);
+      if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+        handleDisconnect();                         // lost due to either server restart, or a
+      } else {                                      // connnection idle timeout (the wait_timeout
+        throw err;                                  // server variable configures this)
+      }
+    });
+  }
+  
+  handleDisconnect();
+  //DISCONNECT BUG FIX
+
 //create a spotifyAPI instance w/ our credentials
 const spotifyApi = new SpotifyWebApi({
     redirectUri: 'http://vynilla-app.herokuapp.com/callback', // where to send user after authentication
@@ -67,6 +101,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+setInterval(function () {
+    db.query('SELECT 1');
+    console.log("Still Connected...");
+}, 4000);
 
 // parse application/x-www-form-urlencoded, basically can only parse incoming Request Object if strings or arrays
 app.use(bodyParser.urlencoded({ extended: true }));
