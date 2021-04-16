@@ -68,11 +68,27 @@
       </div>
       <!-- end friend selector -->
 
-      <div class="dev">
-          {{#if self}}
-            <h1>You are {{self}}.</h1>
-          {{/if}}
-      </div>
+      {{!-- Songs If playlist is already created --}}
+      {{!-- <div class="songsContainer"></div>
+      <ul>
+      {{#each songs}}
+                <li>{{this.songname}}</li>
+            <ul>
+                {{#each artists}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/each}}
+        </ul> --}}
+
+        {{#each songs}}
+            {{this.songname}}
+        {{/each}}
+
+
+
+
       <div class="queues">
           {{#if friend}}
             <h1 style="color:white;">{{friend}}</h1>
@@ -147,7 +163,7 @@
                         <label for="songname">Song name <3</label>
                     <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!">
                     <input type="hidden" name="selfID" value={{self}}>
-                    <input type="hidden" name="friendname" value={{friend}}>
+                    <input type="hidden" name="friendID" value={{friendID}}>
                     </div>
                     <button type="submit" class="btn btn-success btn-sm">Search dat hooooooe</button>
                 </form>
@@ -183,7 +199,7 @@
                         </ul>
                     </div>
                     {{/each}}
-                    <input type="hidden" name="friendID" value={{{friendID}}}>
+                    <input type="hidden" name="friendID" value={{friendID}}>
                     <input type="hidden" name="selfID" value={{self}}>
                     <button type="submit" class="btn btn-success btn-sm">Add it to {{friendName}}'s queue!</button>
                 </form>
