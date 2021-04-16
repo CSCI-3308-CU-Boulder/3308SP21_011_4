@@ -889,7 +889,7 @@ app.get("/select-friend", (req, res) => {
 
     db.query("SELECT * FROM queue WHERE fromUser = ?", [req.session.userId], (error, results) => {
         console.log(results);
-        if (results[0].length == 0){
+        if (results[0].nameOfPlaylist == null){
             // User does not have a playlist, We need to make one
 
             res.render("queue", {
