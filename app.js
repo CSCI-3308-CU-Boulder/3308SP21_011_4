@@ -229,7 +229,7 @@ app.post('/explore/search', (req, res) => {
 
     //find users whose name resembles their search query
     db.query(`USE ${process.env.DATABASE};`);
-    db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
+    db.query('SELECT * FROM users WHERE username LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         // console.log(results);
         friendsResults = results;
         if(error){
@@ -888,8 +888,8 @@ app.get("/select-friend", (req, res) => {
     })
 
     db.query("SELECT * FROM queue WHERE fromUser = ?", [req.session.userId], (error, results) => {
-        // console.log(results);
-        if (results[0].nameOfPlaylist == null){
+        console.log(results);
+        if (results[0].length == 0){
             // User does not have a playlist, We need to make one
 
             res.render("queue", {
