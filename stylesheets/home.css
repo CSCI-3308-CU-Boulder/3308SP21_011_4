@@ -1,0 +1,263 @@
+:root {
+    --dark0: black;
+    --dark1: #292830;
+    --dark2: #38373d;
+    --dark3: #444347;
+    --light: #fff;
+    --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+}
+
+html {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--dark1);
+}
+
+body {
+    /* dark linear */
+    background: linear-gradient(45deg, black, var(--dark3));
+
+    /*blue-pink radial*/
+    /* background: rgb(238, 174, 202);
+    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%); */
+=======
+    background: var(--dark0);
+    margin: 30px 50px;
+    line-height: 1.4em;
+    color: var(--light);
+}
+
+.wrapper {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-areas:
+
+        "nav feed feed feed feed friends"
+        "nav feed feed feed feed friends"
+        ".   feed feed feed feed       .";
+
+}
+
+.main-nav {
+    /* width: 30%; */
+    border-radius: 10px;
+}
+
+.main-nav ul {
+    border-radius: 10px;
+    width: 100%;
+    display: grid;
+    grid-gap: 20px;
+    padding: 0;
+    list-style: none;
+    grid-template-rows: repeat(5, 1fr);
+    grid-area: nav;
+    grid-auto-flow: column;
+    background-color: var(--dark2);
+    /* border-radius: 50px; */
+}
+
+.main-nav a {
+    border-radius: 10px;
+    width: 100%;
+    /* box-shadow: var(--shadow); */
+    background: var(--dark2);
+    display: block;
+    text-decoration: none;
+    padding: 0.8rem;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    /* box-shadow: var(--shadow); */
+}
+
+.main-nav a:hover {
+    transition: 0.3s;
+    background: var(--dark1);
+    color: var(--light);
+}
+
+.main-feed {
+    grid-area: feed;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 40px;
+    /* background-color: var(--dark2); */
+    background-color: black;
+}
+
+.main-feed .author,
+.action {
+=======
+.main-feed .author, .action, .pfp {
+    display: inline;
+    margin-left: 10px;
+}
+
+.main-feed .action {
+    margin-left: -1px;
+}
+
+
+
+
+
+.main-feed .feed {
+    /* background: rgba(104, 104, 104, 0.8); */
+    background: var(--dark2);
+    border-radius: 40px 40px 2px 2px; /* warning - hard-coded to match feed-item b. radius */
+}
+
+.main-feed .feed h4, .feed p #action, .feed .pfp {
+    margin-left: 15px; /* give Jack Smith Added... a left margin */
+    margin-bottom: 15px;
+}
+
+.feed .pfp {
+    width : 50px;
+    height : 60px;
+    border-radius: 50%;
+}
+
+
+.album-cover {
+    margin-top: 15px;
+    width: 250px;
+    margin:0px;
+}
+
+
+.author {
+    color: lightblue;
+}
+
+.feed-item {
+    border-radius: 10px;
+    margin: 20px 0px;
+    min-height: 200px;
+    background: var(--dark1);
+    border-radius: 25px;
+}
+
+.main-feed .feed-header {
+    border-radius: 10px 10px 0px 0px;
+    background-color: var(--dark2);
+}
+
+.song { 
+    display: grid;
+    grid-template-columns: 1fr, 3fr;
+    /* display: grid; */
+    /* grid-gap: 20px; */
+    /* grid-column: 1/2; */
+    /* grid-template-areas: */
+        /* "alb-cover song-name . ."
+        ". artist    . ."
+        ". album-name play . " */
+    grid-gap: 0px;
+    grid-template-areas:
+    "alb-cover song-name ."
+    "alb-cover artist    ."
+    "alb-cover album-name play"
+}
+
+.song .song-name {
+    grid-column: 2/4;
+    text-align: left;
+    /* grid-area: song-name; */
+    /* margin-top: 0.5rem;
+    margin-bottom: 0; */
+}
+
+.song .artist {
+    /* grid-area: artist; */
+    /* margin-top: -1rem; */
+    /* margin-bottom: 0; */
+}
+
+.song .album {
+    /* grid-area: album-name; */
+    /* margin-top: -1rem; */
+
+}
+
+.song .album-cover {
+    width: 50%;
+    grid-column: 1/1;
+    /* grid-area: alb-cover; */
+    /* border-radius: 5%; */
+    /* margin-right: 0px; */
+}
+
+.song .icons {
+    /* grid-area: play; */
+    text-align: right;
+    margin-right: 0.5rem;
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: var(--dark1);
+    border-top: 1px solid var(--dark3);
+    text-align: right;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    width: 100%;
+    border-radius: 0px 0px 25px 25px;
+}
+
+.comments .commenter {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding-top: 0.3rem;
+    padding-right: 6px;
+}
+
+.comments .comment {
+    font-size: 0.8rem;
+    margin-top: 0.1rem;
+    padding-right: 6px;
+}
+
+.friend-feed {
+    display: flex;
+    flex-direction: column;
+    grid-area: friends;
+    text-align: left;
+    background-color: var(--dark2);
+    border-radius: 10px ;
+    /* width: 100%; */
+}
+
+.friend-feed .listening {
+    background-color: rgba(104, 104, 104, 0.8);
+    border-radius: 10px 10px 0px 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.friend-feed .friend-feed-item {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.friend-feed-item .song-name {
+    font-size: 1.3rem;
+    padding-left: 10px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.friend-feed-item .artist {
+    font-size: 0.9rem;
+    padding-left: 15px;
+    padding-top: 0;
+    margin-top: 0;
+}

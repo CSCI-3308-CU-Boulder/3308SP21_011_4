@@ -1,0 +1,187 @@
+
+:root {
+  --dark0: black;
+  --dark1: #292830;
+  --dark2: #38373d;
+  --dark3: #444347;
+  --light: #fff;
+  --shadow: 0 1px 5px rgba(104, 104, 104, 0.8);
+}
+.searchText {
+  color: white;
+  font-size: 20px;
+  align-self: flex-start;
+}
+
+.searchCategory {
+  color: rgb(196, 196, 196);
+  font-size: 20px;
+  align-self: flex-start;
+  text-decoration: underline;
+}
+
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  padding: 25px;
+  background-color: rgb(73, 73, 73);
+  border-radius: 5px;
+}
+.button {
+  display: inline-block;
+  padding: .75rem 1rem;
+  border-radius: 10rem;
+  background-color: rgb(75, 196, 101);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.button:hover {
+  background-color: rgb(54, 139, 72);
+}
+
+
+a {
+  color: white;
+  text-decoration: none;
+}
+html {
+  color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--dark1);
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center {
+  align-self: center;
+  margin-left: 30px;
+  margin-right: 30px;
+  width: 1000px;
+  text-align: center;
+}
+.left,.center,.right {
+  background-color: #131313;
+  border-radius: 20px;
+}
+.left label:hover {
+  cursor: pointer;
+  color: #4270C2;
+}
+.search {
+  border-radius: 10px;
+  width: 570px;
+  outline: 0;
+  height: 24px;
+  border: 0;
+  margin-top: 100px;
+}
+.p-row img {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+}
+.p-row span {
+  margin-left: 5px;
+}
+.p-row {
+  display: inline-flex;
+  line-height: 40px;
+}
+.out-row {
+  margin-bottom: 10px;
+}
+.card-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+.card {
+  width: 420px;
+  height: 200px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+.card:nth-child(1) {
+  background: linear-gradient(to bottom, #6F40C9 0%,#56A6E3 100%);
+}
+.card:nth-child(2) {
+  background: linear-gradient(to bottom, #419C27 0%,#D7D05B 100%);
+}
+.card:nth-child(3) {
+  background: linear-gradient(to bottom, #BC4748 0%,#D06DB0 100%);
+}
+.card:nth-child(4) {
+  background: linear-gradient(to bottom, #4676B8 0%,#5CD7C7 100%);
+}
+.card:hover {
+  cursor: pointer;
+}
+.card:nth-child(1), .card:nth-child(3) {
+  margin-right: 10px;
+}
+.dropdown-item {
+  display: block;
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}

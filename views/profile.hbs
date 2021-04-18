@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | Vynilla</title>
+    <link rel="stylesheet" href="./pfp.css">
+    <link rel="stylesheet" href="./navbar.css">
+    <script src="https://kit.fontawesome.com/a95c4725a7.js"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+    <div class="sidenav">
+        <a href="/feed">Home</a>
+        <a href="/explore">Explore</a>
+        <a href="#">Notifications</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+    <!-- grid wrapper -->
+    <section class="wrapper">
+        
+        <div class="midsection">
+            <div class="profile-section">
+                <!-- <div class="flexy"> -->
+
+                    <!-- pfp -->
+                    <div> 
+                        <img src="{{profile_link}}"
+                            alt="A precious lil doggo" class="pfp">
+
+                        <!-- user name -->
+                        <h1 class="name">{{name}}</h1>
+                        <h2 class="atname">@{{display_name}}</h2>
+
+                    </div>
+
+                    <div>
+                        <div class="friends">
+                            <h3>Friends</h3>
+                            <h4>{{friend_count}}</h4>
+                        </div>
+                    </div>
+
+                    
+                    <!-- music icons -->
+                    <div>
+                        <div class="music">
+                            <h3>Music</h3>
+                            <div class="icons">
+                                <i class="fas fa-play"></i>
+                                <i class="fab fa-spotify"></i>
+                                <i class="fas fa-music"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="description">
+                        <p>
+                            {{description}}
+                        </p>
+                    </div>
+
+                    <div>
+                        <a class="btn btn-primary btn-lg" href="#" role="button">Edit Profile</a>
+                    </div>
+                    
+
+                    <!-- friends -->
+                    
+                <!-- </div> -->
+
+            </div>
+            <!-- artists, songs, albums -->
+            <section class="subsections">
+
+                <div class="artist-backing">
+                    <h1>Artists</h1>
+                    <div class="artists">
+                        <ul class="artist-list">
+                            {{#each artist}}
+                            <li>{{this}}</li> <!-- do fields go here? -->
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="songs-backing">
+                    <h1>Songs</h1>
+                    <div class="songs">
+                        <ul class="song-list">
+                            {{#each song}}
+                            <li class="song">
+                                <h3 class="song-name">{{this}}</h3>
+                                <h4 class="song-artist">{{this}}</h4>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="albums-backing">
+                    <h1>Albums</h1>
+                    <div class="albums">
+                        <ul class="album-list"> 
+                            {{#each album}}
+                            <li class="album">
+                                <h3>Mind Mischief</h3>
+                                <h4>Tame Impala</h4>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- Use a flex box for Queue -->
+
+        <!-- public user notes PublicUserObject -->
+        <!-- 
+            display_name : String
+            id           : String
+            images       : Array[ImageObject]
+            followers    : FollowersObject
+        -->
+        <div class="friends-backer">
+            <!-- here goes friend_select drop down button -->
+            <form action="/friendSelect" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Select Friend
+                    </button>
+                    <div class="dropdown-menu" name="friend-select">
+                        {{#each friend}}
+                        <option>{{friend}}</option>
+                        {{/each}}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <div class="friends">
+                <h1>Aux</h1>
+                <ul>
+                    {{#each song}}
+                    <li class="feed-item">
+                        <h2 class="user-friend">{{username}}</h2>
+                        <h3 class="song-name">{{song_name}}</h4>
+                        <h4 class="song-artist">{{artist_name}}</h5>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- image object -->
+    <!-- key    : value
+         height : int
+         width  : int
+         url    : String
+    -->
+
+    <!-- private user object -->
+    <!-- key    : value
+         display_name : String
+         id           : String
+         image          : Array[ImageObject]
+    -->
+
+    <!-- Followers object -->
+    <!-- key    : value
+         href  : String
+         total : int
+    -->
+
+
+</body>
+
+</html>
