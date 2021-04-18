@@ -6,7 +6,7 @@ Vynilla is a web-based, music centered social media platform to showcase your mu
 * app.js is main javascript file
 * .env is all database settings
 * /routes/auth.js is all express settings 
-* session cookie is /controlles/auth.js
+* session cookie is /controllers/auth.js
 * Main profile page is pfp.hbs
 * views, stylesheets are our HTML and CSS files
 
