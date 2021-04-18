@@ -16,7 +16,7 @@ If the website happens to crash, restart the heroku app. On a good note, databas
 4. Sign in
 5. Go to explore and send a friend request to friend that you are using Vynilla with.
 6. Search your favorite songs on the explore page, and add them to different spots in your Discography
-  a. You can view these songs on your profile page.
+* You can view these songs on your profile page.
 7. Go to the queue page (first click on "home" then click on "queue")
 8. make a queue of songs for your friend (first name the queue, this will be the playlist name in Spotify)
 9. You can select a friend who has made queue for your and view it on the page. This can be exported to Spotify by clicking the export button.
