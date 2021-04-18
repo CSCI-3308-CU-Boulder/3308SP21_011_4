@@ -55,7 +55,7 @@ var db_config = {
 
 //create a spotifyAPI instance w/ our credentials
 const spotifyApi = new SpotifyWebApi({
-    redirectUri: 'http://localhost:3333/callback', // where to send user after authentication
+    redirectUri: 'http://vynilla-app.herokuapp.com/callback', // where to send user after authentication
     clientId: '1721ccaf9f0f40a196710dede9030908',
     clientSecret: '7efbade01f16446a880254fe1f30d2a7'
 });
@@ -229,7 +229,7 @@ app.post('/explore/search', (req, res) => {
 
     //find users whose name resembles their search query
     db.query(`USE ${process.env.DATABASE};`);
-    db.query('SELECT * FROM users WHERE name LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
+    db.query('SELECT * FROM users WHERE username LIKE ? AND username != ?', [search, req.session.username], async (error, results) => {
         // console.log(results);
         friendsResults = results;
         if(error){
@@ -715,9 +715,124 @@ app.get('/pfp/accept-friend/:userOneId', (req, res) => {
 })
 
 
+app.get("/export-queue", (req, res) => {
+    const friendID = req.query["friendID"];
+    var friend;
+    var songsObj = {
+        songs: []
+    };
+    db.query("SELECT username FROM users WHERE id = ?", [friendID], (error, currentFriend) => {
+        if(error){
+            console.log(error);
+        } else {
+            friend = currentFriend[0].username;
+        }
+    })
+
+    db.query("SELECT * FROM queue WHERE toUser = ? AND fromUser = ?", [req.session.userId, friendID], (error, results) => {
+        // console.log(results);
+        if (results[0].nameOfPlaylist == null){
+            // User does not have a playlist, We need to make one
+
+            res.render("queue", {
+                message: friend + " hasn't made you a queue yet",
+                theirQueue: false,
+                friendName: friend,
+                friendID: friendID
+            })
+            console.log('got here, id is null');
+        } else {
+            // User has a playlist already for this friend
+            // console.log("select friend" + selectedFriend);
+
+            db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [friendID, req.session.userId], async (error, result) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    songsArr = result.map((song) => {
+                        return { id: song.songID };
+                    });
+                    if(songsArr == null){
+                        res.render("queue", {
+                            message: friend + " hasn't made you a queue yet",
+                            theirQueue: false,
+                            friendName: friend,
+                            friendID: friendID
+                        })
+                    } else {
+                        var songCounter = 0;
+                        spotifyApi.setAccessToken(req.session.access_token)
+                        songsArr.forEach((song) => {
+                            console.log(song.id);
+                            spotifyApi.getTrack(song.id)
+                            .then((data) => {
+                                    songCounter++;
+                                    //store all of this track's artists
+                                    var artists = [];
+                                    data.body.artists.forEach((artist) => {
+                                        artists.push(artist.name);
+                                    })
+
+                                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
+                                    songsObj.songs.push({
+                                        songname: data.body.name,
+                                        artists: artists,
+                                        link: data.body.uri
+                                    })
+                                    if(songCounter == songsArr.length){
+                                        renderOurPage();
+                                    }
+                            })
+                        })
+                    }
+                }
+            })
+
+        }
+    })
+    async function renderOurPage(){
+        res.render("queueExport", {
+            message: null,
+            friendName: friend,
+            friendID: friendID,
+            songs: songsObj["songs"]
+        })
+    }
+})
+
+app.get("/export-queue-to-spotify", (req, res) => {
+    const friendID = req.query["friendID"];
+    var playlistID;
+    var songsArr;
+
+    db.query("SELECT nameOfPlaylist FROM queue WHERE toUser = ? AND fromUser = ?", [req.session.userId, friendID], (error, playlistName) => {
+        if(error){
+            console.log(error);
+        } else {
+            console.log("1");
+            spotifyApi.createPlaylist(playlistName[0].nameOfPlaylist, { description: 'Made with Vynilla <3', public: true })
+            .then((data) => {
+                playlistID = data.body.id;
+                console.log("2");
+                db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [friendID, req.session.userId], (error, songIDs) => {
+                    songsArr = songIDs.map((song) => {
+                        return "spotify:track:" + song.songID;
+                    });
+                    console.log(songsArr);
+                    spotifyApi.addTracksToPlaylist(playlistID, songsArr)
+                    .then((finished) => {
+                        console.log("2");
+                        res.render("queueExport", {
+                            message: "Your queue has been exported!"
+                        })
+                    })
+                })
+            })
+        }
+    })
+})
+
 app.get("/queue", (req, res) => {
-    const getAllUsers = "select person from users;"; //for dev purposes, to sim switching users w/o actually needing to
-    var users = [];
     var friends = [];
 
     db.query("SELECT users.username, users.id FROM relationship INNER JOIN users ON IF(?=user_id_one, relationship.user_id_two = users.id, relationship.user_id_one = users.id) WHERE (user_id_one = ? OR user_id_two = ?) AND status = 1 \
@@ -730,7 +845,8 @@ app.get("/queue", (req, res) => {
             friends.push(friendsList[i]);
         }
         res.render("queue", {
-            friends: friends
+            friends: friends,
+            export: true
         })
     }
 })
@@ -758,6 +874,10 @@ app.get("/queue", (req, res) => {
 app.get("/select-friend", (req, res) => {
     var friend;
     const selectedFriend = req.query["friends-dropdown"];
+    var songsArr = [];
+    var songsObj = {
+        songs: [],
+    };
 
     db.query("SELECT username FROM users WHERE id = ?", [selectedFriend], (error, currentFriend) => {
         if(error){
@@ -767,7 +887,7 @@ app.get("/select-friend", (req, res) => {
         }
     })
 
-    db.query("SELECT * FROM queue WHERE fromUser = ?", [req.session.userId], (error, results) => {
+    db.query("SELECT * FROM queue WHERE fromUser = ? AND toUser = ?", [req.session.userId, selectedFriend], (error, results) => {
         console.log(results);
         if (results[0].nameOfPlaylist == null){
             // User does not have a playlist, We need to make one
@@ -781,16 +901,68 @@ app.get("/select-friend", (req, res) => {
             console.log('got here, id is null');
         } else {
             // User has a playlist already for this friend
-            console.log("select friend" + selectedFriend);
-            res.render("queue", {
-                message: "Making a queue for " + friend,
-                theirQueue: true,
-                friendName: friend,
-                friendID: selectedFriend
+            // console.log("select friend" + selectedFriend);
+
+            db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [req.session.userId, selectedFriend], async (error, result) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    songsArr = result.map((song) => {
+                        return { id: song.songID };
+                    });
+                    if(songsArr == null){
+                        res.render("queue", {
+                            message: "Making a queue for " + friend,
+                            theirQueue: true,
+                            friendName: friend,
+                            friendID: selectedFriend,
+                            songs: null
+                        })
+                    } else {
+                        var songCounter = 0;
+                        spotifyApi.setAccessToken(req.session.access_token)
+                        songsArr.forEach((song) => {
+                            console.log(song.id);
+                            spotifyApi.getTrack(song.id)
+                            .then((data) => {
+                                    songCounter++;
+                                    //store all of this track's artists
+                                    var artists = [];
+                                    data.body.artists.forEach((artist) => {
+                                        artists.push(artist.name);
+                                    })
+
+                                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
+                                    songsObj.songs.push({
+                                        songname: data.body.name,
+                                        artists: artists,
+                                        link: data.body.uri
+                                    })
+                                    if(songCounter == songsArr.length){
+                                        renderOurPage();
+                                    }
+                            })
+                        })
+                    }
+                }
             })
+
         }
     })
+    async function renderOurPage(){
+        res.render("queue", {
+            message: "Making a queue for " + friend,
+            theirQueue: true,
+            friendName: friend,
+            friendID: selectedFriend,
+            songs: songsObj["songs"]
+        })
+    }
+
 })
+
+
+
 
 
 app.get("/make_queue", (req, res) => {
@@ -839,7 +1011,7 @@ app.get("/search", (req, res) => {
                 });
             });
 
-            console.log(songsObj["songs"]);
+            // console.log(songsObj["songs"]);
             res.render("queue", {
                 songsFromSearch: songsObj["songs"], //obvi we need to get this from DB
                 queueSoFar: songsObj["songs"], //& this
@@ -850,19 +1022,181 @@ app.get("/search", (req, res) => {
 });
 
 app.get("/addToPlaylist", (req, res) => {
-    const song = req.query["songLink"];
+    var song = req.query["songLink"];
     const friendID = req.query["friendID"];
-    console.log("Add To playlist" + friendID);
+    var friendName;
+    song = song.substring(14);
 
-    db.query("INSERT INTO queueSongs VALUES (?, ?, ?)", [req.session.userId, 234, song], (error, results) => {
+    var songsObj = {
+        songs: []
+    };
+
+    db.query("SELECT username FROM users WHERE id = ?", [friendID], (error, result) => {
         if(error){
             console.log(error);
         } else {
-            res.render("queue", {
-                message: "added song to queue"
-            });
+            friendName = result[0].username;
         }
     })
+
+    db.query("INSERT INTO queueSongs (fromUser, toUser, songID) VALUES (?, ?, ?)", [req.session.userId, friendID, song], (error, results) => {
+        if(error){
+            console.log(error);
+        } else {
+            db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [req.session.userId, friendID], async (error, result) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    songsArr = result.map((song) => {
+                        return { id: song.songID };
+                    });
+                    if(songsArr == null){
+                        res.render("queue", {
+                            message: "We should never get here",
+                            theirQueue: true,
+                            friendName: friend,
+                            friendID: selectedFriend,
+                            songs: null
+                        })
+                    } else {
+                        var songCounter = 0;
+                        spotifyApi.setAccessToken(req.session.access_token)
+                        songsArr.forEach((song) => {
+                            console.log(song.id);
+                            spotifyApi.getTrack(song.id)
+                            .then((data) => {
+                                    songCounter++;
+                                    //store all of this track's artists
+                                    var artists = [];
+                                    data.body.artists.forEach((artist) => {
+                                        artists.push(artist.name);
+                                    })
+
+                                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
+                                    songsObj.songs.push({
+                                        songname: data.body.name,
+                                        artists: artists,
+                                        link: data.body.uri
+                                    })
+                                    if(songCounter == songsArr.length){
+                                        renderOurPage();
+                                    }
+                            })
+                        })
+                    }
+                }
+            })
+        }
+    })
+
+    db.query("INSERT INTO queueSongs (fromUser, toUser, songID) VALUES (?, ?, ?)", [req.session.userId, friendID, song], (error, results) => {
+        if(error){
+            console.log(error);
+        } else {
+            db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [req.session.userId, friendID], async (error, result) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    songsArr = result.map((song) => {
+                        return { id: song.songID };
+                    });
+                    if(songsArr == null){
+                        res.render("queue", {
+                            message: "We should never get here",
+                            theirQueue: true,
+                            friendName: friend,
+                            friendID: selectedFriend,
+                            songs: null
+                        })
+                    } else {
+                        var songCounter = 0;
+                        spotifyApi.setAccessToken(req.session.access_token)
+                        songsArr.forEach((song) => {
+                            console.log(song.id);
+                            spotifyApi.getTrack(song.id)
+                            .then((data) => {
+                                    songCounter++;
+                                    //store all of this track's artists
+                                    var artists = [];
+                                    data.body.artists.forEach((artist) => {
+                                        artists.push(artist.name);
+                                    })
+
+                                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
+                                    songsObj.songs.push({
+                                        songname: data.body.name,
+                                        artists: artists,
+                                        link: data.body.uri
+                                    })
+                                    if(songCounter == songsArr.length){
+                                        renderOurPage();
+                                    }
+                            })
+                        })
+                    }
+                }
+            })
+        }
+    })
+
+    db.query("INSERT INTO queueSongs (fromUser, toUser, songID) VALUES (?, ?, ?)", [req.session.userId, friendID, song], (error, results) => {
+        if(error){
+            console.log(error);
+        } else {
+            db.query("SELECT songID FROM queueSongs WHERE fromUser = ? AND toUser = ?", [req.session.userId, friendID], async (error, result) => {
+                if(error){
+                    console.log(error);
+                } else {
+                    songsArr = result.map((song) => {
+                        return { id: song.songID };
+                    });
+                    if(songsArr == null){
+                        res.render("queue", {
+                            message: "We should never get here",
+                            theirQueue: true,
+                            friendName: friend,
+                            friendID: selectedFriend,
+                            songs: null
+                        })
+                    } else {
+                        var songCounter = 0;
+                        spotifyApi.setAccessToken(req.session.access_token)
+                        songsArr.forEach((song) => {
+                            console.log(song.id);
+                            spotifyApi.getTrack(song.id)
+                            .then((data) => {
+                                    songCounter++;
+                                    //store all of this track's artists
+                                    var artists = [];
+                                    data.body.artists.forEach((artist) => {
+                                        artists.push(artist.name);
+                                    })
+
+                                    //store this song's name, its artists, and its link in songsObj. to be rendered into hbs
+                                    songsObj.songs.push({
+                                        songname: data.body.name,
+                                        artists: artists,
+                                        link: data.body.uri
+                                    })
+                                    if(songCounter == songsArr.length){
+                                        renderOurPage();
+                                    }
+                            })
+                        })
+                    }
+                }
+            })
+        }
+    })
+    async function renderOurPage(){
+        res.render("queue", {
+            message: "Making a queue for " + friendName,
+            theirQueue: true,
+            friendName: friendName,
+            friendID: friendID,
+            songs: songsObj["songs"]
+        })
+    }
 })
 
 //LATER IMPLEMENTATION

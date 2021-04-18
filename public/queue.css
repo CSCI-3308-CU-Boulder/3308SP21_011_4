@@ -25,6 +25,38 @@
 .createQueueButton:hover {
   color: rgb(228, 228, 228);
 }
+.friends-select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px;
+  padding-bottom: 50px;
+}
+.BigText {
+  color: white;
+  font-size: xx-large;
+  padding-bottom: 25px;
+}
+.songname, .artist {
+    color: white;
+}
+.songname {
+  font-size: large;
+}
+.artist {
+  font-size: small;
+}
+
+
+.singleSong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgb(82, 82, 82);
+  padding: 5px;
+  margin: 10px;
+}
 
 .friendname {
     color: white;

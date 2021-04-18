@@ -25,30 +25,18 @@
 
   <div class="center">
 
-      {{#if message}}
-        <h1 style="color:white;">{{message}}</h1>
-      {{/if}}
 
-      {{!-- <!-- self-selector for development purposes -->
-      <div class="self-select">
-          <form action="/select-self" method="GET">
-              <select  name="self-dropdown" class="form-select form-select lg mb-3" id="self-dropdown"
-                                                                                    onchange="this.form.submit()">
-                  <option>~DEV~ Choose urself ~DEV~</option>
-                  {{#if users}}
-                    {{#each users}}
-                        <option value={{this}}>{{this}}</option>
-                    {{/each}}
-                  {{/if}}
 
-              </select>
-          </form>
-      </div>
-      <!-- end self selector --> --}}
 
-    <p>HI</p>
+
       <!-- friends selector -->
       <div class="friends-select">
+        {{#if message}}
+            <h4 style="color:rgb(184, 184, 184);">{{message}}</h4>
+        {{/if}}
+          <div class="BigText">
+              Send a friend a playlist directly to their Spotify! 
+          </div>
           {{#if friends}}
           <form action="/select-friend" method="GET">
               <select onchange="this.form.submit()" class="form-select form-select-lg mb-3" aria-label=".form-select-lg" id="friends-dropdown" name="friends-dropdown">
@@ -61,18 +49,40 @@
                       {{/each}}
                   {{/if}}
               </select>
-
-              <!-- not necessary since we have cookies -->
-              <input type="hidden" name="madeq" value={{self}}>
           </form>
       </div>
       <!-- end friend selector -->
+        {{#if export}}
+        <p></p>
+        {{else}}
+        <form action="/export-queue" method="GET">
+            <input type="hidden" name="friendID" value={{friendID}}>
+            <button type="submit">Export {{friendName}}'s Queue for you</button>
+        </form>
+        {{/if}}
+      {{!-- Songs If playlist is already created --}}
+        <div class="queueContainer">
+            {{#if songs}}
+            <h4 class="BigText">{{friendName}}'s Queue So Far...</h4>
+            {{/if}}
+            {{#each songs}}
+            <div class="singleSong">
+                <div class="songname">{{this.songname}}
+                {{#each artists}}
+                    <div class="artist">{{this}}</div>
+                {{/each}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
 
-      <div class="dev">
-          {{#if self}}
-            <h1>You are {{self}}.</h1>
-          {{/if}}
-      </div>
+        {{!-- {{#each songs}}
+            {{this.songname}}
+        {{/each}} --}}
+
+
+
+
       <div class="queues">
           {{#if friend}}
             <h1 style="color:white;">{{friend}}</h1>
@@ -147,7 +157,7 @@
                         <label for="songname">Song name <3</label>
                     <input type="text" name="songname" class="form-control" id="songname" placeholder="Enter a song!">
                     <input type="hidden" name="selfID" value={{self}}>
-                    <input type="hidden" name="friendname" value={{friend}}>
+                    <input type="hidden" name="friendID" value={{friendID}}>
                     </div>
                     <button type="submit" class="btn btn-success btn-sm">Search dat hooooooe</button>
                 </form>
@@ -183,7 +193,7 @@
                         </ul>
                     </div>
                     {{/each}}
-                    <input type="hidden" name="friendID" value={{{friendID}}}>
+                    <input type="hidden" name="friendID" value={{friendID}}>
                     <input type="hidden" name="selfID" value={{self}}>
                     <button type="submit" class="btn btn-success btn-sm">Add it to {{friendName}}'s queue!</button>
                 </form>
