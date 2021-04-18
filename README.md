@@ -7,8 +7,8 @@ Lorem ipsum dolor amet...
 
 # Usage
 Vynilla is fun with friends!
-The queue can be viewed on the 
-If the website happens to crash, restart the heroku app. On a good note, database information persists!
+Once the queue is exported, go to your Spotify account and look for it under playlists.
+If the website happens to crash, restart the heroku app. On a good note, database information persists across crashes!
 
 1. go to: http://vynilla-app.herokuapp.com/
 2. click "Sign up", and register and account with a secure password.
