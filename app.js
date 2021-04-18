@@ -26,13 +26,13 @@ var db_config = {
     password: process.env.DATABASE_PASS,
     database: process.env.DATABASE
   };
-  
+
   var connection;
-  
+
   function handleDisconnect() {
     connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
-  
+
     connection.connect(function(err) {              // The server is either down
       if(err) {                                     // or restarting (takes a while sometimes).
         console.log('error when connecting to db:', err);
@@ -49,7 +49,7 @@ var db_config = {
       }
     });
   }
-  
+
   handleDisconnect();
   //DISCONNECT BUG FIX
 
@@ -158,7 +158,7 @@ app.get('/callback', (req, res) => {
             console.log(error);
         }
     })
-    
+
 
       //set our access & refresh tokens for all future spotifyApi calls
       spotifyApi.setAccessToken(access_token);
@@ -274,7 +274,7 @@ app.post('/explore/search', (req, res) => {
                         artists: artists,
                         link: item.uri
                     })
-                    
+
                 });
                 // console.log(songsObj);
                 if (results.length == 0){
@@ -343,7 +343,7 @@ app.get('/explore/add_song:songid/:location', async (req, res) => {
     var location = req.params.location;
     location = parseInt(location);
     var song;
-    
+
     try {
         song = await getTrackInfoFromSpotify(songid);
 
@@ -551,7 +551,7 @@ app.get('/pfp', (req, res) =>{
     })
 
     async function getTracksFromSpotify(song_one_id, song_two_id, song_three_id, song_four_id, song_five_id) {
-        
+
             if(song_one_id != null) {
                 spotifyApi.getTrack(song_one_id)
                 .then((data) => {
@@ -789,7 +789,7 @@ app.get("/select-friend", (req, res) => {
                 friendID: selectedFriend
             })
         }
-    })    
+    })
 })
 
 
@@ -901,7 +901,7 @@ app.get("/removeSongs/:toRemove" , (req, res) => {
     db.query('DELETE FROM top5songs WHERE id = ? AND song_one = ? OR song_two = ? OR song_three = ? OR song_four = ? OR song_five = ?', [req.session.userId, getRidOfSong], async(error, results) => {
         if(error) {
             console.log(error);
-        } 
+        }
     })
     res.redirect('pfp');
 })
@@ -909,7 +909,7 @@ app.get("/removeSongs/:toRemove" , (req, res) => {
 //i'm imagining something similar will go on with these two,
 //since i don't think they'd always want to entirely clear their top 5s
 app.get("/removeArtists/:toRemove" , (req, res) => {
-    const getRidOfArtist = req.query.toRemoveArtist; 
+    const getRidOfArtist = req.query.toRemoveArtist;
     db.query('DELETE FROM top5artists WHERE id = ? AND artist_one = ? OR artist_two = ? OR artist_three = ? OR artist_four = ? OR artist_five = ?', [req.session.userId, getRidOfArtist], async(error, results) => {
         if(error) {
             console.log(error);
