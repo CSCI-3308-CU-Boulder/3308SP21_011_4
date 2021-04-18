@@ -31,7 +31,8 @@ If the website happens to crash, restart the heroku app. On a good note, databas
 
 Misc.
 - Milestones, meetings, etc. are in /Class Materials
-- Spotify API examples are in... you guessed it, /Spotify_API_Examples
+- Spotify API examples are in... you guessed it, /Spotify-Api-Examples
+    - Older examples can be found nested deeply in /legacy code/...../Spotify-API-Examples
 - Stylesheets, etc. are in /public
 - Some SQL resources are in /SQL
 - Old code (before Heroku push restructuring) is in /legacy code
