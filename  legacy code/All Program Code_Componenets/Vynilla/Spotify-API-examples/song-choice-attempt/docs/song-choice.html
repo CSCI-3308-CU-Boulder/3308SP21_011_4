@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>song-choice.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>song-choice.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-1">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>)();
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;path&quot;</span>);
+<span class="hljs-keyword">const</span> SpotWAPI = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;spotify-web-api-node&quot;</span>);
+<span class="hljs-keyword">const</span> querystring = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;querystring&quot;</span>);
+
+app.set(<span class="hljs-string">&quot;views&quot;</span>, path.join(__dirname, <span class="hljs-string">&quot;views&quot;</span>));
+app.set(<span class="hljs-string">&quot;view engine&quot;</span>, <span class="hljs-string">&quot;hbs&quot;</span>);
+
+<span class="hljs-keyword">const</span> credentials = {
+    <span class="hljs-attr">clientId</span>: <span class="hljs-string">&quot;1721ccaf9f0f40a196710dede9030908&quot;</span>,
+    <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">&quot;7efbade01f16446a880254fe1f30d2a7&quot;</span>,
+    <span class="hljs-attr">redirectUri</span>: <span class="hljs-string">&quot;http://localhost:8888/callback&quot;</span>,
+};
+
+<span class="hljs-keyword">const</span> scopes = [<span class="hljs-string">&quot;playlist-modify-private&quot;</span>, <span class="hljs-string">&quot;playlist-modify-public&quot;</span>];
+
+<span class="hljs-keyword">var</span> spotifyApi = <span class="hljs-keyword">new</span> SpotWAPI(credentials);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-2">&#x00a7;</a>
+              </div>
+              <p>auth ourselves</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.get(<span class="hljs-string">&quot;/login&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    res.redirect(spotifyApi.createAuthorizeURL(scopes));
+});
+
+app.get(<span class="hljs-string">&quot;/callback&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    <span class="hljs-keyword">var</span> code = req.query.code;
+    <span class="hljs-keyword">var</span> error = req.query.error;
+
+    <span class="hljs-keyword">if</span> (error) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Shit!&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+
+    spotifyApi
+        .authorizationCodeGrant(code)
+        .then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+            <span class="hljs-keyword">const</span> access_token = data.body[<span class="hljs-string">&quot;access_token&quot;</span>];
+            spotifyApi.setAccessToken(access_token); <span class="hljs-comment">//globally auth ourselves to access &#x27;search&#x27;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-3">&#x00a7;</a>
+              </div>
+              <p>params:
+playlistid: we don’t want the ‘add songs’ button to render at first, so just pass null playlist id.
+ look in .hsb file for {{#if playlistid}}. this conditionally renders ‘add songs’ btn.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            res.render(<span class="hljs-string">&quot;song-choice&quot;</span>, { <span class="hljs-attr">songs</span>: [] , <span class="hljs-attr">playlistid</span>:<span class="hljs-literal">null</span>, <span class="hljs-attr">playlistname</span>:<span class="hljs-literal">null</span>});
+        })
+        .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Couldn&#x27;t auth!! : &quot;</span> + err);
+        });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-4">&#x00a7;</a>
+              </div>
+              <p>when user clicks ‘make a playlist’
+the modal opens up, and they enter a description, name, &amp; privacy val</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.get(<span class="hljs-string">&#x27;/callback/makePlaylist&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> pname = req.query[<span class="hljs-string">&quot;playlistName&quot;</span>];
+    <span class="hljs-keyword">const</span> desc = req.query[<span class="hljs-string">&quot;playlistDescription&quot;</span>]; <span class="hljs-comment">//get those from the url</span>
+    <span class="hljs-keyword">const</span> private = req.query[<span class="hljs-string">&quot;privacy&quot;</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-5">&#x00a7;</a>
+              </div>
+              <p>console.log(pname, desc, private);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-6">&#x00a7;</a>
+              </div>
+              <p>create a playlist with those attributes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    spotifyApi.createPlaylist(pname, {<span class="hljs-string">&#x27;description&#x27;</span> : desc, <span class="hljs-string">&#x27;public&#x27;</span>: private})
+        .then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-7">&#x00a7;</a>
+              </div>
+              <p>then, render its id into the .hbs form. now the #if id thing will pass, &amp; we can add songs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            res.render(<span class="hljs-string">&#x27;song-choice&#x27;</span>, {<span class="hljs-attr">songs</span>:[], <span class="hljs-attr">playlistid</span>:data.body.id, <span class="hljs-attr">playlistname</span>:data.body.name});
+        })
+        .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Crap. : &quot;</span> + err);
+            res.render(<span class="hljs-string">&#x27;song-choice&#x27;</span>, {<span class="hljs-attr">songs</span>:[], <span class="hljs-attr">playlistid</span>:<span class="hljs-literal">null</span>, <span class="hljs-attr">playlistname</span>:<span class="hljs-literal">null</span>});
+        })
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-8">&#x00a7;</a>
+              </div>
+              <p>when user clicks ‘add a song’, the modal opens up, they enter a songname, etc.
+this endpoint searches the song they entered, and sends back 5 of the results.
+NOTICE: we’re still passing around playlistid. pretty jank but it works</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.get(<span class="hljs-string">&quot;/callback/searchSong&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> song = req.query[<span class="hljs-string">&quot;songname&quot;</span>];
+    <span class="hljs-keyword">const</span> playlistid = req.query[<span class="hljs-string">&quot;playlistid&quot;</span>];
+
+    <span class="hljs-keyword">var</span> songsObj = {
+        <span class="hljs-attr">songs</span>: []
+    };
+
+    spotifyApi
+        .searchTracks(song, { <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span> })
+        .then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+            data.body.tracks.items.forEach(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> {
+                <span class="hljs-keyword">var</span> artists = [];
+                item.artists.forEach(<span class="hljs-function">(<span class="hljs-params">artist</span>) =&gt;</span> {
+                    artists.push(artist.name);
+                })
+                songsObj.songs.push({
+                    <span class="hljs-attr">songname</span>: item.name,
+                    <span class="hljs-attr">artists</span>: artists,
+                    <span class="hljs-attr">link</span>: item.uri <span class="hljs-comment">//NOTICE: we&#x27;re passing link URIs now. this is the checkbox&#x27;s value in hbs</span>
+                })
+
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-9">&#x00a7;</a>
+              </div>
+              <p>console.log(songsObj);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-10">&#x00a7;</a>
+              </div>
+              <p>pass the songs returned from the call &amp; playlistid back to the hbs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            res.render(<span class="hljs-string">&#x27;song-choice&#x27;</span>, {<span class="hljs-attr">songs</span>: songsObj[<span class="hljs-string">&quot;songs&quot;</span>], <span class="hljs-attr">playlistid</span>:playlistid});
+        })
+        .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+            <span class="hljs-built_in">console</span>.log(err);
+        });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-11">&#x00a7;</a>
+              </div>
+              <p>now, when they click ‘add that mfer’ or w/e, we pass back
+ the song they chose to add (its uri)
+ the playlistid from waaaay earlier that we’ve been beachball-at-a-concerting around</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.get(<span class="hljs-string">&#x27;/callback/addToQueue&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> songlink = req.query.songchoice; <span class="hljs-comment">//get the uri of the song they chose</span>
+    <span class="hljs-keyword">const</span> playlistid = req.query.playlistid; <span class="hljs-comment">//get the id of the playlist they created earlier</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-12">&#x00a7;</a>
+              </div>
+              <p>console.log(songlink);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    spotifyApi.addTracksToPlaylist(playlistid, [songlink]); <span class="hljs-comment">//ask spotify to add it to the playlist</span>
+    res.render(<span class="hljs-string">&#x27;song-choice&#x27;</span>, {<span class="hljs-attr">songs</span>:[], <span class="hljs-attr">playlistid</span>:playlistid}); <span class="hljs-comment">//send them back to hbs w/ no songs &amp; the playlistid. rinse &amp; repeat</span>
+})
+
+app.listen(<span class="hljs-number">8888</span>, <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Goto http://localhost:8888/login&quot;</span>));</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

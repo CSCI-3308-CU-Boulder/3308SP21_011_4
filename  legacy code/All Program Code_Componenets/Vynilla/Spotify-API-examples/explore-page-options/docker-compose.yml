@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pwd
+      POSTGRES_DB: example_db
+    
+    expose:
+      - "5432"
+
+    volumes:
+      - labwebsite-db:/var/lib/postgresql/data
+      - ./init_data:/docker-entrypoint-initdb.d
+
+  web:
+    image: node:12
+    user: "node"
+    working_dir: /home/node/app
+
+    depends_on:
+      - db
+
+    ports:
+      - '8888:8888'
+    volumes:
+      - ./:/home/node/app
+
+    command: "npm start"
+
+  volumes:
+    labwebsite-db: {}
