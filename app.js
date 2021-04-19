@@ -101,10 +101,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-setInterval(function () {
-    db.query('SELECT 1');
-    console.log("Still Connected...");
-}, 4000);
+// setInterval(function () {
+//     db.query('SELECT 1');
+//     console.log("Still Connected...");
+// }, 4000);
 
 // parse application/x-www-form-urlencoded, basically can only parse incoming Request Object if strings or arrays
 app.use(bodyParser.urlencoded({ extended: true }));
