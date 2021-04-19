@@ -12,7 +12,7 @@ dotenv.config({ path: './.env'});
 const app = express();
 
 //connect to mysql database
-const db = mysql.createConnection({
+var db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
@@ -30,17 +30,22 @@ var db_config = {
   var connection;
 
   function handleDisconnect() {
-    connection = mysql.createConnection(db_config); // Recreate the connection, since
+    db = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
+<<<<<<< Updated upstream
 
     connection.connect(function(err) {              // The server is either down
+=======
+  
+    db.connect(function(err) {              // The server is either down
+>>>>>>> Stashed changes
       if(err) {                                     // or restarting (takes a while sometimes).
         console.log('error when connecting to db:', err);
         setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
       }                                     // to avoid a hot loop, and to allow our node script to
     });                                     // process asynchronous requests in the meantime.
                                             // If you're also serving http, display a 503 error.
-    connection.on('error', function(err) {
+    db.on('error', function(err) {
       console.log('db error', err);
       if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
         handleDisconnect();                         // lost due to either server restart, or a
