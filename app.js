@@ -32,13 +32,8 @@ var db_config = {
   function handleDisconnect() {
     db = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
-<<<<<<< Updated upstream
-
-    connection.connect(function(err) {              // The server is either down
-=======
   
     db.connect(function(err) {              // The server is either down
->>>>>>> Stashed changes
       if(err) {                                     // or restarting (takes a while sometimes).
         console.log('error when connecting to db:', err);
         setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
