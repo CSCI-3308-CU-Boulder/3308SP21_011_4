@@ -89,13 +89,13 @@ const scopes = [
     'user-follow-modify'
   ];
 
-db.connect((error) => {
-    if(error) {
-        console.log(error)
-    } else {
-        console.log("MySQL Connected...")
-    }
-})
+// db.connect((error) => {
+//     if(error) {
+//         console.log(error)
+//     } else {
+//         console.log("MySQL Connected...")
+//     }
+// })
 
 //specify where express should look for static files (stylesheets, etc)
 const publicDirectory = path.join(__dirname, './public');
