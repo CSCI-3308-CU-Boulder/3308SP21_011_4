@@ -25,6 +25,7 @@ exports.register = (req, res) => {
     req.session.name = name;
     req.session.email = email;
     req.session.username = username;
+    req.session.loggedin = false;
 
     if (!name || !email || !username || !password || !confirmPass){
         return res.render('register', {
