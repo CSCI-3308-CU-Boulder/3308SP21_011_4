@@ -168,11 +168,14 @@ app.get('/callback', (req, res) => {
       // console.log(
       //   `Sucessfully retreived access token. Expires in ${expires_in} s.`
       // );
-
-      //send users to index
-      res.render('index', {
-        message: "Successfully Connected to Spotify"
-    })
+    if (req.session.loggedin == true){
+        res.redirect('/feed');
+    } else {
+       //send users to index
+        res.render('index', {
+            message: "Successfully Connected to Spotify"
+        })
+    }
 
     //when this access token expires, refresh it & update our cookies, etc
     setInterval(async () => {
