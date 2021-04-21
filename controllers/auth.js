@@ -114,7 +114,7 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie("jwt", token, cookieOptions);
-                res.status(200).redirect('/feed');
+                res.status(205).redirect('/connect-spotify');
             }
         })
 

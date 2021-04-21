@@ -125,6 +125,7 @@ app.get('/connect-spotify', (req, res) => {
 
 //upon authorization, spotify redirects the user to /callback, with the desired auth. codes
 app.get('/callback', (req, res) => {
+    console.log(req);
     const code = req.query.code; //get the authorization code
     const error = req.query.error;
     req.session.authCode = code; //set it for this user
@@ -201,6 +202,8 @@ app.get('/callback', (req, res) => {
       res.send(`Error getting Tokens: ${error}`);
     });
 })
+
+
 
 //if the user is logged in when they goto feed, render it for them with a welcome message.
 app.get('/feed', (req, res) => {
@@ -1152,6 +1155,6 @@ app.get("/removeArtists/:toRemove" , (req, res) => {
     res.redirect('pfp');
 })
 
-app.listen( process.env.PORT || 3333, () => {
-    console.log("Server Started on http://localhost:3333")
+app.listen( process.env.PORT || 8888, () => {
+    console.log("Server Started on http://localhost:8888")
 })
